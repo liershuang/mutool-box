@@ -3,7 +3,7 @@
  * 
  * @Title: package-info.java 
  * @Prject: xcore
- * @Package: com.xwintop.xcore.util.little 
+ * @Package: com.mutool.javafx.core.util.little 
  * @Description: TODO
  * @author: xufeng   
  * @date: 2017年8月26日 上午12:21:58 

@@ -3,6 +3,7 @@ package com.mutool.box;
 import com.mutool.box.fxmlView.IndexView;
 import com.mutool.box.utils.StageUtils;
 import com.mutool.box.utils.XJavaFxSystemUtil;
+import com.mutool.javafx.core.javafx.dialog.FxAlerts;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
@@ -33,7 +34,7 @@ public class Main extends AbstractJavaFxApplicationSupport {
         XJavaFxSystemUtil.addJarByLibs();//添加外部jar包
 
         //启动图设置
-        SplashScreen splashScreen = new SplashScreen() {
+        SplashScreen splashScreen =  new SplashScreen() {
             @Override
             public String getImagePath() {
                 return "/images/javafx.png";
@@ -48,14 +49,11 @@ public class Main extends AbstractJavaFxApplicationSupport {
         super.beforeInitialView(stage, ctx);
         Scene scene = JavaFxViewUtil.getJFXDecoratorScene(stage, "", null, new AnchorPane());
         stage.setScene(scene);
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                if (AlertUtil.showConfirmAlert("确定要退出吗？")) {
-                    System.exit(0);
-                } else {
-                    event.consume();
-                }
+        stage.setOnCloseRequest(event -> {
+            if (FxAlerts.confirmOkCancel("提示", "确定要退出吗？")) {
+                System.exit(0);
+            } else {
+                event.consume();
             }
         });
         GUIState.setScene(scene);

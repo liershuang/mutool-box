@@ -2,6 +2,7 @@ package com.mutool.box.fxmlView;
 
 import com.jfoenix.controls.JFXDecorator;
 import com.mutool.box.utils.Config;
+import com.mutool.javafx.core.javafx.dialog.FxAlerts;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import de.felixroske.jfxsupport.AbstractFxmlView;
@@ -36,7 +37,7 @@ public class IndexView extends AbstractFxmlView {
         JFXDecorator decorator = JavaFxViewUtil.getJFXDecorator(GUIState.getStage(),
                 GUIState.getStage().getTitle() + Config.xJavaFxToolVersions,"/images/icon.jpg",super.getView());
         decorator.setOnCloseButtonAction(() -> {
-            if (AlertUtil.showConfirmAlert("确定要退出吗？")) {
+            if (FxAlerts.confirmOkCancel("提示", "确定要退出吗？")) {
                 System.exit(0);
             }
         });

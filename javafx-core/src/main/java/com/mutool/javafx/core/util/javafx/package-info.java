@@ -3,7 +3,7 @@
  * 
  * @Title: package-info.java 
  * @Prject: xcore
- * @Package: com.xwintop.xcore.util.javafx 
+ * @Package: com.mutool.javafx.core.util.javafx 
  * @Description: TODO
  * @author: Administrator   
  * @date: 2017年7月22日 下午5:10:15 
