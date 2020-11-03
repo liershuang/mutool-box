@@ -1,0 +1,2 @@
+CharsetDetectTool
+文件编码检测工具(使用juniversalchardet工具)

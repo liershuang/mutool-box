@@ -1,0 +1,5 @@
+# Default ignored files
+#/.gitignore
+/x-DecompilerWxApkgTool.iml
+/log/
+/target/

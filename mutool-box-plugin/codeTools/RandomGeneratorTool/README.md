@@ -1,0 +1,2 @@
+RandomGeneratorTool
+随机数生成工具(使用hutool工具)

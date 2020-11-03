@@ -1,0 +1,5 @@
+# Default ignored files
+#/.gitignore
+/x-WebSourcesTool.iml
+/log/
+/target/

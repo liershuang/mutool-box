@@ -1,0 +1,5 @@
+# Default ignored files
+#/.gitignore
+/x-MessageViewer.iml
+/log/
+/target/
