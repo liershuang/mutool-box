@@ -1,8 +1,8 @@
 package com.mutool.box.services.index;
 
 import com.mutool.box.controller.index.SystemSettingController;
-import com.xwintop.xcore.javafx.FxApp;
-import com.xwintop.xcore.javafx.dialog.FxDialog;
+import com.mutool.javafx.core.javafx.FxApp;
+import com.mutool.javafx.core.javafx.dialog.FxDialog;
 import javafx.scene.control.ButtonType;
 import lombok.Getter;
 import lombok.Setter;

@@ -9,11 +9,11 @@ import com.mutool.box.utils.Config;
 import com.mutool.box.utils.SpringUtil;
 import com.mutool.box.utils.XJavaFxSystemUtil;
 import com.mutool.box.view.IndexView;
-import com.xwintop.xcore.util.ConfigureUtil;
-import com.xwintop.xcore.util.HttpClientUtil;
-import com.xwintop.xcore.util.javafx.AlertUtil;
-import com.xwintop.xcore.util.javafx.JavaFxSystemUtil;
-import com.xwintop.xcore.util.javafx.JavaFxViewUtil;
+import com.mutool.javafx.core.util.ConfigureUtil;
+import com.mutool.javafx.core.util.HttpClientUtil;
+import com.mutool.javafx.core.util.javafx.AlertUtil;
+import com.mutool.javafx.core.util.javafx.JavaFxSystemUtil;
+import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.application.Platform;
@@ -49,7 +49,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static com.mutool.box.utils.Config.Keys.NotepadEnabled;
-import static com.xwintop.xcore.util.javafx.JavaFxViewUtil.setControllerOnCloseRequest;
+import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnCloseRequest;
 
 /**
  * @ClassName: IndexController

@@ -1,6 +1,6 @@
 package com.mutool.box.utils;
 
-import com.xwintop.xcore.util.ConfigureUtil;
+import com.mutool.javafx.core.util.ConfigureUtil;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.io.File;

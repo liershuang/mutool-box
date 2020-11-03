@@ -1,6 +1,6 @@
 package com.mutool.box.services.javaFxTools;
 
-import com.xwintop.xcore.util.StrUtil;
+import com.mutool.javafx.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.*;
 

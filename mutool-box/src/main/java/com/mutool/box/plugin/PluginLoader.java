@@ -2,7 +2,7 @@ package com.mutool.box.plugin;
 
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.utils.Config;
-import com.xwintop.xcore.util.javafx.JavaFxViewUtil;
+import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;

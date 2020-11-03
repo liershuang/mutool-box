@@ -31,8 +31,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.xwintop</groupId>
-			<artifactId>xcore</artifactId>
+			<groupId>com.mutool.javafx</groupId>
+			<artifactId>javafx-core</artifactId>
 			<version>0.0.6</version>
 		</dependency>
 
@@ -86,10 +86,10 @@
 			<id>aliyunmaven</id>
 			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 		</repository>
-		<repository>
+		<!--<repository>
 			<id>xwintop-maven</id>
 			<url>https://864381832.github.io/maven/repository</url>
-		</repository>
+		</repository>-->
 		<repository>
 			<id>spring-snapshots</id>
 			<url>http://repo.spring.io/snapshot</url>

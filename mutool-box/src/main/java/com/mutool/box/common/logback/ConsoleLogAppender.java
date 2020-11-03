@@ -3,7 +3,7 @@ package com.mutool.box.common.logback;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.OutputStreamAppender;
-import com.xwintop.xcore.util.javafx.TooltipUtil;
+import com.mutool.javafx.core.util.javafx.TooltipUtil;
 import javafx.scene.control.TextArea;
 import lombok.Data;
 

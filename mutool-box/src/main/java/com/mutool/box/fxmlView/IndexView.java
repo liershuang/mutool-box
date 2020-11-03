@@ -2,8 +2,8 @@ package com.mutool.box.fxmlView;
 
 import com.jfoenix.controls.JFXDecorator;
 import com.mutool.box.utils.Config;
-import com.xwintop.xcore.util.javafx.AlertUtil;
-import com.xwintop.xcore.util.javafx.JavaFxViewUtil;
+import com.mutool.javafx.core.util.javafx.AlertUtil;
+import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLView;
 import de.felixroske.jfxsupport.GUIState;
