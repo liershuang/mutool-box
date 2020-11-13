@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class PluginManager {
 
-    public static final String SERVER_PLUGINS_URL = "https://xwintop.gitee.io/maven/plugin-libs/plugin-list.json";
+    public static final String SERVER_PLUGINS_URL = "https://liershuang.gitee.io/maven/mutool-box/config/plugin-list.json";
 
     public static final String LOCAL_PLUGINS_PATH = "./system_plugin_list.json";
 

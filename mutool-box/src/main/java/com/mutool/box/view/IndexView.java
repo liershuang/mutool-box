@@ -15,13 +15,14 @@ public abstract class IndexView implements Initializable {
     protected ResourceBundle bundle;
 
     @FXML
-    protected Button myButton;
+    protected Button searchButton;
 
+    //是否新窗口中打开
     @FXML
     protected CheckBox singleWindowBootCheckBox;
 
     @FXML
-    protected TextField myTextField;
+    protected TextField searchTextField;
 
     @FXML
     protected TabPane tabPaneMain;

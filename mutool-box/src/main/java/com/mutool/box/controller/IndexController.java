@@ -62,7 +62,9 @@ import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnC
 @Getter
 @Setter
 public class IndexController extends IndexView {
-    public static final String QQ_URL = "https://support.qq.com/product/127577";
+//    public static final String QQ_URL = "https://support.qq.com/product/127577";
+    public static final String QQ_URL = "https://support.qq.com/products/291829/";
+
     public static final String STATISTICS_URL = "https://xwintop.gitee.io/maven/tongji/xJavaFxTool.html";
 
     private Map<String, Menu> menuMap = new HashMap<String, Menu>();
@@ -88,30 +90,37 @@ public class IndexController extends IndexView {
         }
     }
 
+    /**
+     * 初始化页面（菜单）
+     */
     private void initView() {
         menuMap.put("toolsMenu", toolsMenu);
         menuMap.put("moreToolsMenu", moreToolsMenu);
         File libPath = new File("libs/");
         // 获取所有的.jar和.zip文件
         File[] jarFiles = libPath.listFiles((dir, name) -> name.endsWith(".jar"));
-        if (jarFiles != null) {
-            for (File jarFile : jarFiles) {
-                if (!PluginManageService.isPluginEnabled(jarFile.getName())) {
-                    continue;
-                }
-                try {
-                    this.addToolMenu(jarFile);
-                } catch (Exception e) {
-                    log.error("加载工具出错：", e);
-                }
+        if (jarFiles == null) {
+            return;
+        }
+        for (File jarFile : jarFiles) {
+            if (!PluginManageService.isPluginEnabled(jarFile.getName())) {
+                continue;
+            }
+            try {
+                this.addToolMenu(jarFile);
+            } catch (Exception e) {
+                log.error("加载工具出错：", e);
             }
         }
     }
 
+    /**
+     * 初始化事件（菜单搜索）
+     */
     private void initEvent() {
-        myTextField.textProperty().addListener((observable, oldValue, newValue) -> selectAction(newValue));
-        myButton.setOnAction(arg0 -> {
-            selectAction(myTextField.getText());
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> selectAction(newValue));
+        searchButton.setOnAction(arg0 -> {
+            selectAction(searchTextField.getText());
         });
     }
 
@@ -229,7 +238,7 @@ public class IndexController extends IndexView {
             contextMenu.hide();
         }
         contextMenu = indexService.getSelectContextMenu(selectText);
-        contextMenu.show(myTextField, null, 0, myTextField.getHeight());
+        contextMenu.show(searchTextField, null, 0, searchTextField.getHeight());
     }
 
     @FXML
@@ -344,11 +353,11 @@ public class IndexController extends IndexView {
 
     @FXML
     private void xwintopLinkOnAction() throws Exception {
-        HttpClientUtil.openBrowseURLThrowsException("https://gitee.com/xwintop/xJavaFxTool-spring");
+        HttpClientUtil.openBrowseURLThrowsException("https://github.com/liershuang/mutool-view");
     }
 
     @FXML
     private void userSupportAction() throws Exception {
-        HttpClientUtil.openBrowseURLThrowsException("https://support.qq.com/product/127577");
+        HttpClientUtil.openBrowseURLThrowsException("https://support.qq.com/product/291829");
     }
 }

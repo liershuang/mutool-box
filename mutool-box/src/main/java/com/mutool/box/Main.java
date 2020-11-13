@@ -32,16 +32,14 @@ public class Main extends AbstractJavaFxApplicationSupport {
     public static void main(String[] args) {
         XJavaFxSystemUtil.initSystemLocal();//初始化本地语言
         XJavaFxSystemUtil.addJarByLibs();//添加外部jar包
-
         //启动图设置
         SplashScreen splashScreen =  new SplashScreen() {
             @Override
             public String getImagePath() {
-                return "/images/javafx.png";
+                return "/images/start_page.jpg";
             }
         };
         launch(Main.class, IndexView.class, splashScreen, args);
-//		launchApp(Main.class, IndexView.class, args);
     }
 
     @Override
@@ -61,4 +59,11 @@ public class Main extends AbstractJavaFxApplicationSupport {
             StageUtils.updateStageStyle(GUIState.getStage());
         });
     }
+
+    @Override
+    public void beforeShowingSplash(Stage splashStage) {
+        //添加bootstrapfx样式支持
+        splashStage.getScene().getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+    }
+
 }

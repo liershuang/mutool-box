@@ -26,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 @Slf4j
 public class PluginManageService {
 
-    public static final String PLUGIN_LIST_URL = "https://xwintop.gitee.io/maven/plugin-libs/plugin-list.json";
+    public static final String PLUGIN_LIST_URL = "https://liershuang.gitee.io/maven/mutool-box/config/plugin-list.json";
 
     public static final String PLUGIN_LIST_PATH = "system_plugin_list.json";
 

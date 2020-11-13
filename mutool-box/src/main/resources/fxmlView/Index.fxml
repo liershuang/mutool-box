@@ -55,19 +55,19 @@
                       </Menu>
                     </menus>
                   </MenuBar>
-            		<TextField fx:id="myTextField" focusTraversable="false" promptText="%selectTextField">
+            		<TextField fx:id="searchTextField" focusTraversable="false" promptText="%selectTextField">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
                   </TextField>
-            		<Button fx:id="myButton" mnemonicParsing="false" text="%selectButton">
+            		<Button fx:id="searchButton" mnemonicParsing="false" text="%selectButton">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Button>
                   <CheckBox fx:id="singleWindowBootCheckBox" mnemonicParsing="false" text="%singleWindowBootCheckBox" />
                    <WebView fx:id="tongjiWebView" prefHeight="1.0" prefWidth="1.0" visible="false" />
-                  <Hyperlink onAction="#xwintopLinkOnAction" text="http://gitee.com/xwintop/xJavaFxTool-spring" textFill="RED" />
+                  <Hyperlink onAction="#xwintopLinkOnAction" text="https://github.com/liershuang/mutool-view" textFill="RED" />
                </children>
             </HBox>
          </top>
