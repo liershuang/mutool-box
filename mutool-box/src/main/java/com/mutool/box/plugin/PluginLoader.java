@@ -16,6 +16,10 @@ import java.util.ResourceBundle;
 @Slf4j
 public class PluginLoader {
 
+    /**
+     * 添加插件作为新窗口展示
+     * @param plugin
+     */
     public static void loadPluginAsWindow(PluginJarInfo plugin) {
         try {
             FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getFxmlPath()));
@@ -31,7 +35,11 @@ public class PluginLoader {
         }
     }
 
-
+    /**
+     * 加载插件作为新tab显示
+     * @param plugin
+     * @param tabPane
+     */
     public static void loadPluginAsTab(PluginJarInfo plugin, TabPane tabPane) {
         try {
             FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getFxmlPath()));

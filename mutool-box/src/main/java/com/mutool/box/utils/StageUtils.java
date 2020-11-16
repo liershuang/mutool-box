@@ -35,7 +35,10 @@ public class StageUtils {
         int SetWindowLong(HWND hWnd, int nIndex, com.sun.jna.Callback wndProc) throws LastErrorException;
     }
 
-    // update default javafx stage style
+    /**
+     * 更新stage样式（为windows情况）
+     * @param stage
+     */
     public static void updateStageStyle(Stage stage) {
         if (Platform.isWindows()) {
             Pointer pointer = getWindowPointer(stage);
