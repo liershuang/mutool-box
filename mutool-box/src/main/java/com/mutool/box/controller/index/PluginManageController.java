@@ -17,6 +17,7 @@ import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.Map;
@@ -32,6 +33,7 @@ import java.util.ResourceBundle;
 @Getter
 @Setter
 @Slf4j
+@Controller
 public class PluginManageController extends PluginManageView {
 
     public static final String FXML = "/fxmlView/index/PluginManage.fxml";

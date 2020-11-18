@@ -3,10 +3,13 @@ package com.mutool.box.services.index;
 import com.mutool.box.controller.index.PluginManageController;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.plugin.PluginManager;
+import com.mutool.box.services.IndexService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.HashMap;
@@ -24,11 +27,15 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 @Getter
 @Setter
 @Slf4j
+@Service
 public class PluginManageService {
 
     public static final String PLUGIN_LIST_URL = "https://liershuang.gitee.io/maven/mutool-box/config/plugin-list.json";
 
     public static final String PLUGIN_LIST_PATH = "system_plugin_list.json";
+
+    @Autowired
+    private IndexService indexService;
 
     private PluginManageController pluginManageController;
 
@@ -82,7 +89,8 @@ public class PluginManageService {
 
         File file = pluginManager.downloadPlugin(pluginJarInfo);
 
-        pluginManageController.getIndexController().addToolMenu(file);
+//        pluginManageController.getIndexController().addToolMenu(file);
+        indexService.addToolMenu(file);
     }
 
     public void setIsEnableTableColumn(Integer index) {

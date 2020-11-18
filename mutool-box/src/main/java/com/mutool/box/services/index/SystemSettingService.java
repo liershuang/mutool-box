@@ -7,6 +7,7 @@ import javafx.scene.control.ButtonType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * @ClassName: SystemSettingService
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
+@Service
 public class SystemSettingService {
 
     public static void openSystemSettings(String title) {

@@ -25,8 +25,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @author: xufeng
  * @date: 2017年11月10日 下午4:34:11
  */
-@SpringBootApplication
-@Slf4j
+@SpringBootApplication(scanBasePackages = {"com.mutool.box"})
 public class Main extends AbstractJavaFxApplicationSupport {
 
     public static void main(String[] args) {
