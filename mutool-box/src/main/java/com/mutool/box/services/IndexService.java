@@ -1,7 +1,6 @@
 package com.mutool.box.services;
 
 import com.mutool.box.common.logback.ConsoleLogAppender;
-import com.mutool.box.controller.IndexController;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.model.ToolFxmlLoaderConfiguration;
 import com.mutool.box.plugin.PluginLoader;
@@ -21,6 +20,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
@@ -29,7 +29,6 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -46,14 +45,18 @@ import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnC
 public class IndexService {
 
     private Map<String, Menu> menuMap = new HashMap<String, Menu>();
+
+    @Setter
+    private ResourceBundle bundle;
+    @Setter
+    /** 首页面板tabPane */
+    private TabPane tabPaneMain;
+    @Setter
+    /** 首页是否新窗口打开复选框 */
+    private CheckBox singleWindowBootCheckBox;
+    @Getter
     private Map<String, MenuItem> menuItemMap = new HashMap<String, MenuItem>();
 
-    private IndexController indexController;
-    private ResourceBundle bundle;
-
-    public IndexService(IndexController indexController) {
-        this.indexController = indexController;
-    }
 
     public void setLanguageAction(String languageType) throws Exception {
         if ("简体中文".equals(languageType)) {
@@ -61,13 +64,13 @@ public class IndexService {
         } else if ("English".equals(languageType)) {
             Config.set(Config.Keys.Locale, Locale.US);
         }
-        FxAlerts.info("", indexController.getBundle().getString("SetLanguageText"));
+        FxAlerts.info("", bundle.getString("SetLanguageText"));
     }
 
     public ContextMenu getSelectContextMenu(String selectText) {
         selectText = selectText.toLowerCase();
         ContextMenu contextMenu = new ContextMenu();
-        for (MenuItem menuItem : indexController.getMenuItemMap().values()) {
+        for (MenuItem menuItem : menuItemMap.values()) {
             if (menuItem.getText().toLowerCase().contains(selectText)) {
                 MenuItem menu_tab = new MenuItem(menuItem.getText(), menuItem.getGraphic());
                 menu_tab.setOnAction(event1 -> {
@@ -79,17 +82,21 @@ public class IndexService {
         return contextMenu;
     }
 
+    /**
+     * 添加记事本事件
+     * @param event
+     */
     public void addNodepadAction(ActionEvent event) {
         TextArea notepad = new TextArea();
         notepad.setFocusTraversable(true);
-        if (indexController.getSingleWindowBootCheckBox().isSelected()) {
-            JavaFxViewUtil.getNewStage(indexController.getBundle().getString("addNodepad"), null, notepad);
+        if (singleWindowBootCheckBox.isSelected()) {
+            JavaFxViewUtil.getNewStage(bundle.getString("addNodepad"), null, notepad);
         } else {
-            Tab tab = new Tab(indexController.getBundle().getString("addNodepad"));
+            Tab tab = new Tab(bundle.getString("addNodepad"));
             tab.setContent(notepad);
-            indexController.getTabPaneMain().getTabs().add(tab);
+            tabPaneMain.getTabs().add(tab);
             if (event != null) {
-                indexController.getTabPaneMain().getSelectionModel().select(tab);
+                tabPaneMain.getSelectionModel().select(tab);
             }
         }
     }
@@ -98,17 +105,17 @@ public class IndexService {
         TextArea textArea = new TextArea();
         textArea.setFocusTraversable(true);
         ConsoleLogAppender.textAreaList.add(textArea);
-        if (indexController.getSingleWindowBootCheckBox().isSelected()) {
-            Stage newStage = JavaFxViewUtil.getNewStage(indexController.getBundle().getString("addLogConsole"), null, textArea);
+        if (singleWindowBootCheckBox.isSelected()) {
+            Stage newStage = JavaFxViewUtil.getNewStage(bundle.getString("addLogConsole"), null, textArea);
             newStage.setOnCloseRequest(event1 -> {
                 ConsoleLogAppender.textAreaList.remove(textArea);
             });
         } else {
-            Tab tab = new Tab(indexController.getBundle().getString("addLogConsole"));
+            Tab tab = new Tab(bundle.getString("addLogConsole"));
             tab.setContent(textArea);
-            indexController.getTabPaneMain().getTabs().add(tab);
+            tabPaneMain.getTabs().add(tab);
             if (event != null) {
-                indexController.getTabPaneMain().getSelectionModel().select(tab);
+                tabPaneMain.getSelectionModel().select(tab);
             }
             tab.setOnCloseRequest((Event event1) -> {
                 ConsoleLogAppender.textAreaList.remove(textArea);
@@ -128,10 +135,10 @@ public class IndexService {
         plugin.setBundleName(resourceBundleName);
         plugin.setIconPath(iconPath);
 
-        if (indexController.getSingleWindowBootCheckBox().isSelected()) {
+        if (singleWindowBootCheckBox.isSelected()) {
             PluginLoader.loadPluginAsWindow(plugin);
         } else {
-            PluginLoader.loadPluginAsTab(plugin, indexController.getTabPaneMain());
+            PluginLoader.loadPluginAsTab(plugin, tabPaneMain);
         }
     }
 
@@ -144,7 +151,7 @@ public class IndexService {
 //			Class<AbstractFxmlView> viewClass = (Class<AbstractFxmlView>) ClassLoader.getSystemClassLoader().loadClass(className);
             Class<AbstractFxmlView> viewClass = (Class<AbstractFxmlView>) Thread.currentThread().getContextClassLoader().loadClass(className);
             AbstractFxmlView fxmlView = SpringUtil.getBean(viewClass);
-            if (indexController.getSingleWindowBootCheckBox().isSelected()) {
+            if (singleWindowBootCheckBox.isSelected()) {
 //				Main.showView(viewClass, Modality.NONE);
                 Stage newStage = JavaFxViewUtil.getNewStage(title, iconPath, fxmlView.getView());
                 newStage.setOnCloseRequest((WindowEvent event) -> {
@@ -161,9 +168,8 @@ public class IndexService {
                 imageView.setFitWidth(18);
                 tab.setGraphic(imageView);
             }
-            TabPane indexPaneMain = indexController.getTabPaneMain();
-            indexPaneMain.getTabs().add(tab);
-            indexPaneMain.getSelectionModel().select(tab);
+            tabPaneMain.getTabs().add(tab);
+            tabPaneMain.getSelectionModel().select(tab);
             tab.setOnCloseRequest((Event event) -> {
                 setControllerOnCloseRequest(fxmlView.getPresenter(), event);
             });
@@ -182,9 +188,9 @@ public class IndexService {
         if (url.startsWith("http")) {
             webEngine.load(url);
         } else {
-            webEngine.load(IndexController.class.getResource(url).toExternalForm());
+            webEngine.load(this.getClass().getResource(url).toExternalForm());
         }
-        if (indexController.getSingleWindowBootCheckBox().isSelected()) {
+        if (singleWindowBootCheckBox.isSelected()) {
             JavaFxViewUtil.getNewStage(title, iconPath, new BorderPane(browser));
             return;
         }
@@ -196,8 +202,8 @@ public class IndexService {
             tab.setGraphic(imageView);
         }
         tab.setContent(browser);
-        indexController.getTabPaneMain().getTabs().add(tab);
-        indexController.getTabPaneMain().getSelectionModel().select(tab);
+        tabPaneMain.getTabs().add(tab);
+        tabPaneMain.getSelectionModel().select(tab);
     }
 
     public void addToolMenu(File file) throws Exception {
@@ -309,4 +315,5 @@ public class IndexService {
             menuItemMap.put(menuItem.getText(), menuItem);
         }
     }
+
 }

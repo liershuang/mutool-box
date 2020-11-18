@@ -1,56 +1,36 @@
 package com.mutool.box.controller;
 
+import com.mutool.box.constant.UrlConstant;
 import com.mutool.box.controller.index.PluginManageController;
-import com.mutool.box.model.ToolFxmlLoaderConfiguration;
 import com.mutool.box.services.IndexService;
 import com.mutool.box.services.index.PluginManageService;
 import com.mutool.box.services.index.SystemSettingService;
 import com.mutool.box.utils.Config;
-import com.mutool.box.utils.SpringUtil;
-import com.mutool.box.utils.XJavaFxSystemUtil;
 import com.mutool.box.view.IndexView;
 import com.mutool.javafx.core.util.ConfigureUtil;
 import com.mutool.javafx.core.util.HttpClientUtil;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
 import com.mutool.javafx.core.util.javafx.JavaFxSystemUtil;
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
-import de.felixroske.jfxsupport.AbstractFxmlView;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import static com.mutool.box.utils.Config.Keys.NotepadEnabled;
-import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnCloseRequest;
 
 /**
  * @ClassName: IndexController
@@ -58,25 +38,21 @@ import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnC
  * @author: xufeng
  * @date: 2017年7月20日 下午1:50:00
  */
-@FXMLController
 @Slf4j
-@Getter
-@Setter
+@FXMLController
 public class IndexController extends IndexView {
-//    public static final String QQ_URL = "https://support.qq.com/product/127577";
-    public static final String QQ_URL = "https://support.qq.com/products/291829/";
 
     public static final String STATISTICS_URL = "https://xwintop.gitee.io/maven/tongji/xJavaFxTool.html";
 
-//    private Map<String, Menu> menuMap = new HashMap<String, Menu>();
-    private Map<String, MenuItem> menuItemMap = new HashMap<String, MenuItem>();
+    @Autowired
+    private IndexService indexService;
 
-    private IndexService indexService = new IndexService(this);
     private ContextMenu contextMenu = new ContextMenu();
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //todo 改造优化
         indexService.setBundle(resources);
 
         this.bundle = resources;
@@ -86,7 +62,7 @@ public class IndexController extends IndexView {
 
         //加载记事本页面
         initNotepad();
-        this.indexService.addWebView("欢迎吐槽", QQ_URL, null);
+        this.indexService.addWebView("交流吐槽", UrlConstant.FEEDBACK_URL, null);
         this.tongjiWebView.getEngine().load(STATISTICS_URL);
         //加载插件管理页面
         initPluginManager();
@@ -106,6 +82,10 @@ public class IndexController extends IndexView {
      * 初始化页面（菜单）
      */
     private void initView() {
+        //传递给service使用
+        indexService.setTabPaneMain(tabPaneMain);
+        indexService.setSingleWindowBootCheckBox(singleWindowBootCheckBox);
+
         indexService.addMenu("toolsMenu", toolsMenu);
         indexService.addMenu("moreToolsMenu", moreToolsMenu);
         File libPath = new File("libs/");
@@ -162,7 +142,7 @@ public class IndexController extends IndexView {
 
     @FXML
     private void openAllTabAction(ActionEvent event) {
-        for (MenuItem value : menuItemMap.values()) {
+        for (MenuItem value : indexService.getMenuItemMap().values()) {
             value.fire();
         }
     }
@@ -181,8 +161,6 @@ public class IndexController extends IndexView {
     private void pluginManageAction() throws Exception {
         FXMLLoader fXMLLoader = PluginManageController.getFXMLLoader();
         Parent root = fXMLLoader.load();
-        PluginManageController pluginManageController = fXMLLoader.getController();
-        pluginManageController.setIndexController(this);
         String pluginManage = bundle.getString("plugin_manage");
         JavaFxViewUtil.openNewWindow(pluginManage, root);
     }

@@ -1,11 +1,12 @@
 package com.mutool.box.services.index;
 
-import com.mutool.box.controller.index.PluginManageController;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.plugin.PluginManager;
 import com.mutool.box.services.IndexService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,34 +25,26 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  * @date: 2020/1/19 17:41
  */
 
-@Getter
-@Setter
 @Slf4j
 @Service
 public class PluginManageService {
 
-    public static final String PLUGIN_LIST_URL = "https://liershuang.gitee.io/maven/mutool-box/config/plugin-list.json";
-
-    public static final String PLUGIN_LIST_PATH = "system_plugin_list.json";
-
+    @Getter
+    private ObservableList<Map<String, String>> originPluginData = FXCollections.observableArrayList();
+    @Getter
+    private FilteredList<Map<String, String>> pluginDataTableData = new FilteredList<>(originPluginData, m -> true);
     @Autowired
     private IndexService indexService;
 
-    private PluginManageController pluginManageController;
-
     private PluginManager pluginManager = PluginManager.getInstance();
 
-    public PluginManageService(PluginManageController pluginManageController) {
-        this.pluginManageController = pluginManageController;
-    }
 
-    public void getPluginList() {
+    public void initPluginList() {
         pluginManager.loadServerPlugins();
         pluginManager.getPluginList().forEach(this::addDataRow);
     }
 
     private void addDataRow(PluginJarInfo plugin) {
-
         Map<String, String> dataRow = new HashMap<>();
         dataRow.put("nameTableColumn", plugin.getName());
         dataRow.put("synopsisTableColumn", plugin.getSynopsis());
@@ -73,7 +66,7 @@ public class PluginManageService {
             dataRow.put("isEnableTableColumn", plugin.getIsEnable().toString());
         }
 
-        pluginManageController.getOriginPluginData().add(dataRow);
+        originPluginData.add(dataRow);
     }
 
     public void downloadPluginJar(Map<String, String> dataRow) throws Exception {
@@ -88,13 +81,11 @@ public class PluginManageService {
         pluginJarInfo.setIsEnable(true);
 
         File file = pluginManager.downloadPlugin(pluginJarInfo);
-
-//        pluginManageController.getIndexController().addToolMenu(file);
         indexService.addToolMenu(file);
     }
 
     public void setIsEnableTableColumn(Integer index) {
-        Map<String, String> dataRow = pluginManageController.getOriginPluginData().get(index);
+        Map<String, String> dataRow = originPluginData.get(index);
         String jarName = dataRow.get("jarName");
         PluginJarInfo pluginJarInfo = this.pluginManager.getPlugin(jarName);
         if (pluginJarInfo != null) {
@@ -102,8 +93,12 @@ public class PluginManageService {
         }
     }
 
+    /**
+     * 插件搜索
+     * @param keyword
+     */
     public void searchPlugin(String keyword) {
-        pluginManageController.getPluginDataTableData().setPredicate(map -> {
+        pluginDataTableData.setPredicate(map -> {
             if (StringUtils.isBlank(keyword)) {
                 return true;
             } else {
@@ -133,4 +128,5 @@ public class PluginManageService {
         Boolean isEnable = pluginJarInfo.getIsEnable();
         return isEnable != null && isEnable;
     }
+
 }

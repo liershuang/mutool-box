@@ -4,18 +4,14 @@ import com.mutool.box.fxmlView.IndexView;
 import com.mutool.box.utils.StageUtils;
 import com.mutool.box.utils.XJavaFxSystemUtil;
 import com.mutool.javafx.core.javafx.dialog.FxAlerts;
-import com.mutool.javafx.core.util.javafx.AlertUtil;
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
 import de.felixroske.jfxsupport.GUIState;
 import de.felixroske.jfxsupport.SplashScreen;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 

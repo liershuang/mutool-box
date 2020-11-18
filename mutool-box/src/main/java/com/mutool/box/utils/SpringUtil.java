@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class SpringUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext = null;
-// 非@import显式注入，@Component是必须的，且该类必须与main同包或子包
+    // 非@import显式注入，@Component是必须的，且该类必须与main同包或子包
     // 若非同包或子包，则需手动import 注入，有没有@Component都一样
     // 可复制到Test同包测试
 
@@ -18,7 +18,6 @@ public class SpringUtil implements ApplicationContextAware {
         if(SpringUtil.applicationContext == null){
             SpringUtil.applicationContext = applicationContext;
         }
-        System.out.println("---------------com.mutool.box.utils.SpringUtil---------------");
     }
 
     //获取applicationContext

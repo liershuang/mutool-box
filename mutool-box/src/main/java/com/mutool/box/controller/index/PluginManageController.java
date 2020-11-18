@@ -1,22 +1,18 @@
 package com.mutool.box.controller.index;
 
-import com.mutool.box.controller.IndexController;
 import com.mutool.box.plugin.PluginManager;
 import com.mutool.box.services.index.PluginManageService;
 import com.mutool.box.view.index.PluginManageView;
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
@@ -30,25 +26,19 @@ import java.util.ResourceBundle;
  * @date: 2020/1/19 17:41
  */
 
-@Getter
-@Setter
 @Slf4j
 @Controller
 public class PluginManageController extends PluginManageView {
 
     public static final String FXML = "/fxmlView/index/PluginManage.fxml";
 
-    private PluginManageService pluginManageService = new PluginManageService(this);
-
-    private ObservableList<Map<String, String>> originPluginData = FXCollections.observableArrayList();
-
-    private FilteredList<Map<String, String>> pluginDataTableData = new FilteredList<>(originPluginData, m -> true);
-
-    private IndexController indexController;
+    //    @Autowired //todo 注入失败，研究原因
+    private PluginManageService pluginManageService = new PluginManageService();
 
     public static FXMLLoader getFXMLLoader() {
-        return new FXMLLoader(IndexController.class.getResource(FXML));
+        return new FXMLLoader(PluginManageController.class.getResource(FXML));
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,6 +48,8 @@ public class PluginManageController extends PluginManageView {
     }
 
     private void initView() {
+        FilteredList<Map<String, String>> pluginDataTableData = pluginManageService.getPluginDataTableData();
+
         JavaFxViewUtil.setTableColumnMapValueFactory(nameTableColumn, "nameTableColumn");
         JavaFxViewUtil.setTableColumnMapValueFactory(synopsisTableColumn, "synopsisTableColumn");
         JavaFxViewUtil.setTableColumnMapValueFactory(versionTableColumn, "versionTableColumn");
@@ -111,7 +103,6 @@ public class PluginManageController extends PluginManageView {
     }
 
     private void initEvent() {
-
         // 右键菜单
         MenuItem mnuSavePluginConfig = new MenuItem("保存配置");
         mnuSavePluginConfig.setOnAction(ev -> {
@@ -133,7 +124,7 @@ public class PluginManageController extends PluginManageView {
     }
 
     private void initService() {
-        pluginManageService.getPluginList();
+        pluginManageService.initPluginList();
     }
 
     @FXML
