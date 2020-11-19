@@ -2,6 +2,7 @@ package com.mutool.box.plugin;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.mutool.box.constant.UrlConstant;
 import com.mutool.box.model.PluginJarInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -23,37 +24,34 @@ import java.util.function.Consumer;
 @Slf4j
 public class PluginManager {
 
-    public static final String SERVER_PLUGINS_URL = "https://liershuang.gitee.io/maven/mutool-box/config/plugin-list.json";
-
-    public static final String LOCAL_PLUGINS_PATH = "./system_plugin_list.json";
-
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
+    private final String localPluginsPath = UrlConstant.LOCAL_PLUGINS_PATH;
+    /** 插件列表 */
+    private final List<PluginJarInfo> pluginList = new ArrayList<>();
+
     public static PluginManager getInstance() {
-        return new PluginManager(LOCAL_PLUGINS_PATH);
+        return new PluginManager();
     }
 
-    //////////////////////////////////////////////////////////////
-
-    private final String localPluginsPath;
-
-    private final List<PluginJarInfo> pluginList = new ArrayList<>(); // 插件列表
-
-    public PluginManager(String localPluginsPath) {
-        this.localPluginsPath = localPluginsPath;
-
-        if (StringUtils.isNotEmpty(localPluginsPath)) {
-            loadLocalPlugins();
-        }
+    public PluginManager() {
+        //加载本地配置文件信息到内存
+        loadLocalPlugins();
     }
 
-    ////////////////////////////////////////////////////////////// 查询插件
-
+    /**
+     * 获取插件列表
+     * @return
+     */
     public List<PluginJarInfo> getPluginList() {
         return Collections.unmodifiableList(this.pluginList);
     }
 
-
+    /**
+     * 通过插件名获取插件完整信息
+     * @param jarName
+     * @return
+     */
     public PluginJarInfo getPlugin(String jarName) {
         return this.pluginList.stream()
             .filter(plugin -> Objects.equals(plugin.getJarName(), jarName))
@@ -71,6 +69,7 @@ public class PluginManager {
             }
             String json = new String(Files.readAllBytes(path), DEFAULT_CHARSET);
             JSON.parseArray(json, PluginJarInfo.class).forEach(plugin -> {
+                //如果不存在则添加，否则更新本地版本号、是否下载、是否启用标志
                 this.addOrUpdatePlugin(plugin, exist -> {
                     exist.setLocalVersionNumber(plugin.getLocalVersionNumber());
                     exist.setIsDownload(plugin.getIsDownload());
@@ -82,10 +81,14 @@ public class PluginManager {
         }
     }
 
+    /**
+     * 下载或更新服务起插件列表信息
+     */
     public void loadServerPlugins() {
         try {
-            String json = HttpUtil.get(SERVER_PLUGINS_URL);
+            String json = HttpUtil.get(UrlConstant.SERVER_PLUGINS_URL);
             JSON.parseArray(json, PluginJarInfo.class).forEach(plugin -> {
+                //如果不存在则添加，否则更新远程名称、简介、版本、下载地址
                 this.addOrUpdatePlugin(plugin, exist -> {
                     exist.setName(plugin.getName());
                     exist.setSynopsis(plugin.getSynopsis());
@@ -99,11 +102,19 @@ public class PluginManager {
         }
     }
 
-    // 异步下载服务器插件列表，便于界面上展示 loading 动画
+    /**
+     * 异步下载或更新服务器插件列表信息，便于界面上展示 loading 动画
+     * @return
+     */
     public CompletableFuture<Void> loadServerPluginsAsync() {
         return CompletableFuture.runAsync(this::loadServerPlugins);
     }
 
+    /**
+     * 新增或更新插件信息到内存
+     * @param pluginJarInfo 插件信息
+     * @param ifExists 插件信息处理逻辑
+     */
     private void addOrUpdatePlugin(PluginJarInfo pluginJarInfo,  Consumer<PluginJarInfo> ifExists) {
         PluginJarInfo exists = getPlugin(pluginJarInfo.getJarName());
         if (exists == null) {
@@ -115,6 +126,12 @@ public class PluginManager {
 
     ////////////////////////////////////////////////////////////// 下载插件
 
+    /**
+     * 下载插件到本地
+     * @param pluginJarInfo
+     * @return
+     * @throws IOException
+     */
     public File downloadPlugin(PluginJarInfo pluginJarInfo) throws IOException {
         PluginJarInfo plugin = getPlugin(pluginJarInfo.getJarName());
         if (plugin == null) {
@@ -132,13 +149,12 @@ public class PluginManager {
         return file;
     }
 
-    ////////////////////////////////////////////////////////////// 保存配置
-
+    /**
+     * 保存插件配置到本地文件
+     * @throws IOException
+     */
     public void saveToFile() throws IOException {
         String json = JSON.toJSONString(this.pluginList, true);
-        Files.write(
-            Paths.get(this.localPluginsPath),
-            json.getBytes(DEFAULT_CHARSET)
-        );
+        Files.write(Paths.get(this.localPluginsPath), json.getBytes(DEFAULT_CHARSET));
     }
 }

@@ -1,4 +1,4 @@
-package com.mutool.box.fxmlView;
+package com.mutool.box.fxmlview;
 
 import com.jfoenix.controls.JFXDecorator;
 import com.mutool.box.utils.Config;
@@ -9,7 +9,6 @@ import de.felixroske.jfxsupport.FXMLView;
 import de.felixroske.jfxsupport.GUIState;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.annotation.Scope;
 
@@ -36,7 +35,6 @@ public class IndexView extends AbstractFxmlView {
     @Override
     public Parent getView() {
         Stage stage = GUIState.getStage();
-        stage.initStyle(StageStyle.UNIFIED);
         JFXDecorator decorator = JavaFxViewUtil.getJFXDecorator(stage,
                 stage.getTitle() + Config.xJavaFxToolVersions,"/images/icon.jpg",super.getView());
         decorator.setOnCloseButtonAction(() -> {

@@ -1,6 +1,6 @@
 package com.mutool.box;
 
-import com.mutool.box.fxmlView.IndexView;
+import com.mutool.box.fxmlview.IndexView;
 import com.mutool.box.utils.StageUtils;
 import com.mutool.box.utils.XJavaFxSystemUtil;
 import com.mutool.javafx.core.javafx.dialog.FxAlerts;

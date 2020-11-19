@@ -38,12 +38,20 @@ public class PluginManageService {
 
     private PluginManager pluginManager = PluginManager.getInstance();
 
-
+    /**
+     * 远程插件信息加载到内存并组织表格信息
+     */
     public void initPluginList() {
+        //加载远程插件信息到内存，点击下载时将内存插件信息保存到本地
         pluginManager.loadServerPlugins();
+        //插件信息组装页面表格信息
         pluginManager.getPluginList().forEach(this::addDataRow);
     }
 
+    /**
+     * 组织表格信息
+     * @param plugin
+     */
     private void addDataRow(PluginJarInfo plugin) {
         Map<String, String> dataRow = new HashMap<>();
         dataRow.put("nameTableColumn", plugin.getName());
@@ -69,6 +77,11 @@ public class PluginManageService {
         originPluginData.add(dataRow);
     }
 
+    /**
+     * 下载插件
+     * @param dataRow
+     * @throws Exception
+     */
     public void downloadPluginJar(Map<String, String> dataRow) throws Exception {
         PluginJarInfo pluginJarInfo = new PluginJarInfo();
         pluginJarInfo.setName(dataRow.get("nameTableColumn"));
@@ -84,6 +97,10 @@ public class PluginManageService {
         indexService.addToolMenu(file);
     }
 
+    /**
+     * 设置是否启用
+     * @param index
+     */
     public void setIsEnableTableColumn(Integer index) {
         Map<String, String> dataRow = originPluginData.get(index);
         String jarName = dataRow.get("jarName");

@@ -20,8 +20,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +40,6 @@ import static com.mutool.box.utils.Config.Keys.NotepadEnabled;
 @FXMLController
 public class IndexController extends IndexView {
 
-    public static final String STATISTICS_URL = "https://xwintop.gitee.io/maven/tongji/xJavaFxTool.html";
-
     @Autowired
     private IndexService indexService;
 
@@ -63,7 +59,7 @@ public class IndexController extends IndexView {
         //加载记事本页面
         initNotepad();
         this.indexService.addWebView("交流吐槽", UrlConstant.FEEDBACK_URL, null);
-        this.tongjiWebView.getEngine().load(STATISTICS_URL);
+        this.tongjiWebView.getEngine().load(UrlConstant.STATISTICS_URL);
         //加载插件管理页面
         initPluginManager();
     }
@@ -101,7 +97,6 @@ public class IndexController extends IndexView {
             try {
                 indexService.addToolMenu(jarFile);
             } catch (Exception e) {
-
                 log.error("加载工具出错：", e);
             }
         }

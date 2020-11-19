@@ -71,29 +71,30 @@ public class PluginManageController extends PluginManageView {
                             super.updateItem(item, empty);
                             this.setText(null);
                             this.setGraphic(null);
-                            if (!empty) {
-                                Map<String, String> dataRow = pluginDataTableData.get(this.getIndex());
-                                Button downloadButton = new Button(dataRow.get("isDownloadTableColumn"));
-                                if ("已下载".equals(dataRow.get("isDownloadTableColumn"))) {
-                                    downloadButton.setDisable(true);
-                                }
-                                this.setContentDisplay(ContentDisplay.CENTER);
-                                downloadButton.setOnMouseClicked((me) -> {
-                                    try {
-                                        pluginManageService.downloadPluginJar(dataRow);
-                                        dataRow.put("isEnableTableColumn", "true");
-                                        dataRow.put("isDownloadTableColumn", "已下载");
-                                        downloadButton.setText("已下载");
-                                        downloadButton.setDisable(true);
-                                        pluginDataTableView.refresh();
-                                        TooltipUtil.showToast("插件 " + dataRow.get("nameTableColumn") + " 下载完成");
-                                    } catch (Exception e) {
-                                        log.error("下载插件失败：", e);
-                                        TooltipUtil.showToast("下载插件失败：" + e.getMessage());
-                                    }
-                                });
-                                this.setGraphic(downloadButton);
+                            if (empty) {
+                                return;
                             }
+                            Map<String, String> dataRow = pluginDataTableData.get(this.getIndex());
+                            Button downloadButton = new Button(dataRow.get("isDownloadTableColumn"));
+                            if ("已下载".equals(dataRow.get("isDownloadTableColumn"))) {
+                                downloadButton.setDisable(true);
+                            }
+                            this.setContentDisplay(ContentDisplay.CENTER);
+                            downloadButton.setOnMouseClicked((me) -> {
+                                try {
+                                    pluginManageService.downloadPluginJar(dataRow);
+                                    dataRow.put("isEnableTableColumn", "true");
+                                    dataRow.put("isDownloadTableColumn", "已下载");
+                                    downloadButton.setText("已下载");
+                                    downloadButton.setDisable(true);
+                                    pluginDataTableView.refresh();
+                                    TooltipUtil.showToast("插件 " + dataRow.get("nameTableColumn") + " 下载完成");
+                                } catch (Exception e) {
+                                    log.error("下载插件失败：", e);
+                                    TooltipUtil.showToast("下载插件失败：" + e.getMessage());
+                                }
+                            });
+                            this.setGraphic(downloadButton);
                         }
                     };
                 }
@@ -103,7 +104,7 @@ public class PluginManageController extends PluginManageView {
     }
 
     private void initEvent() {
-        // 右键菜单
+        // 插件菜单右键选择保存配置执行，将内存插件配置保存到本地
         MenuItem mnuSavePluginConfig = new MenuItem("保存配置");
         mnuSavePluginConfig.setOnAction(ev -> {
             try {
@@ -116,7 +117,6 @@ public class PluginManageController extends PluginManageView {
 
         ContextMenu contextMenu = new ContextMenu(mnuSavePluginConfig);
         pluginDataTableView.setContextMenu(contextMenu);
-
         // 搜索
         selectPluginTextField.textProperty().addListener((_ob, _old, _new) -> {
             pluginManageService.searchPlugin(_new);

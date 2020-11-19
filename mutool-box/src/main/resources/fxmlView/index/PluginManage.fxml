@@ -31,10 +31,10 @@
               <columns>
                 <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="名称" />
                 <TableColumn fx:id="synopsisTableColumn" prefWidth="75.0" text="简介" />
-                  <TableColumn fx:id="versionTableColumn" prefWidth="75.0" text="版本" />
-                  <TableColumn fx:id="isDownloadTableColumn" prefWidth="75.0" text="是否下载" />
-                  <TableColumn fx:id="isEnableTableColumn" prefWidth="75.0" text="是否启用" />
-                  <TableColumn fx:id="downloadTableColumn" prefWidth="75.0" text="下载" />
+                <TableColumn fx:id="versionTableColumn" prefWidth="75.0" text="版本" />
+                <TableColumn fx:id="isDownloadTableColumn" prefWidth="75.0" text="是否下载" />
+                <TableColumn fx:id="isEnableTableColumn" prefWidth="75.0" text="是否启用" />
+                <TableColumn fx:id="downloadTableColumn" prefWidth="75.0" text="下载" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
