@@ -1,17 +1,22 @@
 package com.mutool.box.services.index;
 
+import cn.hutool.json.JSONUtil;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.plugin.PluginManager;
 import com.mutool.box.services.IndexService;
+import com.mutool.javafx.core.util.javafx.HtmlPageUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.Tab;
+import javafx.scene.web.WebView;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +31,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  */
 
 @Slf4j
-@Service
+//@Service
 public class PluginManageService {
 
     @Getter
@@ -38,6 +43,11 @@ public class PluginManageService {
 
     private PluginManager pluginManager = PluginManager.getInstance();
 
+    @PostConstruct
+    private void loadService(){
+        System.out.println("加载 PluginManageService ******************");
+    }
+
     /**
      * 远程插件信息加载到内存并组织表格信息
      */
@@ -46,6 +56,24 @@ public class PluginManageService {
         pluginManager.loadServerPlugins();
         //插件信息组装页面表格信息
         pluginManager.getPluginList().forEach(this::addDataRow);
+    }
+
+    public String getPluginList(){
+        return JSONUtil.toJsonStr(pluginManager.getPluginList());
+    }
+
+    public void openNewPluginPage(){
+        try{
+            Map<String, Object> data = new HashMap<>();
+            WebView browser = HtmlPageUtil.createWebView("/static/plugin.html", data);
+
+            Tab tab = new Tab("插件页面");
+            tab.setContent(browser);
+            indexService.getTabPaneMain().getTabs().add(tab);
+            indexService.getTabPaneMain().getSelectionModel().select(tab);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -82,6 +110,7 @@ public class PluginManageService {
      * @param dataRow
      * @throws Exception
      */
+    @Deprecated
     public void downloadPluginJar(Map<String, String> dataRow) throws Exception {
         PluginJarInfo pluginJarInfo = new PluginJarInfo();
         pluginJarInfo.setName(dataRow.get("nameTableColumn"));
@@ -94,7 +123,8 @@ public class PluginManageService {
         pluginJarInfo.setIsEnable(true);
 
         File file = pluginManager.downloadPlugin(pluginJarInfo);
-        indexService.addToolMenu(file);
+//        indexService.addToolMenu(file);
+        indexService.addMenu(file);
     }
 
     /**
@@ -130,20 +160,6 @@ public class PluginManageService {
                 !entry.getKey().equals("downloadUrl") &&
                     entry.getValue().toLowerCase().contains(keyword.toLowerCase())
         );
-    }
-
-    /**
-     * 判断插件是否启用
-     */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isPluginEnabled(String fileName) {
-        String jarName = substringBeforeLast(fileName, "-");
-        PluginJarInfo pluginJarInfo = PluginManager.getInstance().getPlugin(jarName);
-        if (pluginJarInfo == null) {
-            return false;
-        }
-        Boolean isEnable = pluginJarInfo.getIsEnable();
-        return isEnable != null && isEnable;
     }
 
 }

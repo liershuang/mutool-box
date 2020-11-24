@@ -32,11 +32,13 @@ public class PluginJarInfo {
 
     private Boolean isEnable;       // 是否启用
 
+    private Boolean canUpdate;      // 是否可更新
+
     private Integer localVersionNumber;     // 插件本地版本
 
     ///////////////////////////////////////// 下面的属性来自插件描述文件 toolFxmlLoaderConfiguration.xml
 
-    private String fxmlPath;                // FXML 资源路径
+    private String pagePath;                // FXML或web 资源路径
 
     private String iconPath;                // 图标资源路径（可选）
 

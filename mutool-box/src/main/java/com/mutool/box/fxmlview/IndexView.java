@@ -29,7 +29,7 @@ public class IndexView extends AbstractFxmlView {
         ResourceBundle bundle = ResourceBundle.getBundle(this.getResourceBundle().get().getBaseBundleName(), Config.defaultLocale);
         FieldUtils.writeField(this,"bundle",Optional.ofNullable(bundle),true);
         //修改标题国际化
-        GUIState.getStage().setTitle(bundle.getString("Title"));
+        GUIState.getStage().setTitle("mutool工具箱");
     }
 
     @Override

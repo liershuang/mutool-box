@@ -1,9 +1,8 @@
 package com.mutool.box.controller;
 
 import com.mutool.box.constant.UrlConstant;
-import com.mutool.box.controller.index.PluginManageController;
 import com.mutool.box.services.IndexService;
-import com.mutool.box.services.index.PluginManageService;
+import com.mutool.box.services.PluginService;
 import com.mutool.box.services.index.SystemSettingService;
 import com.mutool.box.utils.Config;
 import com.mutool.box.view.IndexView;
@@ -11,13 +10,10 @@ import com.mutool.javafx.core.util.ConfigureUtil;
 import com.mutool.javafx.core.util.HttpClientUtil;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
 import com.mutool.javafx.core.util.javafx.JavaFxSystemUtil;
-import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import lombok.extern.slf4j.Slf4j;
@@ -42,15 +38,14 @@ public class IndexController extends IndexView {
 
     @Autowired
     private IndexService indexService;
+    @Autowired
+    private PluginService pluginService;
 
     private ContextMenu contextMenu = new ContextMenu();
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        indexService.setBundle(resources);
-
         this.bundle = resources;
         initView();
         initEvent();
@@ -59,19 +54,16 @@ public class IndexController extends IndexView {
         //加载记事本页面
         initNotepad();
         this.indexService.addWebView("交流吐槽", UrlConstant.FEEDBACK_URL, null);
-        this.tongjiWebView.getEngine().load(UrlConstant.STATISTICS_URL);
-        //加载插件管理页面
-        initPluginManager();
+//        this.tongjiWebView.getEngine().load(UrlConstant.STATISTICS_URL);
+        //加载插件管理页面（html实现）
+        pluginService.openPluginManagerPage();
     }
+
 
     private void initNotepad() {
         if (Config.getBoolean(NotepadEnabled, true)) {
             addNodepadAction(null);
         }
-    }
-
-    private void initPluginManager() {
-        indexService.addContent("插件管理", PluginManageController.FXML, "", "");
     }
 
     /**
@@ -82,7 +74,6 @@ public class IndexController extends IndexView {
         indexService.setTabPaneMain(tabPaneMain);
         indexService.setSingleWindowBootCheckBox(singleWindowBootCheckBox);
 
-        indexService.addMenu("toolsMenu", toolsMenu);
         indexService.addMenu("moreToolsMenu", moreToolsMenu);
         File libPath = new File("libs/");
         // 获取所有的.jar和.zip文件
@@ -91,11 +82,8 @@ public class IndexController extends IndexView {
             return;
         }
         for (File jarFile : jarFiles) {
-            if (!PluginManageService.isPluginEnabled(jarFile.getName())) {
-                continue;
-            }
             try {
-                indexService.addToolMenu(jarFile);
+                indexService.addMenu(jarFile);
             } catch (Exception e) {
                 log.error("加载工具出错：", e);
             }
@@ -137,7 +125,7 @@ public class IndexController extends IndexView {
 
     @FXML
     private void openAllTabAction(ActionEvent event) {
-        for (MenuItem value : indexService.getMenuItemMap().values()) {
+        for (MenuItem value : indexService.getJavafxMenuItemMap().values()) {
             value.fire();
         }
     }
@@ -153,25 +141,28 @@ public class IndexController extends IndexView {
     }
 
     @FXML
-    private void pluginManageAction() throws Exception {
-        FXMLLoader fXMLLoader = PluginManageController.getFXMLLoader();
-        Parent root = fXMLLoader.load();
-        String pluginManage = bundle.getString("plugin_manage");
-        JavaFxViewUtil.openNewWindow(pluginManage, root);
+    /** 点击插件管理打开插件列表页面 */
+    private void pluginManageAction() {
+        pluginService.openPluginManagerPage();
+
+//        FXMLLoader fXMLLoader = PluginManageController.getFXMLLoader();
+//        Parent root = fXMLLoader.load();
+//        JavaFxViewUtil.openNewWindow("插件管理", root);
     }
 
     @FXML
     private void SettingAction() {
-        SystemSettingService.openSystemSettings(bundle.getString("Setting"));
+        SystemSettingService.openSystemSettings("设置");
     }
 
     @FXML
     private void aboutAction(ActionEvent event) throws Exception {
-        AlertUtil.showInfoAlert(bundle.getString("aboutText") + Config.xJavaFxToolVersions);
+        String aboutText = "欢迎使用JavaFx工具集合。\\ngit地址：https://github.com/liershuang/mutool-view\\n作者：小木\\n博客：https://liershuang.gitee.io\\n欢迎前来提出意见，一起完善该工具，谢谢！！\\n当前版本：";
+        AlertUtil.showInfoAlert(aboutText + Config.xJavaFxToolVersions);
     }
 
     @FXML
-    private void setLanguageAction(ActionEvent event) throws Exception {
+    private void setLanguageAction(ActionEvent event) {
         MenuItem menuItem = (MenuItem) event.getSource();
         indexService.setLanguageAction(menuItem.getText());
     }

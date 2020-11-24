@@ -25,8 +25,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class Main extends AbstractJavaFxApplicationSupport {
 
     public static void main(String[] args) {
-        XJavaFxSystemUtil.initSystemLocal();//初始化本地语言
-        XJavaFxSystemUtil.addJarByLibs();//添加外部jar包
+        //初始化本地语言
+        XJavaFxSystemUtil.initSystemLocal();
         //启动图设置
         SplashScreen splashScreen =  new SplashScreen() {
             @Override

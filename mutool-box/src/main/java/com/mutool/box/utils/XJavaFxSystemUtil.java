@@ -1,7 +1,6 @@
 package com.mutool.box.utils;
 
 import com.mutool.box.plugin.PluginManager;
-import com.mutool.box.services.index.PluginManageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,38 +37,14 @@ public class XJavaFxSystemUtil {
 
 
     /**
-     * @Title: addJarByLibs
-     * @Description: 添加libs中jar包到系统中
-     */
-    public static void addJarByLibs() {
-        //加载本地插件信息（检查介绍及是否已下载）
-        PluginManager.getInstance().loadLocalPlugins();
-        try {
-            // 系统类库路径
-            File libPath = new File("libs/");
-            // 获取所有的.jar和.zip文件
-            File[] jarFiles = libPath.listFiles((dir, name) -> name.endsWith(".jar"));
-            if (jarFiles != null) {
-                for (File file : jarFiles) {
-                    if (!PluginManageService.isPluginEnabled(file.getName())) {
-                        continue;
-                    }
-                    addJarClass(file);
-                }
-            }
-        } catch (Exception e) {
-            log.error("添加libs中jar包到系统中异常:", e);
-        }
-    }
-
-    /**
-     * @Title: addJarClass
-     * @Description: 添加jar包到系统中
+     * 添加jar到系统中
+     * @param jarFile jar包文件
      */
     public static void addJarClass(File jarFile) {
         try {
             Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            method.setAccessible(true); // 设置方法的访问权限
+            // 设置方法的访问权限
+            method.setAccessible(true);
             // 获取系统类加载器
             URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             URL url = jarFile.toURI().toURL();

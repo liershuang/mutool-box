@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.PostConstruct;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -27,18 +28,20 @@ import java.util.ResourceBundle;
  */
 
 @Slf4j
-@Controller
+//@Controller
 public class PluginManageController extends PluginManageView {
 
     public static final String FXML = "/fxmlView/index/PluginManage.fxml";
 
-    //    @Autowired //todo 注入失败，研究原因
-    private PluginManageService pluginManageService = new PluginManageService();
+    @Autowired
+    // todo 注入失败，研究原因
+//    private PluginManageService pluginManageService;
+    private PluginManageService pluginManageService;
 
-    public static FXMLLoader getFXMLLoader() {
-        return new FXMLLoader(PluginManageController.class.getResource(FXML));
+    @PostConstruct
+    private void IndexService(){
+        System.out.println("加载 PluginManageController ******************");
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,6 +64,7 @@ public class PluginManageController extends PluginManageView {
 
         // TODO 实现插件的启用禁用
 
+        //点击下载执行操作
         downloadTableColumn.setCellFactory(
             new Callback<TableColumn<Map<String, String>, String>, TableCell<Map<String, String>, String>>() {
                 @Override
@@ -108,7 +112,7 @@ public class PluginManageController extends PluginManageView {
         MenuItem mnuSavePluginConfig = new MenuItem("保存配置");
         mnuSavePluginConfig.setOnAction(ev -> {
             try {
-                PluginManager.getInstance().saveToFile();
+                PluginManager.getInstance().savePluginInfoToLocalFile();
                 TooltipUtil.showToast("保存配置成功");
             } catch (Exception ex) {
                 log.error("保存插件配置失败", ex);

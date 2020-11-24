@@ -66,6 +66,17 @@
 			<artifactId>bootstrapfx-core</artifactId>
 			<version>0.3.0</version>
 		</dependency>
+		<!-- javafx webview调试 -->
+		<!--<dependency>
+			<groupId>com.github.jitpack</groupId>
+			<artifactId>gradle-simple</artifactId>
+			<version>master-SNAPSHOT</version>
+		</dependency>-->
+		<dependency>
+			<groupId>com.vladsch.javafx-webview-debugger</groupId>
+			<artifactId>javafx-webview-debugger</artifactId>
+			<version>0.8.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -92,6 +103,11 @@
 			<id>aliyunmaven</id>
 			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 		</repository>
+
+		<!--<repository>
+			<id>view_debug</id>
+			<url>https://jitpack.io</url>
+		</repository>-->
 		<!--<repository>
 			<id>xwintop-maven</id>
 			<url>https://864381832.github.io/maven/repository</url>

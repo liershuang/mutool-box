@@ -25,32 +25,31 @@
                     <menus>
                       <Menu fx:id="fileMenu" mnemonicParsing="false" text="%File">
                         <items>
-                              <MenuItem mnemonicParsing="false" onAction="#closeAllTabAction" text="%closeAllTab" />
-                              <MenuItem mnemonicParsing="false" onAction="#openAllTabAction" text="%openAllTab" />
-                            <MenuItem mnemonicParsing="false" onAction="#pluginManageAction" text="%plugin_manage" />
-                              <MenuItem mnemonicParsing="false" onAction="#addNodepadAction" text="%addNodepad" />
-                              <MenuItem mnemonicParsing="false" onAction="#addLogConsoleAction" text="%addLogConsole" />
-                          <MenuItem mnemonicParsing="false" onAction="#exitAction" text="%Exit" />
+                              <MenuItem mnemonicParsing="false" onAction="#closeAllTabAction" text="关闭所有标签" />
+                              <MenuItem mnemonicParsing="false" onAction="#openAllTabAction" text="打开所有标签" />
+                            <MenuItem mnemonicParsing="false" onAction="#pluginManageAction" text="插件管理" />
+                              <MenuItem mnemonicParsing="false" onAction="#addNodepadAction" text="临时记事本" />
+                              <MenuItem mnemonicParsing="false" onAction="#addLogConsoleAction" text="日志控制台" />
+                          <MenuItem mnemonicParsing="false" onAction="#exitAction" text="退出" />
                         </items>
                       </Menu>
-                      <Menu fx:id="toolsMenu" mnemonicParsing="false" text="%Tools" />
-                        <Menu fx:id="moreToolsMenu" mnemonicParsing="false" text="%More_Tools" />
-                      <Menu fx:id="helpMenu" mnemonicParsing="false" text="%Help">
-                          <MenuItem mnemonicParsing="false" onAction="#openLogFileAction" text="%openLogFile" />
-                          <MenuItem mnemonicParsing="false" onAction="#openLogFolderAction" text="%openLogFolder" />
-                          <MenuItem mnemonicParsing="false" onAction="#openConfigFolderAction" text="%openConfigFolder" />
-                          <MenuItem mnemonicParsing="false" onAction="#openPluginFolderAction" text="%openPluginFolder" />
+                      <Menu fx:id="moreToolsMenu" mnemonicParsing="false" text="插件列表" />
+                      <Menu fx:id="helpMenu" mnemonicParsing="false" text="帮助">
+                          <MenuItem mnemonicParsing="false" onAction="#openLogFileAction" text="打开日志文件" />
+                          <MenuItem mnemonicParsing="false" onAction="#openLogFolderAction" text="打开日志目录" />
+                          <MenuItem mnemonicParsing="false" onAction="#openConfigFolderAction" text="打开配置目录" />
+                          <MenuItem mnemonicParsing="false" onAction="#openPluginFolderAction" text="打开插件目录" />
                           <SeparatorMenuItem />
                         <items>
-                              <Menu mnemonicParsing="false" text="%SetLanguage">
-                                <items>
-                                  <MenuItem mnemonicParsing="false" onAction="#setLanguageAction" text="简体中文" />
-                                    <MenuItem mnemonicParsing="false" onAction="#setLanguageAction" text="English" />
-                                </items>
-                              </Menu>
-                          <MenuItem mnemonicParsing="false" onAction="#userSupportAction" text="%userSupport" />
-                          <MenuItem mnemonicParsing="false" onAction="#SettingAction" text="%Setting" />
-                          <MenuItem mnemonicParsing="false" onAction="#aboutAction" text="%About" />
+                          <Menu mnemonicParsing="false" text="设置语言">
+                            <items>
+                              <MenuItem mnemonicParsing="false" onAction="#setLanguageAction" text="简体中文" />
+                                <MenuItem mnemonicParsing="false" onAction="#setLanguageAction" text="English" />
+                            </items>
+                          </Menu>
+                          <MenuItem mnemonicParsing="false" onAction="#userSupportAction" text="用户论坛" />
+                          <MenuItem mnemonicParsing="false" onAction="#SettingAction" text="设置" />
+                          <MenuItem mnemonicParsing="false" onAction="#aboutAction" text="关于" />
                         </items>
                       </Menu>
                     </menus>

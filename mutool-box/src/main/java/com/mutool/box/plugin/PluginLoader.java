@@ -22,7 +22,7 @@ public class PluginLoader {
      */
     public static void loadPluginAsWindow(PluginJarInfo plugin) {
         try {
-            FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getFxmlPath()));
+            FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getPagePath()));
 
             if (StringUtils.isNotEmpty(plugin.getBundleName())) {
                 ResourceBundle resourceBundle = ResourceBundle.getBundle(plugin.getBundleName(), Config.defaultLocale);
@@ -42,7 +42,7 @@ public class PluginLoader {
      */
     public static void loadPluginAsTab(PluginJarInfo plugin, TabPane tabPane) {
         try {
-            FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getFxmlPath()));
+            FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getPagePath()));
 
             if (StringUtils.isNotEmpty(plugin.getBundleName())) {
                 ResourceBundle resourceBundle = ResourceBundle.getBundle(plugin.getBundleName(), Config.defaultLocale);

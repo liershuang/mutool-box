@@ -12,10 +12,10 @@ public final class UrlConstant {
 
     public static final String STATISTICS_URL = "https://xwintop.gitee.io/maven/tongji/xJavaFxTool.html";
 
-    /** 服务插件列表配置文件url */
+    /** 服务插件信息文件url */
     public static final String SERVER_PLUGINS_URL = "https://liershuang.gitee.io/maven/mutool-box/config/plugin-list.json";
 
-    /** 本地插件配置文件路径 */
+    /** 本地插件信息文件路径 */
     public static final String LOCAL_PLUGINS_PATH = "./system_plugin_list.json";
 
 }

@@ -18,15 +18,14 @@ public class HtmlPageUtil {
 
     /**
      * 创建webview并添加对象到页面
-     * @param url 本地html路径
+     * @param htmlPath 本地html路径
      * @param members 要放到页面的java对象map
      * @return WebView
      */
-    public static WebView createWebView(String url, Map<String, Object> members){
+    public static WebView createWebView(String htmlPath, Map<String, Object> members){
         WebView browser = new WebView();
         WebEngine webEngine = browser.getEngine();
-        System.out.println("文件绝对路径："+HtmlPageUtil.class.getResource(url).toExternalForm());
-        webEngine.load(HtmlPageUtil.class.getResource(url).toExternalForm());
+        webEngine.load(HtmlPageUtil.class.getResource(htmlPath).toExternalForm());
         if(CollectionUtil.isEmpty(members)){
             return browser;
         }
@@ -37,6 +36,10 @@ public class HtmlPageUtil {
                         members.forEach((k, v) -> {
                             win.setMember(k, v);
                         });
+                        // 页面加载完且放入页面对象后默认执行initPage方法渲染页面数据，否则直接使用对象加载页面数据不生效
+                        try{
+                            webEngine.executeScript("initPage()");
+                        }catch(Exception e){}
                     }
                 });
         return browser;
