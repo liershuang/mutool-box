@@ -1,5 +1,7 @@
 package com.mutool.box.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.FileUtil;
 import com.mutool.box.constant.UrlConstant;
 import com.mutool.box.services.IndexService;
 import com.mutool.box.services.PluginService;
@@ -75,12 +77,12 @@ public class IndexController extends IndexView {
         indexService.setSingleWindowBootCheckBox(singleWindowBootCheckBox);
 
         indexService.addMenu("moreToolsMenu", moreToolsMenu);
-        File libPath = new File("libs/");
         // 获取所有的.jar和.zip文件
-        File[] jarFiles = libPath.listFiles((dir, name) -> name.endsWith(".jar"));
-        if (jarFiles == null) {
+        List<File> jarFiles = FileUtil.loopFiles("libs/", file -> file.getName().endsWith(".jar"));
+        if(CollectionUtil.isEmpty(jarFiles)){
             return;
         }
+
         for (File jarFile : jarFiles) {
             try {
                 indexService.addMenu(jarFile);

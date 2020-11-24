@@ -1,6 +1,6 @@
 package com.mutool.box.services;
 
-import cn.hutool.json.JSONUtil;
+import cn.hutool.core.io.FileUtil;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.plugin.PluginManager;
 import com.mutool.javafx.core.util.javafx.HtmlPageUtil;
@@ -38,12 +38,12 @@ public class PluginService {
      */
     @PostConstruct
     public void initService(){
-        //添加jar到系统中
-        pluginManager.addJarByLibs();
         //加载本地插件信息到内存
         pluginManager.loadLocalPlugins();
         //加载远程插件信息到内存
         pluginManager.loadServerPlugins();
+        //添加jar到系统中
+        pluginManager.addPluginJarToSystem();
     }
 
     public void testnew(){
@@ -69,16 +69,17 @@ public class PluginService {
      * 打开新插件列表
      * @param menuId
      */
+    //todo 待考虑
     public void openPluginMenu(String menuId){
         try{
-            PluginJarInfo pluginInfo = pluginManager.getPluginInfo(menuId);
+            /*PluginJarInfo pluginInfo = pluginManager.getPluginInfo(menuId);
             //todo 加载jar包时将jar对应的service类获取并加入
             Map<String, Object> data = new HashMap<>();
             WebView browser = HtmlPageUtil.createWebView(pluginInfo.getPagePath(), data);
 
             Tab tab = new Tab(pluginInfo.getTitle());
             tab.setContent(browser);
-            indexService.addTab(tab);
+            indexService.addTab(tab);*/
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -91,7 +92,11 @@ public class PluginService {
      */
     public void downloadPlugin(String pluginJarName) throws IOException {
         File file = pluginManager.downloadPlugin(pluginJarName);
-        indexService.addMenu(file);
+        if(FileUtil.exist(file)){
+            indexService.addMenu(file);
+        }else{
+            log.error("文件不存在，未添加菜单。。。。");
+        }
     }
 
     /**
@@ -110,8 +115,8 @@ public class PluginService {
         }
         String jarFilePath = "libs/"+pluginJarName + "-" + plugin.getVersion() + ".jar";
         File pluginFile = new File(jarFilePath);
-        indexService.removeMenu(pluginFile);
         pluginManager.deletePlugin(pluginJarName);
+        indexService.removeMenu(pluginFile);
     }
 
 

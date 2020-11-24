@@ -1,5 +1,6 @@
 package com.mutool.box.plugin;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
@@ -39,7 +40,7 @@ public class PluginManager {
     }
 
     /**
-     * 获取插件列表
+     * 获取插件列表（只读）
      * @return
      */
     public List<PluginJarInfo> getPluginList() {
@@ -55,12 +56,6 @@ public class PluginManager {
         return this.pluginList.stream()
             .filter(plugin -> Objects.equals(plugin.getJarName(), jarName))
             .findFirst().orElse(null);
-    }
-
-    public PluginJarInfo getPluginInfo(String menuId){
-        return this.pluginList.stream()
-                .filter(plugin -> plugin.getMenuId().equals(menuId))
-                .findFirst().orElse(null);
     }
 
     /**
@@ -150,18 +145,16 @@ public class PluginManager {
         }
         String jarFilePath = "libs/"+pluginJarName + "-" + plugin.getVersion() + ".jar";
         FileUtil.del(jarFilePath);
-        File file = new File(jarFilePath);
-
-        String absolutePath = FileUtil.getAbsolutePath(jarFilePath);
-        HttpUtil.downloadFile(plugin.getDownloadUrl(), absolutePath);
+        HttpUtil.downloadFile(plugin.getDownloadUrl(), jarFilePath);
 
         plugin.setIsDownload(true);
         plugin.setIsEnable(true);
         plugin.setLocalVersionNumber(plugin.getVersionNumber());
         //保存插件配置信息到本地
-        this.savePluginInfoToLocalFile();
-
-        return file;
+        if(FileUtil.exist(jarFilePath)){
+            this.savePluginInfoToLocalFile();
+        }
+        return FileUtil.file(jarFilePath);
     }
 
     /**
@@ -190,24 +183,29 @@ public class PluginManager {
     }
 
     /**
-     * @Title: addJarByLibs
-     * @Description: 添加libs中jar包到系统中
+     * 添加插件jar包到系统中
      */
-    public void addJarByLibs() {
+    public void addPluginJarToSystem() {
         try {
-            // 系统类库路径
-            File libPath = new File("libs/");
             // 获取所有的.jar
-            File[] jarFiles = libPath.listFiles((dir, name) -> name.endsWith(".jar"));
-            if (jarFiles != null) {
-                for (File file : jarFiles) {
-                    XJavaFxSystemUtil.addJarClass(file);
+            List<File> jarFiles = FileUtil.loopFiles("libs/", file -> file.getName().endsWith(".jar"));
+            if(CollectionUtil.isEmpty(jarFiles)){
+                return;
+            }
+            for (File file : jarFiles) {
+                XJavaFxSystemUtil.addJarClass(file);
+                //更新jar下载标志
+                String fileName = file.getName().split("-")[0];
+                PluginJarInfo plugin = getPlugin(fileName);
+                if(plugin != null){
+                    plugin.setIsDownload(Boolean.TRUE);
                 }
             }
         } catch (Exception e) {
             log.error("添加libs中jar包到系统中异常:", e);
         }
     }
+
 
     /**
      * 新增或更新插件信息到内存

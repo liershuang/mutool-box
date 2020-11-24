@@ -2,6 +2,7 @@ package com.mutool.box.services;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.mutool.box.common.logback.ConsoleLogAppender;
 import com.mutool.box.model.MenuConfig;
@@ -293,6 +294,9 @@ public class IndexService {
     }
 
     public void removeMenu(File file){
+        if(!FileUtil.exist(file)){
+            return;
+        }
         List<MenuConfig> menuList = analyseMenuList(file);
         menuList.forEach(i -> removeMenu(i));
     }
@@ -430,21 +434,35 @@ public class IndexService {
 
         //如果是菜单则设置菜单menu，否者设置menuItem
         if(CollectionUtil.isNotEmpty(menuConfig.getChildMenuList())){
-            Menu menu = new Menu(menuConfig.getMenuName());
-            if (StrUtil.isNotBlank(menuConfig.getIconPath())) {
-                ImageView imageView = new ImageView(new Image(menuConfig.getIconPath()));
-                imageView.setFitHeight(18);
-                imageView.setFitWidth(18);
-                menu.setGraphic(imageView);
+            boolean isExist = false;
+            Menu menu = javafxMenuMap.get(menuConfig.getMenuId());
+            if(menu == null){
+                menu = new Menu(menuConfig.getMenuName());
+            }else{
+                isExist = true;
             }
-            javafxMenuMap.put(menuConfig.getMenuId(), menu);
-            //将菜单添加到父菜单下
-            javafxMenuMap.get(menuConfig.getParentMenuId()).getItems().add(javafxMenuMap.get(menuConfig.getMenuId()));
 
+            if(!isExist){
+                if (StrUtil.isNotBlank(menuConfig.getIconPath())) {
+                    ImageView imageView = new ImageView(new Image(menuConfig.getIconPath()));
+                    imageView.setFitHeight(18);
+                    imageView.setFitWidth(18);
+                    menu.setGraphic(imageView);
+                }
+
+                javafxMenuMap.put(menuConfig.getMenuId(), menu);
+                //将菜单添加到父菜单下
+                javafxMenuMap.get(menuConfig.getParentMenuId()).getItems().add(javafxMenuMap.get(menuConfig.getMenuId()));
+            }
+            //若菜单已存在则递归子菜单添加到现有菜单中
             for(MenuConfig childMenu : menuConfig.getChildMenuList()){
                 addMenu(childMenu);
             }
         }else{
+            //叶子节点菜单已存在不再添加
+            if(javafxMenuItemMap.get(menuConfig.getMenuId()) != null){
+                return;
+            }
             MenuItem menuItem = new MenuItem(menuConfig.getMenuName());
             if (StrUtil.isNotBlank(menuConfig.getIconPath())) {
                 ImageView imageView = new ImageView(new Image(menuConfig.getIconPath()));
@@ -471,10 +489,14 @@ public class IndexService {
             }
             //将menuItem添加到父菜单下
             javafxMenuMap.get(menuConfig.getParentMenuId()).getItems().add(menuItem);
-            javafxMenuItemMap.put(menuItem.getText(), menuItem);
+            javafxMenuItemMap.put(menuConfig.getMenuId(), menuItem);
 
             menuItems.put(menuConfig.getMenuId(), menuConfig);
         }
+    }
+
+    private void getExistJavafxMenu(String menuName){
+
     }
 
     private void removeMenu(MenuConfig menuConfig){
