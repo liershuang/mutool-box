@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>assistTools</menuId>
+		<menuName>辅助工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>textToSpeechTool</menuId>
+				<menuName>语音转换工具</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/assistTools/TextToSpeechTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

@@ -41,7 +41,7 @@ public class X2048Controller extends X2048View implements EventHandler<KeyEvent>
 
     private void initService() {
         x2048Service.Init();
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             x2048Service.ImplInit(4);
         });
     }

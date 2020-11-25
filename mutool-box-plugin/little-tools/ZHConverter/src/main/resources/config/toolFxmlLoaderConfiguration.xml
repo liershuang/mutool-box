@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>littleTools</menuId>
+		<menuName>小工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>zHConverter</menuId>
+				<menuName>字符串转换</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/littleTools/ZHConverter.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>developTools</menuId>
+		<menuName>开发工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>directoryTreeTool</menuId>
+				<menuName>文件列表生成器</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/developTools/DirectoryTreeTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

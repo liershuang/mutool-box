@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>assistTools</menuId>
+		<menuName>辅助工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>wechatJumpGameTool</menuId>
+				<menuName>微信跳一跳助手</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/assistTools/WechatJumpGameTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

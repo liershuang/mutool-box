@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>codeTools</menuId>
+		<menuName>Code工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>colorCodeConverterTool</menuId>
+				<menuName>颜色代码转换工具</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/codeTools/ColorCodeConverterTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

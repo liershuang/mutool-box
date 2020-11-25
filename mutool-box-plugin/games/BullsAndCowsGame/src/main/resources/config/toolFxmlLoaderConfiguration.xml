@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-	<ToolFxmlLoaderConfiguration title="games" menuId="p-games" menuParentId="moreToolsMenu" isMenu="true" />
-	<ToolFxmlLoaderConfiguration>
-		<url>/com/xwintop/xJavaFxTool/fxmlView/games/BullsAndCowsGame.fxml</url>
-		<resourceBundleName>locale.BullsAndCowsGame</resourceBundleName>
-		<className></className>
-		<title>Title</title>
-		<isDefaultShow></isDefaultShow>
-		<menuId></menuId>
-		<menuParentId>p-games</menuParentId>
-		<controllerType>Node</controllerType>
-	</ToolFxmlLoaderConfiguration>
+
+    <menuTree>
+        <menuId>developTools</menuId>
+        <menuName>开发工具</menuName>
+        <childMenu>
+            <menuTree>
+                <menuId>bullsAndCowsGame</menuId>
+                <menuName>猜数字游戏</menuName>
+                <url>/com/xwintop/xJavaFxTool/fxmlView/games/BullsAndCowsGame.fxml</url>
+                <iconPath></iconPath>
+                <isDefaultShow>false</isDefaultShow>
+                <menuType>Node</menuType>
+            </menuTree>
+        </childMenu>
+    </menuTree>
+
 </root>

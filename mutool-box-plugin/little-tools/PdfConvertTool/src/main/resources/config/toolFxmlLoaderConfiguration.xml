@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>littleTools</menuId>
+		<menuName>小工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>pdfConvertTool</menuId>
+				<menuName>Pdf转换工具</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/littleTools/PdfConvertTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>codeTools</menuId>
+		<menuName>Code工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>fileUnicodeTransformationTool</menuId>
+				<menuName>文件编码转换工具</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/codeTools/FileUnicodeTransformationTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

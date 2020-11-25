@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>littleTools</menuId>
+		<menuName>小工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>webCronExpBuilder</menuId>
+				<menuName>Cron表达式生成器Html版</menuName>
+				<url>/web/littleTools/cron/index.htm</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>WebView</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

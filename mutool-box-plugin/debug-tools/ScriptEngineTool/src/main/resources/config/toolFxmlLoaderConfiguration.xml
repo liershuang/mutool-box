@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>debugTools</menuId>
+		<menuName>调试工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>scriptEngineTool</menuId>
+				<menuName>脚本引擎调试工具</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/debugTools/ScriptEngineTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

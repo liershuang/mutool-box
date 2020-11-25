@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>codeTools</menuId>
+		<menuName>Code工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>escapeCharacter</menuId>
+				<menuName>转义字符</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/codeTools/EscapeCharacter.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

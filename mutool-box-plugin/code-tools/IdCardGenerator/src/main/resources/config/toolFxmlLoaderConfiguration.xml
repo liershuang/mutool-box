@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>codeTools</menuId>
+		<menuName>Code工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>idCardGenerator</menuId>
+				<menuName>身份证生成工具</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/codeTools/IdCardGenerator.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

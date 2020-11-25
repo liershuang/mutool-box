@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+	<menuTree>
+		<menuId>developTools</menuId>
+		<menuName>开发工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>debugEpms</menuId>
+				<menuName>DebugEpms</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/epmsTools/DebugEpms.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+
+</root>

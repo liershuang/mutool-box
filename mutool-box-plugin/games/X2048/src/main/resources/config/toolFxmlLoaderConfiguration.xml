@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-	<ToolFxmlLoaderConfiguration title="games" menuId="p-games" menuParentId="moreToolsMenu" isMenu="true" />
-	<ToolFxmlLoaderConfiguration>
-		<url>/com/xwintop/xJavaFxTool/fxmlView/games/X2048.fxml</url>
-		<resourceBundleName>locale.X2048</resourceBundleName>
-		<className></className>
-		<title>Title</title>
-		<isDefaultShow></isDefaultShow>
-		<menuId></menuId>
-		<menuParentId>p-games</menuParentId>
-		<controllerType>Node</controllerType>
-	</ToolFxmlLoaderConfiguration>
+
+    <menuTree>
+        <menuId>developTools</menuId>
+        <menuName>开发工具</menuName>
+        <childMenu>
+            <menuTree>
+                <menuId>X2048</menuId>
+                <menuName>X2048</menuName>
+                <url>/com/xwintop/xJavaFxTool/fxmlView/games/X2048.fxml</url>
+                <iconPath></iconPath>
+                <isDefaultShow>false</isDefaultShow>
+                <menuType>Node</menuType>
+            </menuTree>
+        </childMenu>
+    </menuTree>
+
 </root>

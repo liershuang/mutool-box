@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<menuTree>
+		<menuId>assistTools</menuId>
+		<menuName>辅助工具</menuName>
+		<childMenu>
+			<menuTree>
+				<menuId>decompilerWxApkgTool</menuId>
+				<menuName>反编译微信小程序包工具</menuName>
+				<url>/com/xwintop/xJavaFxTool/fxmlView/assistTools/DecompilerWxApkgTool.fxml</url>
+				<iconPath></iconPath>
+				<isDefaultShow>false</isDefaultShow>
+				<menuType>Node</menuType>
+			</menuTree>
+		</childMenu>
+	</menuTree>
+</root>
