@@ -68,10 +68,12 @@ public class PluginManager {
             }
             String json = new String(Files.readAllBytes(path), SystemConstant.CHARSET_UTF_8);
             JSON.parseArray(json, PluginJarInfo.class).forEach(plugin -> {
+                //启动加载设置下载标志为false，实际以已有的jar包存在为准
+                plugin.setIsDownload(Boolean.FALSE);
                 //如果不存在则添加，否则更新本地版本号、是否下载、是否启用标志
                 this.addOrUpdatePlugin(plugin, exist -> {
                     exist.setLocalVersionNumber(plugin.getLocalVersionNumber());
-                    exist.setIsDownload(plugin.getIsDownload());
+//                    exist.setIsDownload(plugin.getIsDownload());
                     exist.setIsEnable(plugin.getIsEnable());
                 });
             });

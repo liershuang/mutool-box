@@ -4,6 +4,6 @@
                                  menuId="javaFxTools" resourceBundleName="locale.Menu" isMenu="true"/>
     <ToolFxmlLoaderConfiguration
             className="com.mutool.box.fxmlview.javaFxTools.JavaFxXmlToObjectCodeView" resourceBundleName=""
-            title="JavaFxXmlToObjectCode" iconPath="/images/icon.jpg"
+            title="JavaFxXmlToObjectCode" iconPath="/static/images/icon.jpg"
             menuParentId="javaFxTools" controllerType="Node"/>
 </root>

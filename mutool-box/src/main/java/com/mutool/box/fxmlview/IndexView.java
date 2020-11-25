@@ -9,11 +9,7 @@ import de.felixroske.jfxsupport.FXMLView;
 import de.felixroske.jfxsupport.GUIState;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.annotation.Scope;
-
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 /**
  * @ClassName: IndexView
@@ -37,7 +33,7 @@ public class IndexView extends AbstractFxmlView {
     public Parent getView() {
         Stage stage = GUIState.getStage();
         JFXDecorator decorator = JavaFxViewUtil.getJFXDecorator(stage,
-                stage.getTitle() + Config.xJavaFxToolVersions,"/images/icon.jpg",super.getView());
+                stage.getTitle() + Config.xJavaFxToolVersions, "/static/images/icon.jpg",super.getView());
         decorator.setOnCloseButtonAction(() -> {
             if (FxAlerts.confirmOkCancel("提示", "确定要退出吗？")) {
                 System.exit(0);
