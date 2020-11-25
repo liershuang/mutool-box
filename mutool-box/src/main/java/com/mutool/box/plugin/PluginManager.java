@@ -23,7 +23,6 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 @Slf4j
 @Component

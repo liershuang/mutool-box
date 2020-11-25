@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Layui</title>
+    <title>mutool插件管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
 </head>
 <body>
 
@@ -21,29 +21,13 @@
 
 <div style="padding: 10px; background-color: #F2F2F2;">
     <div class="layui-row layui-col-space15" id="pluginDiv">
-        <div class="layui-col-md3">
-            <div class="layui-card">
-                <div class="layui-card-header" style="height: 80px;">
-                    <img src="https://f.51240.com/file/wannianrili/i_c_o.png?v=20031908" width="30" height="30">
-                    <span>卡片面板</span>
-                    <i class="layui-icon layui-icon-tips" style="font-size: 23px; color: #009688; float:right;"></i>
-                    <br/>
-                    <button type="button" class="layui-btn layui-btn-xs">下载</button>
-                    <button type="button" class="layui-btn layui-btn-xs">下载</button>
-                    <button type="button" class="layui-btn layui-btn-xs layui-btn-disabled">下载</button>
-                </div>
-                <div class="layui-card-body">
-                    卡片式面板面板通常用于非白色背景色的主体内
-                </div>
-            </div>
-        </div>
-
+        暂无数据
     </div>
 </div>
 
-<script src="../../js/jquery-3.5.1.min.js" charset="utf-8"></script>
-<script src="../../js/util.js" charset="utf-8"></script>
-<script src="../../layui/layui.js" charset="utf-8"></script>
+<script src="../js/jquery-3.5.1.min.js" charset="utf-8"></script>
+<script src="../js/util.js" charset="utf-8"></script>
+<script src="../layui/layui.js" charset="utf-8"></script>
 <script>
     //页面进入渲染插件列表
     $.post("http://127.0.0.1:10821/plugin/getPluginList",function(data,status){
@@ -116,7 +100,7 @@
                 '    <div class="layui-card">' +
                 '        <div class="layui-card-header" style="height: 80px;">' +
                 '            <img src="https://f.51240.com/file/wannianrili/i_c_o.png?v=20031908" width="25" height="25"/>' +
-                '            <span onclick="pageService.openNewPluginPage()">'+item.name+'</span>' +
+                '            <span>'+item.name+'</span>' +
                 '            <i class="layui-icon layui-icon-tips" style="font-size: 23px; color: #FFB800; float:right;" onclick="showIntroduce(\''+synopsis+'\')"></i>' +
                 '            <br/>';
             if(item.isDownload){

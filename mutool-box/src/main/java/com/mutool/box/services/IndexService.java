@@ -35,12 +35,12 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
 import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnCloseRequest;
 
@@ -48,17 +48,18 @@ import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnC
 @Service
 public class IndexService {
 
-    private Map<String, Menu> menuMap = new HashMap<String, Menu>();
+//    private Map<String, Menu> menuMap = new HashMap<String, Menu>();
 
-    /** 页面菜单（子节点功能菜单）map */
-    private Map<String, MenuConfig> menuItems = new HashMap<>();
+    /** 页面菜单（叶子节点功能菜单）map */
+    @Getter
+    private Map<String, MenuConfig> menuItemMap = new HashMap<>();
     /** 所有菜单数据 */
     private Map<String, MenuConfig> allMenuMap = new HashMap<>();
     /** javafx菜单map */
-    private Map<String, Menu> javafxMenuMap = new HashMap<String, Menu>();
+    private Map<String, Menu> javafxMenuMap = new HashMap<>();
     /** javafx子节点菜单map */
     @Getter
-    private Map<String, MenuItem> javafxMenuItemMap = new HashMap<String, MenuItem>();
+    private Map<String, MenuItem> javafxMenuItemMap = new HashMap<>();
 
     @Getter
     @Setter
@@ -67,8 +68,8 @@ public class IndexService {
     @Setter
     /** 首页是否新窗口打开复选框 */
     private CheckBox singleWindowBootCheckBox;
-    @Getter
-    private Map<String, MenuItem> menuItemMap = new HashMap<String, MenuItem>();
+//    @Getter
+//    private Map<String, MenuItem> menuItemMap = new HashMap<String, MenuItem>();
 
 
     /**
@@ -274,6 +275,57 @@ public class IndexService {
         }
         tab.setContent(browser);
         addTab(tab);
+    }
+
+    /**
+     * 获取树形结构菜单
+     * @return
+     */
+    public List<MenuConfig> getMenuTree(){
+        ArrayList<MenuConfig> allMenuTree = new ArrayList<>(allMenuMap.values());
+        //平铺去重
+        Map<String, MenuConfig> distinctMenuMap = new HashMap<>();
+        explanMenu(allMenuTree, distinctMenuMap);
+        //重新组织为树形结构
+        List<MenuConfig> topLevelMenu = distinctMenuMap.values().stream()
+                .filter(i -> "moreToolsMenu".equals(i.getParentMenuId())).collect(Collectors.toList());
+        setChildMenu(topLevelMenu, distinctMenuMap);
+        return topLevelMenu;
+    }
+
+    /**
+     * 平铺去重菜单为list
+     * @param menuConfigList
+     * @param distinctMenuMap
+     */
+    private void explanMenu(List<MenuConfig> menuConfigList, Map<String, MenuConfig> distinctMenuMap){
+        for(MenuConfig menuConfig : menuConfigList){
+            List<MenuConfig> childMenuList = menuConfig.getChildMenuList();
+            if(CollectionUtil.isNotEmpty(childMenuList)){
+                explanMenu(childMenuList, distinctMenuMap);
+                //子节点不为空的话解析完子节点后设置子节点为空
+                menuConfig.setChildMenuList(Collections.EMPTY_LIST);
+            }
+            //不判断是否已存在，因上级菜单可能重复，直接覆盖即可
+            distinctMenuMap.put(menuConfig.getMenuId(), menuConfig);
+        }
+    }
+
+    /**
+     * 递归设置子菜单
+     * @param menuConfigList
+     * @param distinctMenuMap
+     */
+    private void setChildMenu(List<MenuConfig> menuConfigList, Map<String, MenuConfig> distinctMenuMap){
+        if(CollectionUtil.isEmpty(menuConfigList)){
+            return;
+        }
+        menuConfigList.forEach(i -> {
+            List<MenuConfig> childList = distinctMenuMap.values().stream()
+                    .filter(menu -> menu.getParentMenuId().equals(i.getMenuId())).collect(Collectors.toList());
+            i.setChildMenuList(childList);
+            setChildMenu(childList, distinctMenuMap);
+        });
     }
 
     /**
@@ -491,7 +543,7 @@ public class IndexService {
             javafxMenuMap.get(menuConfig.getParentMenuId()).getItems().add(menuItem);
             javafxMenuItemMap.put(menuConfig.getMenuId(), menuItem);
 
-            menuItems.put(menuConfig.getMenuId(), menuConfig);
+            menuItemMap.put(menuConfig.getMenuId(), menuConfig);
         }
     }
 
@@ -508,7 +560,7 @@ public class IndexService {
             }
         }else{
             javafxMenuItemMap.remove(menuConfig.getMenuName());
-            menuItems.remove(menuConfig.getMenuId(), menuConfig);
+            menuItemMap.remove(menuConfig.getMenuId(), menuConfig);
         }
         //将菜单从父菜单下删除
         javafxMenuMap.get(menuConfig.getParentMenuId()).getItems().remove(javafxMenuMap.get(menuConfig.getMenuId()));

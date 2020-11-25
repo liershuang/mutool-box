@@ -24,11 +24,12 @@ import java.util.ResourceBundle;
 @Scope("prototype")
 @FXMLView(value = "/fxmlView/Index.fxml", bundle = "locale.Menu")
 public class IndexView extends AbstractFxmlView {
+
     public IndexView() throws Exception {
         //反射修改默认语言
-        ResourceBundle bundle = ResourceBundle.getBundle(this.getResourceBundle().get().getBaseBundleName(), Config.defaultLocale);
-        FieldUtils.writeField(this,"bundle",Optional.ofNullable(bundle),true);
-        //修改标题国际化
+//        ResourceBundle bundle = ResourceBundle.getBundle(this.getResourceBundle().get().getBaseBundleName(), Config.defaultLocale);
+//        FieldUtils.writeField(this,"bundle",Optional.ofNullable(bundle),true);
+        //修改标题
         GUIState.getStage().setTitle("mutool工具箱");
     }
 

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>mutool菜单</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layui/css/layui.css"  media="all">
+</head>
+<body>
+
+<ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline" lay-filter="demo" id="menuDiv">
+    <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;">默认展开</a>
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;">选项一</a></dd>
+            <dd><a href="javascript:;">选项二</a></dd>
+            <dd><a href="javascript:;">选项三</a></dd>
+            <dd><a href="">跳转项</a></dd>
+            <dd>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">默认展开</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">选项一</a></dd>
+                        <dd><a href="javascript:;">选项二</a></dd>
+                        <dd><a href="javascript:;">选项三</a></dd>
+                        <dd><a href="">跳转项</a></dd>
+                    </dl>
+                </li>
+            </dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+            <dd><a href="">移动模块</a></dd>
+            <dd><a href="">后台模版</a></dd>
+            <dd><a href="">电商平台</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item"><a href="">云市场</a></li>
+    <li class="layui-nav-item"><a href="">社区</a></li>
+</ul>
+
+<div id="menuContent"></div>
+
+<script src="../js/jquery-3.5.1.min.js" charset="utf-8"></script>
+<script src="../layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use('element', function(){
+        //导航的hover效果、二级菜单等功能，需要依赖element模块
+        var element = layui.element;
+    });
+
+    //渲染菜单列表
+    $.post("http://127.0.0.1:10821/index/getMenuTree", function(data,status){
+        var resulMenutHtml = drawMenuList(data);
+        $("#menuDiv").html(resulMenutHtml);
+    });
+
+    //组织菜单列表
+    function drawMenuList(menuList){
+        if(menuList == null || menuList.length == 0){
+            return;
+        }
+        var menuHtml = '';
+        $.each(menuList, function(index, value){
+            if(value.childMenuList.length > 0){
+                menuHtml +=
+                    '<li class="layui-nav-item">' +
+                    '    <a href="javascript:;">'+value.menuName+'</a>' +
+                    '    <dl class="layui-nav-child">';
+
+                $.each(value.childMenuList, function(childIndex, childValue){
+                    if(childValue.childMenuList.length > 0){
+                        menuHtml += drawMenuList(childValue.childMenuList);
+                    }else{
+                        menuHtml += '<dd><a href="javascript:;" onclick="openMenu(\''+childValue.menuType+'\',\''+childValue.url+'\');">'+childValue.menuName+'</a></dd>';
+                    }
+                });
+                menuHtml +=
+                    '    </dl>' +
+                    '</li>';
+            }else{
+                menuHtml += '<li class="layui-nav-item"><a href="javascript:;" onclick="openMenu(\''+value.menuType+'\',\''+value.url+'\');">'+value.menuName+'</a></li>';
+            }
+        });
+        return menuHtml;
+    }
+
+    //打开插件页面
+    function openMenu(menuType, pageUrl){
+        if(menuType == "Node"){
+            layui.use('layer', function(){
+                var layer = layui.layer;
+                layer.open({
+                    title: '提示',
+                    content: "暂不支持页面打开，请到客户端查看"
+                });
+            });
+        }
+        if(menuType == "WebView"){
+            $.get("http://127.0.0.1:10821"+pageUrl, function(result){
+                $("#menuContent").html(result);
+            });
+        }
+    }
+
+</script>
+
+</body>
+</html>

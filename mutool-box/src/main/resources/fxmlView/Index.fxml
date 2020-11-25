@@ -15,7 +15,7 @@
 
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.web.WebView?>
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mutool.box.controller.IndexController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mutool.box.controller.JavafxIndexController">
 	<children>
       <BorderPane layoutY="2.0" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0">
          <top>
@@ -23,7 +23,7 @@
                <children>
                   <MenuBar fx:id="mainMenuBar" cache="true">
                     <menus>
-                      <Menu fx:id="fileMenu" mnemonicParsing="false" text="%File">
+                      <Menu fx:id="fileMenu" mnemonicParsing="false" text="菜单">
                         <items>
                               <MenuItem mnemonicParsing="false" onAction="#closeAllTabAction" text="关闭所有标签" />
                               <MenuItem mnemonicParsing="false" onAction="#openAllTabAction" text="打开所有标签" />
@@ -54,17 +54,17 @@
                       </Menu>
                     </menus>
                   </MenuBar>
-            		<TextField fx:id="searchTextField" focusTraversable="false" promptText="%selectTextField">
+            		<TextField fx:id="searchTextField" focusTraversable="false" promptText="请输入菜单名">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
                   </TextField>
-            		<Button fx:id="searchButton" mnemonicParsing="false" text="%selectButton">
+            		<Button fx:id="searchButton" mnemonicParsing="false" text="搜索">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Button>
-                  <CheckBox fx:id="singleWindowBootCheckBox" mnemonicParsing="false" text="%singleWindowBootCheckBox" />
+                  <CheckBox fx:id="singleWindowBootCheckBox" mnemonicParsing="false" text="新窗口打开" />
                    <WebView fx:id="tongjiWebView" prefHeight="1.0" prefWidth="1.0" visible="false" />
                   <Hyperlink onAction="#xwintopLinkOnAction" text="https://github.com/liershuang/mutool-view" textFill="RED" />
                </children>

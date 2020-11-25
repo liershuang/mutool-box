@@ -3,9 +3,6 @@ package com.mutool.box.services;
 import cn.hutool.core.io.FileUtil;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.plugin.PluginManager;
-import com.mutool.javafx.core.util.javafx.HtmlPageUtil;
-import javafx.scene.control.Tab;
-import javafx.scene.web.WebView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,26 +60,6 @@ public class PluginService {
 
     public List<PluginJarInfo> getPluginList(){
         return pluginManager.getPluginList();
-    }
-
-    /**
-     * 打开新插件列表
-     * @param menuId
-     */
-    //todo 待考虑
-    public void openPluginMenu(String menuId){
-        try{
-            /*PluginJarInfo pluginInfo = pluginManager.getPluginInfo(menuId);
-            //todo 加载jar包时将jar对应的service类获取并加入
-            Map<String, Object> data = new HashMap<>();
-            WebView browser = HtmlPageUtil.createWebView(pluginInfo.getPagePath(), data);
-
-            Tab tab = new Tab(pluginInfo.getTitle());
-            tab.setContent(browser);
-            indexService.addTab(tab);*/
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     /**
