@@ -43,12 +43,6 @@ public class PluginService {
         pluginManager.addPluginJarToSystem();
     }
 
-    public void testnew(){
-        Map<String, Object> data = new HashMap<>();
-        data.put("pageService", this);
-        indexService.openLocalWebView("测试", "/static/testpage.html", "", data);
-    }
-
     /**
      * 打开插件管理页面
      */

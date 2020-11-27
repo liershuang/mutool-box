@@ -166,7 +166,7 @@ public class JavaFxViewUtil {
     public static Scene getJFXDecoratorScene(JFXDecorator decorator, double width, double height) {
         Scene scene = new Scene(decorator, width, height);
         final ObservableList<String> stylesheets = scene.getStylesheets();
-        URL cssUrl = JavaFxViewUtil.class.getResource("/css/jfoenix-main.css");
+        URL cssUrl = JavaFxViewUtil.class.getResource("/static/css/jfoenix-main.css");
         if (cssUrl != null) {
             stylesheets.addAll(cssUrl.toExternalForm());
         }

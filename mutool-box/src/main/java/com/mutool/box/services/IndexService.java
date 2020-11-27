@@ -432,55 +432,6 @@ public class IndexService {
     }
 
 
-    /*public void addToolMenu(File file) throws Exception {
-        //加载jar到系统
-        XJavaFxSystemUtil.addJarClass(file);
-
-        Map<String, ToolFxmlLoaderConfiguration> toolMap = new HashMap<>();
-        List<ToolFxmlLoaderConfiguration> toolList = new ArrayList<>();
-
-        try (JarFile jarFile = new JarFile(file)) {
-            JarEntry entry = jarFile.getJarEntry("config/toolFxmlLoaderConfiguration.xml");
-            if (entry == null) {
-                return;
-            }
-            InputStream input = jarFile.getInputStream(entry);
-            SAXReader saxReader = new SAXReader();
-            Document document = saxReader.read(input);
-            Element root = document.getRootElement();
-            List<Element> elements = root.elements("ToolFxmlLoaderConfiguration");
-            for (Element configurationNode : elements) {
-                ToolFxmlLoaderConfiguration toolFxmlLoaderConfiguration = new ToolFxmlLoaderConfiguration();
-                List<Attribute> attributes = configurationNode.attributes();
-                for (Attribute configuration : attributes) {
-                    BeanUtils.copyProperty(toolFxmlLoaderConfiguration, configuration.getName(), configuration.getValue());
-                }
-                List<Element> childrenList = configurationNode.elements();
-                for (Element configuration : childrenList) {
-                    BeanUtils.copyProperty(toolFxmlLoaderConfiguration, configuration.getName(), configuration.getStringValue());
-                }
-                //无归属时添加插件菜单到更多工具菜单下
-                if (org.apache.commons.lang.StringUtils.isEmpty(toolFxmlLoaderConfiguration.getMenuParentId())) {
-                    toolFxmlLoaderConfiguration.setMenuParentId("moreToolsMenu");
-                }
-                if (toolFxmlLoaderConfiguration.getIsMenu()) {
-                    if (menuMap.get(toolFxmlLoaderConfiguration.getMenuId()) == null) {
-                        toolMap.putIfAbsent(toolFxmlLoaderConfiguration.getMenuId(), toolFxmlLoaderConfiguration);
-                    }
-                } else {
-                    toolList.add(toolFxmlLoaderConfiguration);
-                }
-            }
-        }
-        toolList.addAll(toolMap.values());
-        this.addMenu(toolList);
-    }*/
-
-    /*public void addMenu(String menuId, Menu menu){
-        menuMap.put(menuId, menu);
-    }*/
-
-
     private void addMenu(MenuConfig menuConfig){
         allMenuMap.put(menuConfig.getMenuId(), menuConfig);
 
@@ -547,10 +498,6 @@ public class IndexService {
         }
     }
 
-    private void getExistJavafxMenu(String menuName){
-
-    }
-
     private void removeMenu(MenuConfig menuConfig){
         allMenuMap.remove(menuConfig.getMenuId());
 
@@ -565,75 +512,5 @@ public class IndexService {
         //将菜单从父菜单下删除
         javafxMenuMap.get(menuConfig.getParentMenuId()).getItems().remove(javafxMenuMap.get(menuConfig.getMenuId()));
     }
-
-    /**
-     * 添加菜单，为菜单添加响应事件，设置菜单logo
-     * @param toolList
-     */
-    /*private void addMenu(List<ToolFxmlLoaderConfiguration> toolList) {
-        for (ToolFxmlLoaderConfiguration toolConfig : toolList) {
-            try {
-                if (StringUtils.isEmpty(toolConfig.getResourceBundleName())) {
-                    if (StringUtils.isNotEmpty(bundle.getString(toolConfig.getTitle()))) {
-                        toolConfig.setTitle(bundle.getString(toolConfig.getTitle()));
-                    }
-                } else {
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle(toolConfig.getResourceBundleName(), Config.defaultLocale);
-                    if (org.apache.commons.lang.StringUtils.isNotEmpty(resourceBundle.getString(toolConfig.getTitle()))) {
-                        toolConfig.setTitle(resourceBundle.getString(toolConfig.getTitle()));
-                    }
-                }
-            } catch (Exception e) {
-                log.error("加载菜单失败", e);
-            }
-            if (toolConfig.getIsMenu()) {
-                Menu menu = new Menu(toolConfig.getTitle());
-                if (org.apache.commons.lang.StringUtils.isNotEmpty(toolConfig.getIconPath())) {
-                    ImageView imageView = new ImageView(new Image(toolConfig.getIconPath()));
-                    imageView.setFitHeight(18);
-                    imageView.setFitWidth(18);
-                    menu.setGraphic(imageView);
-                }
-                menuMap.put(toolConfig.getMenuId(), menu);
-            }
-        }
-
-        for (ToolFxmlLoaderConfiguration toolConfig : toolList) {
-            if (toolConfig.getIsMenu()) {
-                menuMap.get(toolConfig.getMenuParentId()).getItems().add(menuMap.get(toolConfig.getMenuId()));
-            }
-        }
-
-        for (ToolFxmlLoaderConfiguration toolConfig : toolList) {
-            if (toolConfig.getIsMenu()) {
-                continue;
-            }
-            MenuItem menuItem = new MenuItem(toolConfig.getTitle());
-            if (org.apache.commons.lang.StringUtils.isNotEmpty(toolConfig.getIconPath())) {
-                ImageView imageView = new ImageView(new Image(toolConfig.getIconPath()));
-                imageView.setFitHeight(18);
-                imageView.setFitWidth(18);
-                menuItem.setGraphic(imageView);
-            }
-            if ("Node".equals(toolConfig.getControllerType())) {
-                //菜单点击打开页面
-                menuItem.setOnAction((ActionEvent event) -> {
-                    addContent(menuItem.getText(), toolConfig.getUrl(), toolConfig.getResourceBundleName(), toolConfig.getIconPath());
-                });
-                if (toolConfig.getIsDefaultShow()) {
-                    addContent(menuItem.getText(), toolConfig.getUrl(), toolConfig.getResourceBundleName(), toolConfig.getIconPath());
-                }
-            } else if ("WebView".equals(toolConfig.getControllerType())) {
-                menuItem.setOnAction((ActionEvent event) -> {
-                    addWebView(menuItem.getText(), toolConfig.getUrl(), toolConfig.getIconPath());
-                });
-                if (toolConfig.getIsDefaultShow()) {
-                    addWebView(menuItem.getText(), toolConfig.getUrl(), toolConfig.getIconPath());
-                }
-            }
-            menuMap.get(toolConfig.getMenuParentId()).getItems().add(menuItem);
-            menuItemMap.put(menuItem.getText(), menuItem);
-        }
-    }*/
 
 }

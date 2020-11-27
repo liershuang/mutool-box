@@ -62,9 +62,11 @@
 
     //下载插件
     function downloadPlugin(jarName){
-        $.post("http://127.0.0.1:10821/plugin/downloadPlugin",{"jarName":jarName}, function(data,status){
-            layui.use('layer', function(){
-                var layer = layui.layer;
+        layui.use('layer', function(){
+            var layer = layui.layer;
+            var index = layer.load();
+            $.post("http://127.0.0.1:10821/plugin/downloadPlugin",{"jarName":jarName}, function(data,status){
+                layer.close(index);
                 layer.open({
                     title: '提示',
                     content: "下载成功",
@@ -76,9 +78,11 @@
 
     //删除插件
     function deletePlugin(jarName){
-        $.post("http://127.0.0.1:10821/plugin/deletePlugin",{"jarName":jarName}, function(data,status){
-            layui.use('layer', function(){
-                var layer = layui.layer;
+        layui.use('layer', function(){
+            var layer = layui.layer;
+            var index = layer.load();
+            $.post("http://127.0.0.1:10821/plugin/deletePlugin",{"jarName":jarName}, function(data,status){
+                layer.close(index);
                 layer.open({
                     title: '提示',
                     content: "删除成功",
