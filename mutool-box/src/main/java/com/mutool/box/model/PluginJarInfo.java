@@ -20,7 +20,7 @@ public class PluginJarInfo {
 
     private String jarName;         // jar包名称
 
-    private String version;         // 版本名称
+    private String version = "0.0.1";         // 版本名称
 
     private Integer versionNumber;  // 版本号（用来判断更新）
 
@@ -28,11 +28,11 @@ public class PluginJarInfo {
 
     ///////////////////////////////////////// 下面的属性在远程插件列表中不存在
 
-    private Boolean isDownload;     // 是否下载
+    private Boolean isDownload = false;     // 是否下载
 
-    private Boolean isEnable;       // 是否启用
+    private Boolean isEnable = true;       // 是否启用
 
-    private Boolean canUpdate;      // 是否可更新
+    private Boolean canUpdate = false;      // 是否可更新
 
     private Integer localVersionNumber;     // 插件本地版本
 

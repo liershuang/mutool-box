@@ -25,21 +25,11 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.mutool.javafx</groupId>
 			<artifactId>javafx-core</artifactId>
 			<version>0.0.6</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>de.roskenet</groupId>
 			<artifactId>springboot-javafx-support</artifactId>
@@ -49,34 +39,45 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- oshi获取系统信息工具 -->
 		<dependency>
-			<groupId>com.github.oshi</groupId>
-			<artifactId>oshi-core</artifactId>
-			<version>3.9.1</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.12</version>
 		</dependency>
-		<!-- bootstrap样式 -->
 		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.2.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>4.5.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- bootstrap样式 -->
+		<!--<dependency>
 			<groupId>org.kordamp.bootstrapfx</groupId>
 			<artifactId>bootstrapfx-core</artifactId>
 			<version>0.3.0</version>
-		</dependency>
+		</dependency>-->
 		<!-- javafx webview调试 -->
 		<!--<dependency>
 			<groupId>com.github.jitpack</groupId>
 			<artifactId>gradle-simple</artifactId>
 			<version>master-SNAPSHOT</version>
 		</dependency>-->
-		<dependency>
+		<!--<dependency>
 			<groupId>com.vladsch.javafx-webview-debugger</groupId>
 			<artifactId>javafx-webview-debugger</artifactId>
 			<version>0.8.0</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 	<build>
 		<plugins>
@@ -84,6 +85,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- javafx客户端打包插件 -->
 			<plugin>
 				<groupId>com.zenjava</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>

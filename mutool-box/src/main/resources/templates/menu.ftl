@@ -21,21 +21,24 @@
 <script>document.write('<script src="../js/util.js?t='+new Date().getTime() + '" charset="utf-8"><\/script>')</script>
 <script>
 
-    //加载菜单数据要同步的方式，保证渲染页面在layui之前执行
-    $.ajax({
-        type : "post",
-        url : "http://127.0.0.1:10821/index/getMenuTree",
-        async : false,
-        success : function(data){
-            var businData = getBusinData(data);
-            var resulMenutHtml = drawMenuList(businData);
-            $("#menuDiv").html(resulMenutHtml);
-        }
-    });
-
     layui.use('element', function(){
         //导航的hover效果、二级菜单等功能，需要依赖element模块
         var element = layui.element;
+    });
+
+    //加载菜单数据要同步的方式，保证渲染页面在layui之前执行
+    $.ajax({
+        type : "post",
+        url : "${baseAttr.serverDoamin}:${baseAttr.serverPort}/index/getMenuTree",
+        async : false,
+        success : function(data){
+            if(data.code != "200"){
+                layer.open({title: '提示', content: data.msg, time:1500});
+                return;
+            }
+            var resulMenutHtml = drawMenuList(data.data);
+            $("#menuDiv").html(resulMenutHtml);
+        }
     });
 
     //组织菜单列表
@@ -80,9 +83,12 @@
             });
         }
         if(menuType == "WebView"){
-            $.get("http://127.0.0.1:10821"+pageUrl, function(result){
-                var businData = getBusinData(result);
-                $("#menuContent").html(businData);
+            $.get("${baseAttr.serverDoamin}:${baseAttr.serverPort}"+pageUrl, function(result){
+                if(result.code != "200"){
+                    layer.open({title: '提示', content: result.msg, time:1500});
+                    return;
+                }
+                $("#menuContent").html(result.data);
             });
         }
     }

@@ -1,6 +1,7 @@
 package com.mutool.box.services;
 
 import cn.hutool.core.io.FileUtil;
+import com.mutool.box.config.SystemConfig;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.plugin.PluginManager;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,8 @@ public class PluginService {
     private PluginManager pluginManager;
     @Autowired
     private IndexService indexService;
+    @Autowired
+    private SystemConfig systemConfig;
 
     /**
      * 插件数据初始化加载
@@ -47,13 +50,20 @@ public class PluginService {
      * 打开插件管理页面
      */
     public void openPluginManagerPage(){
-        Map<String, Object> data = new HashMap<>();
-        data.put("pageService", this);
-        indexService.openLocalWebView("插件管理", "/static/html/pluginManage.html", "", data);
+        indexService.addWebView("插件管理", systemConfig.getServerUrl()+"/plugin/viewPluginPage", null);
     }
 
     public List<PluginJarInfo> getPluginList(){
         return pluginManager.getPluginList();
+    }
+
+
+    public String getLocalPluginJarDir(){
+        return pluginManager.getLocalPluginJarDir();
+    }
+
+    public List<File> getPluginJarFileList(){
+        return pluginManager.getPluginJarFileList();
     }
 
     /**
@@ -66,7 +76,7 @@ public class PluginService {
         if(FileUtil.exist(file)){
             indexService.addMenu(file);
         }else{
-            log.error("文件不存在，未添加菜单。。。。");
+            log.error("文件不存在，未添加菜单，插件包名：{}", pluginJarName);
         }
     }
 
@@ -84,7 +94,7 @@ public class PluginService {
         if (plugin == null) {
             throw new IllegalStateException("没有找到插件 " + pluginJarName);
         }
-        String jarFilePath = "libs/"+pluginJarName + "-" + plugin.getVersion() + ".jar";
+        String jarFilePath = "/Users/Shared/mutool-box/libs/"+pluginJarName + "-" + plugin.getVersion() + ".jar";
         File pluginFile = new File(jarFilePath);
         pluginManager.deletePlugin(pluginJarName);
         indexService.removeMenu(pluginFile);

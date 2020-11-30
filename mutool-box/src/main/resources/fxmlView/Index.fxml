@@ -41,12 +41,12 @@
                           <MenuItem mnemonicParsing="false" onAction="#openPluginFolderAction" text="打开插件目录" />
                           <SeparatorMenuItem />
                         <items>
-                          <Menu mnemonicParsing="false" text="设置语言">
+                          <!--<Menu mnemonicParsing="false" text="设置语言">
                             <items>
                               <MenuItem mnemonicParsing="false" onAction="#setLanguageAction" text="简体中文" />
                                 <MenuItem mnemonicParsing="false" onAction="#setLanguageAction" text="English" />
                             </items>
-                          </Menu>
+                          </Menu>-->
                           <MenuItem mnemonicParsing="false" onAction="#userSupportAction" text="用户论坛" />
                           <MenuItem mnemonicParsing="false" onAction="#SettingAction" text="设置" />
                           <MenuItem mnemonicParsing="false" onAction="#aboutAction" text="关于" />

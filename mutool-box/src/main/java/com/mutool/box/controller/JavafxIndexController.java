@@ -1,7 +1,6 @@
 package com.mutool.box.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.FileUtil;
 import com.mutool.box.constant.UrlConstant;
 import com.mutool.box.services.IndexService;
 import com.mutool.box.services.PluginService;
@@ -48,7 +47,6 @@ public class JavafxIndexController extends IndexView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.bundle = resources;
         initView();
         initEvent();
         initService();
@@ -56,7 +54,6 @@ public class JavafxIndexController extends IndexView {
         //加载记事本页面
         initNotepad();
         this.indexService.addWebView("交流吐槽", UrlConstant.FEEDBACK_URL, null);
-//        this.tongjiWebView.getEngine().load(UrlConstant.STATISTICS_URL);
         //加载插件管理页面（html实现）
         pluginService.openPluginManagerPage();
     }
@@ -78,18 +75,11 @@ public class JavafxIndexController extends IndexView {
 
         indexService.addMenu("moreToolsMenu", moreToolsMenu);
         // 获取所有的.jar和.zip文件
-        List<File> jarFiles = FileUtil.loopFiles("libs/", file -> file.getName().endsWith(".jar"));
+        List<File> jarFiles = pluginService.getPluginJarFileList();
         if(CollectionUtil.isEmpty(jarFiles)){
             return;
         }
-
-        for (File jarFile : jarFiles) {
-            try {
-                indexService.addMenu(jarFile);
-            } catch (Exception e) {
-                log.error("加载工具出错：", e);
-            }
-        }
+        jarFiles.forEach(i -> indexService.addMenu(i));
     }
 
     /**
@@ -146,10 +136,6 @@ public class JavafxIndexController extends IndexView {
     /** 点击插件管理打开插件列表页面 */
     private void pluginManageAction() {
         pluginService.openPluginManagerPage();
-
-//        FXMLLoader fXMLLoader = PluginManageController.getFXMLLoader();
-//        Parent root = fXMLLoader.load();
-//        JavaFxViewUtil.openNewWindow("插件管理", root);
     }
 
     @FXML
@@ -171,13 +157,13 @@ public class JavafxIndexController extends IndexView {
 
     @FXML
     private void openLogFileAction() {
-        String filePath = "logs/logFile." + DateFormatUtils.format(new Date(), "yyyy-MM-dd") + ".log";
+        String filePath = System.getProperty("user.home")+"/mutool/logs/logFile." + DateFormatUtils.format(new Date(), "yyyy-MM-dd") + ".log";
         JavaFxSystemUtil.openDirectory(filePath);
     }
 
     @FXML
     private void openLogFolderAction() {
-        JavaFxSystemUtil.openDirectory("logs/");
+        JavaFxSystemUtil.openDirectory(System.getProperty("user.home")+"/mutool/logs/");
     }
 
     @FXML
@@ -187,7 +173,7 @@ public class JavafxIndexController extends IndexView {
 
     @FXML
     private void openPluginFolderAction() {
-        JavaFxSystemUtil.openDirectory("libs/");
+        JavaFxSystemUtil.openDirectory(pluginService.getLocalPluginJarDir());
     }
 
     @FXML

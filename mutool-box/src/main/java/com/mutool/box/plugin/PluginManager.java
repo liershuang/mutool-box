@@ -8,6 +8,7 @@ import com.mutool.box.constant.SystemConstant;
 import com.mutool.box.constant.UrlConstant;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.utils.XJavaFxSystemUtil;
+import com.mutool.javafx.core.util.ConfigureUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -28,15 +29,9 @@ import java.util.function.Consumer;
 @Component
 public class PluginManager {
 
-    /** 本地插件配置文件路径，存在必要性：启用禁用等设置需要存储在配置文件中，目前启用功能去除，可不用保存配置到本地 */
-    private final String localPluginsPath = UrlConstant.LOCAL_PLUGINS_PATH;
     /** 插件列表 */
     private final List<PluginJarInfo> pluginList = new ArrayList<>();
 
-    @Deprecated
-    public static PluginManager getInstance() {
-        return new PluginManager();
-    }
 
     /**
      * 获取插件列表（只读）
@@ -44,6 +39,11 @@ public class PluginManager {
      */
     public List<PluginJarInfo> getPluginList() {
         return Collections.unmodifiableList(this.pluginList);
+    }
+
+    /** 获取插件文件对象列表 */
+    public List<File> getPluginJarFileList(){
+        return FileUtil.loopFiles(getLocalPluginJarDir(), file -> file.getName().endsWith(".jar"));
     }
 
     /**
@@ -62,7 +62,7 @@ public class PluginManager {
      */
     public void loadLocalPlugins() {
         try {
-            Path path = Paths.get(this.localPluginsPath);
+            Path path = Paths.get(getLocalPluginConfig());
             if (!Files.exists(path)) {
                 return;
             }
@@ -128,7 +128,7 @@ public class PluginManager {
             throw new IllegalStateException("没有找到插件 " + pluginJarInfo.getJarName());
         }
 
-        File file = new File("libs/", pluginJarInfo.getJarName() + "-" + pluginJarInfo.getVersion() + ".jar");
+        File file = new File(getLocalPluginJarDir(), pluginJarInfo.getJarName() + "-" + pluginJarInfo.getVersion() + ".jar");
         HttpUtil.downloadFile(pluginJarInfo.getDownloadUrl(), file);
 
         plugin.setIsDownload(true);
@@ -144,7 +144,7 @@ public class PluginManager {
         if (plugin == null) {
             throw new IllegalStateException("没有找到插件 " + pluginJarName);
         }
-        String jarFilePath = "libs/"+pluginJarName + "-" + plugin.getVersion() + ".jar";
+        String jarFilePath = getLocalPluginJarDir()+pluginJarName + "-" + plugin.getVersion() + ".jar";
         FileUtil.del(jarFilePath);
         HttpUtil.downloadFile(plugin.getDownloadUrl(), jarFilePath);
 
@@ -167,7 +167,7 @@ public class PluginManager {
         if (plugin == null) {
             throw new IllegalStateException("没有找到插件 " + pluginJarName);
         }
-        String jarFilePath = "libs/"+pluginJarName + "-" + plugin.getVersion() + ".jar";
+        String jarFilePath = getLocalPluginJarDir() +pluginJarName + "-" + plugin.getVersion() + ".jar";
         FileUtil.del(jarFilePath);
 
         this.pluginList.stream().filter(i -> i.getJarName().equals(pluginJarName))
@@ -179,8 +179,12 @@ public class PluginManager {
      * @throws IOException
      */
     public void savePluginInfoToLocalFile() throws IOException {
+        String pluginConfigFile = getLocalPluginConfig();
+        if(FileUtil.exist(pluginConfigFile)){
+            FileUtil.newFile(pluginConfigFile);
+        }
         String json = JSON.toJSONString(this.pluginList, true);
-        Files.write(Paths.get(this.localPluginsPath), json.getBytes(SystemConstant.CHARSET_UTF_8));
+        Files.write(Paths.get(getLocalPluginConfig()), json.getBytes(SystemConstant.CHARSET_UTF_8));
     }
 
     /**
@@ -189,7 +193,7 @@ public class PluginManager {
     public void addPluginJarToSystem() {
         try {
             // 获取所有的.jar
-            List<File> jarFiles = FileUtil.loopFiles("libs/", file -> file.getName().endsWith(".jar"));
+            List<File> jarFiles = FileUtil.loopFiles(getLocalPluginJarDir(), file -> file.getName().endsWith(".jar"));
             if(CollectionUtil.isEmpty(jarFiles)){
                 return;
             }
@@ -220,6 +224,16 @@ public class PluginManager {
         } else {
             ifExists.accept(exists);
         }
+    }
+
+    /** 获取本地插件jar包目录 */
+    public String getLocalPluginJarDir(){
+        return ConfigureUtil.getPluginPath()+"libs/";
+    }
+
+    /** 本地插件配置信息json文件路径 */
+    private static String getLocalPluginConfig(){
+        return ConfigureUtil.getPluginPath()+"system_plugin_list.json";
     }
 
 }

@@ -4,7 +4,7 @@ import java.io.File;
 
 public class ConfigureUtil {
     public static String getConfigurePath() {
-        return System.getProperty("user.home") + "/xJavaFxTool/";
+        return System.getProperty("user.home") + "/mutool/configure/";
     }
 
     public static String getConfigurePath(String fileName) {
@@ -13,5 +13,9 @@ public class ConfigureUtil {
 
     public static File getConfigureFile(String fileName) {
         return new File(getConfigurePath(fileName));
+    }
+
+    public static String getPluginPath(){
+        return System.getProperty("user.home") + "/mutool/plugin/";
     }
 }

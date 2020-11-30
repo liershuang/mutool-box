@@ -67,7 +67,7 @@ public class Main extends AbstractJavaFxApplicationSupport {
     @Override
     public void beforeShowingSplash(Stage splashStage) {
         //添加bootstrapfx样式支持
-        splashStage.getScene().getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+//        splashStage.getScene().getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
     }
 
 }

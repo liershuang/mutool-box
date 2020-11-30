@@ -4,12 +4,12 @@ import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.services.PluginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述：插件管理<br>
@@ -22,6 +22,13 @@ public class PluginController {
 
     @Autowired
     private PluginService pluginService;
+
+    @RequestMapping(value="viewPluginPage")
+    public String viewPluginPage(Model model){
+        Map<String, Object> modelMap = model.asMap();
+        modelMap.put("pluginList", pluginService.getPluginList());
+        return "pluginManage";
+    }
 
     @ResponseBody
     @PostMapping("getPluginList")
