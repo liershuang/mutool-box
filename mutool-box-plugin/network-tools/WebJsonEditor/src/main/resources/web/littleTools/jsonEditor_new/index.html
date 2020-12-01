@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <script src="jsoneditor.min.js"></script>
+
+  	<style type="text/css">
+        body {
+          font: 10.5pt arial;
+          color: #4d4d4d;
+          line-height: 150%;
+          width: 500px;
+        }
+
+        code {
+          background-color: #f5f5f5;
+        }
+
+        #jsoneditor {
+          width: 500px;
+          height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="jsoneditor"></div>
+
+    <script>
+        const container = document.getElementById("jsoneditor")
+        const options = {
+            mode: 'tree',
+            modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
+            onError: function (err) {
+              alert(err.toString())
+            },
+            onModeChange: function (newMode, oldMode) {
+              console.log('Mode switched from', oldMode, 'to', newMode)
+            },
+            onCreateMenu: function (items, node) {
+              const path = node.path
+
+              function pathTojq() {
+                let pathString = ''
+
+                path.forEach(function (segment, index) {
+                  if (typeof segment == 'number') {
+                    pathString += '[' + segment + ']'
+                  } else {
+                    pathString += '."' + segment + '"'
+                  }
+                })
+                alert(pathString)
+              }
+
+              if (path) {
+                items.push({
+                  text: '筛选路径',
+                  title: '展示筛选路径',
+                  className: 'example-class',
+                  click: pathTojq
+                })
+              }
+
+              items.forEach(function (item, index, items) {
+                if ("submenu" in item) {
+                  items[index].className += ' submenu-highlight'
+                } else {
+                  items[index].className += ' rainbow'
+                }
+              })
+
+              items = items.filter(function (item) {
+                return item.type !== 'separator'
+              })
+              return items
+            }
+        }
+        
+        const editor = new JSONEditor(container, options)
+
+        // set test json
+        const initialJson = {
+            "Array": [1, 2, 3],
+            "Boolean": true,
+            "Null": null,
+            "Number": 123,
+            "Object": {"a": "b", "c": "d"},
+            "String": "Hello World"
+        }
+        editor.set(initialJson)
+
+        // get json
+        const updatedJson = editor.get()
+    </script>
+</body>
+</html>

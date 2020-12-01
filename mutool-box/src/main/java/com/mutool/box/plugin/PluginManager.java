@@ -180,11 +180,8 @@ public class PluginManager {
      */
     public void savePluginInfoToLocalFile() throws IOException {
         String pluginConfigFile = getLocalPluginConfig();
-        if(FileUtil.exist(pluginConfigFile)){
-            FileUtil.newFile(pluginConfigFile);
-        }
         String json = JSON.toJSONString(this.pluginList, true);
-        Files.write(Paths.get(getLocalPluginConfig()), json.getBytes(SystemConstant.CHARSET_UTF_8));
+        FileUtil.writeBytes(json.getBytes(SystemConstant.CHARSET_UTF_8), pluginConfigFile);
     }
 
     /**
