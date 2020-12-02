@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -15,8 +17,6 @@ import com.xwintop.xTransfer.util.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +51,8 @@ public class ReceiverFsSplitImpl implements Receiver {
 
     private void receiveInternal(String pathIn, String pathTmp, int max, String encoding, Map params, boolean hasTmpPath,
                                  boolean delReceiveFile, final String fileNameRegex, boolean includeSubdirectory, long delayTime, int receivedFileSum, int defaultRow) throws Exception{
-        pathIn = StringUtils.appendIfMissing(pathIn, "/", "/", "\\");
-        pathTmp = StringUtils.appendIfMissing(pathTmp, "/", "/", "\\");
+        pathIn = StrUtil.appendIfMissing(pathIn, "/", "/", "\\");
+        pathTmp = StrUtil.appendIfMissing(pathTmp, "/", "/", "\\");
         File dirIn = new File(pathIn);//源文件
         if (!dirIn.exists() || !dirIn.isDirectory()) {
             log.error("path: " + pathIn + "not exist or not a dirctory!");
@@ -71,7 +71,7 @@ public class ReceiverFsSplitImpl implements Receiver {
         }
         //add filter
         File[] files = null;//目录下的文件
-        if (StringUtils.isNotBlank(fileNameRegex)) {
+        if (StrUtil.isNotBlank(fileNameRegex)) {
             files = dirIn.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File file) {
@@ -211,7 +211,7 @@ public class ReceiverFsSplitImpl implements Receiver {
      */
     public void receiveSplit(StringBuffer stringBuffer, String curFileName, String encoding, String pathIn, Map params) throws Exception {
         IMessage msg = new DefaultMessage();
-        if (StringUtils.isNoneBlank(stringBuffer)) {
+        if (!StrUtil.hasBlank(stringBuffer)) {
             byte[] data = stringBuffer.toString().getBytes(encoding);
             msg.setRawData(data);
             msg.setFileName(curFileName);
@@ -227,7 +227,7 @@ public class ReceiverFsSplitImpl implements Receiver {
             msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_FS);
             msgLogInfo.put(LOGKEYS.CHANNEL_IN, pathIn);
             msgLogInfo.put(LOGKEYS.MSG_TAG, curFileName);
-            msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+            msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
             msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
             msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
             msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_FS);
@@ -256,8 +256,8 @@ public class ReceiverFsSplitImpl implements Receiver {
         if (fileName == null || fileName.trim().length() <= 0) {
             throw new Exception("configuration for fileName is missing.MessageSender:" + filterConfigBackup.toString());
         }
-        path = StringUtils.appendIfMissing(path, "/", "/", "\\");
-        tmp = StringUtils.appendIfMissing(tmp, "/", "/", "\\");
+        path = StrUtil.appendIfMissing(path, "/", "/", "\\");
+        tmp = StrUtil.appendIfMissing(tmp, "/", "/", "\\");
         File filePath = new File(path);
         Common.checkIsHaveDir(filePath, filterConfigBackup.isCreatePathFlag());//检查是否存在目录
         switch (StrategyEnum.valueOf(filterConfigBackup.getStrategy())) {//文件目录策略（direct、day、hour）
@@ -274,7 +274,7 @@ public class ReceiverFsSplitImpl implements Receiver {
                 break;
         }
         File tmpFile;
-        if (StringUtils.isBlank(tmp)) {
+        if (StrUtil.isBlank(tmp)) {
             tmpFile = Common.getPathByCheckFileName(new File(filePath, fileName));//查找是否有重复文件；同一文件名，加后缀（.YYYYMMDDHHSSSS）
         } else {
             File tmpPath = new File(tmp);
@@ -284,7 +284,7 @@ public class ReceiverFsSplitImpl implements Receiver {
             tmpFile = new File(tmpPath, fileName);
         }
         FileUtils.copyFile(optFile,tmpFile);
-        if (StringUtils.isNotBlank(tmp)) {
+        if (StrUtil.isNotBlank(tmp)) {
             //查找是否有重复文件；同一文件名，加后缀（.YYYYMMDDHHSSSS）
             File backupFile = Common.getPathByCheckFileName(new File(filePath, fileName));
             if (!tmpFile.renameTo(backupFile)) {

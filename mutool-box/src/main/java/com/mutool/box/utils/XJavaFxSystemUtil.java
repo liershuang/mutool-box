@@ -1,8 +1,7 @@
 package com.mutool.box.utils;
 
-import com.mutool.box.plugin.PluginManager;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -26,7 +25,7 @@ public class XJavaFxSystemUtil {
     public static void initSystemLocal() {
         try {
             String localeString = Config.get(Config.Keys.Locale, "");
-            if (StringUtils.isNotEmpty(localeString)) {
+            if (StrUtil.isNotEmpty(localeString)) {
                 String[] locale1 = localeString.split("_");
                 Config.defaultLocale = new Locale(locale1[0], locale1[1]);
             }

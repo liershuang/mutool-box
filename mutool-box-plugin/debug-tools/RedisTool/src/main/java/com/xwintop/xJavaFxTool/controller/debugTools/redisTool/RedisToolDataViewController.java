@@ -1,12 +1,12 @@
 package com.xwintop.xJavaFxTool.controller.debugTools.redisTool;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.services.debugTools.redisTool.RedisToolDataViewService;
 import com.xwintop.xJavaFxTool.utils.RedisUtil;
 import com.xwintop.xJavaFxTool.view.debugTools.redisTool.RedisToolDataViewView;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
 
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -202,7 +202,7 @@ public class RedisToolDataViewController extends RedisToolDataViewView {
 	@FXML
 	private void valueListInsertHeadAction(ActionEvent event) {
 		String value = AlertUtil.showInputAlert("请输入值");
-		if (StringUtils.isNotEmpty(value)) {
+		if (StrUtil.isNotEmpty(value)) {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("value", value);
 			valueListTableData.add(0, map);
@@ -212,7 +212,7 @@ public class RedisToolDataViewController extends RedisToolDataViewView {
 	@FXML
 	private void valueListAppendTailAction(ActionEvent event) {
 		String value = AlertUtil.showInputAlert("请输入值");
-		if (StringUtils.isNotEmpty(value)) {
+		if (StrUtil.isNotEmpty(value)) {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("value", value);
 			valueListTableData.add(map);

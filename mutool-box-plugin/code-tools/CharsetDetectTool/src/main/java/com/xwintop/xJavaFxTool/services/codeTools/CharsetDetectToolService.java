@@ -1,12 +1,12 @@
 package com.xwintop.xJavaFxTool.services.codeTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.codeTools.CharsetDetectToolController;
 import com.xwintop.xJavaFxTool.utils.DirectoryTreeUtil;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.File;
@@ -39,7 +39,7 @@ public class CharsetDetectToolService {
 
     public void detectAction() throws Exception {
         String watchPath = charsetDetectToolController.getDetectPathTextField().getText();
-        if (StringUtils.isEmpty(watchPath)) {
+        if (StrUtil.isEmpty(watchPath)) {
             TooltipUtil.showToast("检测目录不能为空！");
             return;
         }

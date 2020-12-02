@@ -1,10 +1,10 @@
 package com.xwintop.xJavaFxTool.manager;
 
+import cn.hutool.core.util.StrUtil;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -32,7 +32,7 @@ public class ScheduleManager {
         if ("简单表达式".equals(quartzType)) {
             this.runQuartzAction(jobClass, jobDataMap, interval, repeatCount);
         } else if ("Cron表达式".equals(quartzType)) {
-            if (StringUtils.isEmpty(cronText)) {
+            if (StrUtil.isEmpty(cronText)) {
                 TooltipUtil.showToast("cron表达式不能为空。");
                 throw new Exception("cron表达式不能为空。");
             }
@@ -59,7 +59,7 @@ public class ScheduleManager {
             scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(interval)// 时间间隔
                     .withRepeatCount(repeatCount);// 重复次数（将执行6次）
         } else if (QuartzType.CRON.equals(quartzType)) {
-            if (StringUtils.isEmpty(cronText)) {
+            if (StrUtil.isEmpty(cronText)) {
                 throw new Exception("cron表达式不能为空。");
             }
             scheduleBuilder = CronScheduleBuilder.cronSchedule(cronText);

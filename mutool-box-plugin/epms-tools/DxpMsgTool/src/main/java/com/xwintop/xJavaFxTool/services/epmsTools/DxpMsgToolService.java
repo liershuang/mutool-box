@@ -1,13 +1,13 @@
 package com.xwintop.xJavaFxTool.services.epmsTools;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.epmsTools.DxpMsgToolController;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
@@ -42,7 +42,7 @@ public class DxpMsgToolService {
 //        Element transInfo = rootElement.element("TransInfo");
 //        transInfo.element("CopMsgId").setText(dxpMsgToolController.getCopMsgIdTextField().getText());
 //        transInfo.element("MsgType").setText(dxpMsgToolController.getMsgTypeTextField().getText());
-//        if (StringUtils.isEmpty(dxpMsgToolController.getCreatTimeTextField().getText())) {
+//        if (StrUtil.isEmpty(dxpMsgToolController.getCreatTimeTextField().getText())) {
 //            transInfo.element("CreatTime").setText(DateFormatUtils.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
 //        } else {
 //            transInfo.element("CreatTime").setText(dxpMsgToolController.getCreatTimeTextField().getText());
@@ -51,7 +51,7 @@ public class DxpMsgToolService {
 //        addInfo.element("FileName").setText(dxpMsgToolController.getFileNameTextField().getText());
 //        rootElement.element("Data").setText(Base64.encodeBase64String(dxpMsgToolController.getDataTextArea().getText().getBytes("utf-8")));
         File file = null;
-        if (StringUtils.isEmpty(dxpMsgToolController.getSavePathTextField().getText())) {
+        if (StrUtil.isEmpty(dxpMsgToolController.getSavePathTextField().getText())) {
             FileSystemView fsv = FileSystemView.getFileSystemView();
             File com = fsv.getHomeDirectory();    //这便是读取桌面路径的方法了
             file = new File(com, dxpMsgToolController.getFileNameTextField().getText());
@@ -68,8 +68,8 @@ public class DxpMsgToolService {
 //        }
         dxpMode = dxpMode.replace("<CopMsgId></CopMsgId>", "<CopMsgId>" + dxpMsgToolController.getCopMsgIdTextField().getText() + "</CopMsgId>");
         dxpMode = dxpMode.replace("<MsgType></MsgType>", "<MsgType>" + dxpMsgToolController.getMsgTypeTextField().getText() + "</MsgType>");
-        if (StringUtils.isEmpty(dxpMsgToolController.getCreatTimeTextField().getText())) {
-            dxpMode = dxpMode.replace("<CreatTime></CreatTime>", "<CreatTime>" + DateFormatUtils.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") + "</CreatTime>");
+        if (StrUtil.isEmpty(dxpMsgToolController.getCreatTimeTextField().getText())) {
+            dxpMode = dxpMode.replace("<CreatTime></CreatTime>", "<CreatTime>" + DateUtil.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") + "</CreatTime>");
         } else {
             dxpMode = dxpMode.replace("<CreatTime></CreatTime>", "<CreatTime>" + dxpMsgToolController.getCreatTimeTextField().getText() + "</CreatTime>");
         }

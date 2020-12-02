@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -11,8 +13,6 @@ import com.xwintop.xTransfer.receiver.service.Receiver;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.springframework.context.annotation.Scope;
@@ -45,7 +45,7 @@ public class ReceiverHdfsImpl implements Receiver {
     }
 
     private void receiveInternalByFiles(String pathIn, Map params, int receivedFileSum) throws Exception {
-        pathIn = StringUtils.appendIfMissing(pathIn, "/", "/", "\\");
+        pathIn = StrUtil.appendIfMissing(pathIn, "/", "/", "\\");
         Configuration conf = new Configuration();
         conf.set("fs.defaultFS", receiverConfigHdfs.getHdfsUrl());
         FileSystem hdfs = FileSystem.get(conf);
@@ -65,7 +65,7 @@ public class ReceiverHdfsImpl implements Receiver {
                 Path curFile = curPath.getPath();
                 if (curPath.isDirectory()) {
                     String curFileName = curFile.getName();
-                    if (StringUtils.isNotBlank(receiverConfigHdfs.getFileNameRegex())) {
+                    if (StrUtil.isNotBlank(receiverConfigHdfs.getFileNameRegex())) {
                         if (!curFileName.matches(receiverConfigHdfs.getFileNameRegex())) {
                             continue;
                         }
@@ -123,7 +123,7 @@ public class ReceiverHdfsImpl implements Receiver {
                         msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_HDFS);
                         msgLogInfo.put(LOGKEYS.CHANNEL_IN, pathIn);
                         msgLogInfo.put(LOGKEYS.MSG_TAG, curFileName);
-                        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_HDFS);

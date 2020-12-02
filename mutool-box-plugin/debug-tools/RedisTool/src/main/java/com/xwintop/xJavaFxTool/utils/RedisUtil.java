@@ -1,8 +1,8 @@
 package com.xwintop.xJavaFxTool.utils;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.*;
 import redis.clients.jedis.exceptions.JedisException;
 
@@ -268,7 +268,7 @@ public class RedisUtil {
     public RedisUtil(String name, String host, int port, String password) {
         this.name = name;
         this.jedis = new Jedis(host, port);
-        if (StringUtils.isNotEmpty(password)) {
+        if (StrUtil.isNotEmpty(password)) {
             jedis.auth(password);
             this.password = password;
         }

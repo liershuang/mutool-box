@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -15,8 +17,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -43,19 +43,19 @@ public class SenderFsImpl implements Sender {
         log.debug("SenderFs,taskName:" + params.get(TaskQuartzJob.JOBID));
         // parse the variable of send properties
         String path = senderConfigFs.getPath();
-        path = StringUtils.appendIfMissing(path, "/", "/", "\\");
+        path = StrUtil.appendIfMissing(path, "/", "/", "\\");
         boolean hasTmpPath = senderConfigFs.isHasTmpPath();
         boolean overload = senderConfigFs.isOverload();
         String tmp = "";
         String postfixName = "";
         if (hasTmpPath) {
             tmp = senderConfigFs.getTmp();
-            tmp = StringUtils.appendIfMissing(tmp, "/", "/", "\\");
+            tmp = StrUtil.appendIfMissing(tmp, "/", "/", "\\");
         } else {
             postfixName = senderConfigFs.getPostfixName();
         }
         String fileName = msg.getFileName();
-        if (StringUtils.isNotBlank(senderConfigFs.getFileName())) {
+        if (StrUtil.isNotBlank(senderConfigFs.getFileName())) {
             fileName = ParseVariableCommon.parseVariable(senderConfigFs.getFileName(), msg, params);
         }
         if (path == null || path.trim().length() <= 0) {
@@ -68,7 +68,7 @@ public class SenderFsImpl implements Sender {
         Common.checkIsHaveDir(filePath, senderConfigFs.isCreatePathFlag());
         File tmpPath = null;
         // if tmp is not specified,do not use temporary directory
-        if (hasTmpPath && StringUtils.isNotEmpty(tmp)) {
+        if (hasTmpPath && StrUtil.isNotEmpty(tmp)) {
             tmpPath = new File(tmp);
             if (!tmpPath.exists()) {
                 log.warn("senderFs临时目录不存在:" + tmp);
@@ -87,7 +87,7 @@ public class SenderFsImpl implements Sender {
         }
 
         File tmpFile = null;
-        if (hasTmpPath && StringUtils.isNotEmpty(tmp)) {
+        if (hasTmpPath && StrUtil.isNotEmpty(tmp)) {
             tmpFile = new File(tmpPath, fileName);
         } else {
             if (postfixName == null || "".equals(postfixName.trim())) {
@@ -95,7 +95,7 @@ public class SenderFsImpl implements Sender {
             }
             tmpFile = new File(tmpPath, fileName + postfixName);
         }
-        if (StringUtils.isNotEmpty(senderConfigFs.getEncoding()) && !"AUTO".equalsIgnoreCase(senderConfigFs.getEncoding())) {
+        if (StrUtil.isNotEmpty(senderConfigFs.getEncoding()) && !"AUTO".equalsIgnoreCase(senderConfigFs.getEncoding())) {
             FileUtils.writeByteArrayToFile(tmpFile, msg.getMessage(senderConfigFs.getEncoding()));
         } else {
             FileUtils.writeByteArrayToFile(tmpFile, msg.getMessage());
@@ -112,7 +112,7 @@ public class SenderFsImpl implements Sender {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_FS);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigFs.getPath());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

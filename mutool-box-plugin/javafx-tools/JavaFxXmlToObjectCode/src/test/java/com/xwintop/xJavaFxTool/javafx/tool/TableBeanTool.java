@@ -1,7 +1,7 @@
 package com.xwintop.xJavaFxTool.javafx.tool;
 
-import com.mutool.javafx.core.util.StrUtil;
-import org.apache.commons.lang3.reflect.FieldUtils;
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -9,9 +9,8 @@ import java.lang.reflect.Field;
 public class TableBeanTool {
 	@Test
 	public void buildTableBean(){
-//		Class<?> beanClass = EmailToolTableBean.class;
 		Class<?> beanClass = this.getClass();
-		Field[] fields = FieldUtils.getAllFields(beanClass);
+		Field[] fields = ReflectUtil.getFields(beanClass);
 		StringBuffer soutStringBuffer = new StringBuffer();//输出字符串
 		StringBuffer stringBuffer = new StringBuffer();//构造函数头
 		StringBuffer stringBuffer2 = new StringBuffer();//构造函数结构
@@ -27,7 +26,7 @@ public class TableBeanTool {
 			String typeName = field.getType().getSimpleName();
 			String typeSimpleName = typeName.substring(6, typeName.indexOf("Property"));
 			String typeClassName = typeName.substring(6);
-			String UpFieldName = StrUtil.firstToUpCase(fieldName);
+			String UpFieldName = StrUtil.upperFirst(fieldName);
 			
 			stringBuffer.append(typeSimpleName).append(" "+fieldName+",");
 			stringBuffer2.append("this."+fieldName+" = new "+typeName+"("+fieldName+");\n");

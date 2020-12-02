@@ -1,13 +1,14 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.TimeToolController;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +37,7 @@ public class TimeToolService {
         String curTimeFormatter = timeToolController.getChoiceBoxTimeFormatter().getValue();
         TimeZone curTimeZone = TimeZone.getTimeZone(timeToolController.getChoiceBoxTimeZone().getValue());
         String timeStr = timeToolController.getTextFileldTimeStr().getText().trim();
-        if (StringUtils.isBlank(timeStr)) {
+        if (StrUtil.isBlank(timeStr)) {
             timeToolController.getTextAreaResult().setText("没有输入时间字符！");
             return;
         }
@@ -44,7 +45,6 @@ public class TimeToolService {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(curTimeFormatter);
             simpleDateFormat.setTimeZone(curTimeZone);
             timeToolController.getTextFileldTimeStr2().setText(Long.toString(simpleDateFormat.parse(timeStr).getTime()));
-//            timeToolController.getTextFileldTimeStr2().setText(Long.toString(DateUtils.parseDate(timeStr, curTimeFormatter).getTime()));
             timeToolController.getTextAreaResult().setText("转换成功！");
             TooltipUtil.showToast("转换成功");
         } catch (Exception e) {
@@ -58,13 +58,13 @@ public class TimeToolService {
         String curTimeFormatter = timeToolController.getChoiceBoxTimeFormatter().getValue();
         TimeZone curTimeZone = TimeZone.getTimeZone(timeToolController.getChoiceBoxTimeZone().getValue());
         String timestamp = timeToolController.getTextFileldTimeStr2().getText().trim();
-        if (StringUtils.isBlank(timestamp)) {
+        if (StrUtil.isBlank(timestamp)) {
             timeToolController.getTextAreaResult().setText("没有输入时间戳！");
             return;
         }
         try {
-            timeToolController.getTextFileldTimeStr()
-                    .setText(DateFormatUtils.format(Long.parseLong(timestamp), curTimeFormatter, curTimeZone));
+            DateTime dateTime = new DateTime(Long.parseLong(timestamp), curTimeZone);
+            timeToolController.getTextFileldTimeStr().setText(DateUtil.format(dateTime, curTimeFormatter));
             timeToolController.getTextAreaResult().setText("转换成功！");
             TooltipUtil.showToast("转换成功");
         } catch (Exception e) {
@@ -96,8 +96,8 @@ public class TimeToolService {
             long day1 = hour1 / (24);
             long weeks = day1 / 7;
             StringBuilder stringBuffer = new StringBuilder();
-            stringBuffer.append("\n起始时间:" + DateFormatUtils.format(startTime, "yyyy-MM-dd HH:mm:ss.SSS"));
-            stringBuffer.append("\n结束时间:" + DateFormatUtils.format(endTime, "yyyy-MM-dd HH:mm:ss.SSS"));
+            stringBuffer.append("\n起始时间:" + DateUtil.format(new Date(startTime), "yyyy-MM-dd HH:mm:ss.SSS"));
+            stringBuffer.append("\n结束时间:" + DateUtil.format(new Date(endTime), "yyyy-MM-dd HH:mm:ss.SSS"));
             stringBuffer.append("\n两个时间相差:" + day + "天" + hour + "小时" + min + "分" + s + "秒" + ms + "毫秒");
             stringBuffer.append("\n按周计算相差:" + weeks + "周");
             stringBuffer.append("\n按天计算相差:" + day1 + "天");
@@ -120,28 +120,28 @@ public class TimeToolService {
             String addTimeChoiceBoxString = timeToolController.getAddTimeChoiceBox().getValue();
             Date endTime = new Date();
             if (timeToolController.getTimeSuffixFormatter()[0].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addDays(startTime, addTime);
+                endTime = DateUtil.offsetDay(startTime, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[1].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addWeeks(startTime, addTime);
+                endTime = DateUtil.offsetWeek(startTime, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[2].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addMonths(startTime, addTime);
+                endTime = DateUtil.offsetMonth(startTime, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[3].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addYears(startTime, addTime);
+                endTime = DateUtil.offset(startTime, DateField.YEAR, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[4].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addHours(startTime, addTime);
+                endTime = DateUtil.offsetHour(startTime, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[5].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addMinutes(startTime, addTime);
+                endTime = DateUtil.offsetMinute(startTime, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[6].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addSeconds(startTime, addTime);
+                endTime = DateUtil.offsetSecond(startTime, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[7].equals(addTimeChoiceBoxString)) {
-                endTime = DateUtils.addMilliseconds(startTime, addTime);
+                endTime = DateUtil.offsetMillisecond(startTime, addTime);
             } else if (timeToolController.getTimeSuffixFormatter()[8].equals(addTimeChoiceBoxString)) {
                 endTime = new Date(startTime.getTime() + addTime);
             }
             StringBuilder stringBuffer = new StringBuilder();
-            stringBuffer.append("\n起始时间: " + DateFormatUtils.format(startTime, "yyyy-MM-dd HH:mm:ss.SSS"));
+            stringBuffer.append("\n起始时间: " + DateUtil.format(startTime, "yyyy-MM-dd HH:mm:ss.SSS"));
             stringBuffer.append("\n结果时间戳: " + endTime.getTime());
-            stringBuffer.append("\n结果时间: " + DateFormatUtils.format(endTime, "yyyy-MM-dd HH:mm:ss.SSS"));
+            stringBuffer.append("\n结果时间: " + DateUtil.format(endTime, "yyyy-MM-dd HH:mm:ss.SSS"));
             timeToolController.getTextAreaResult().setText("转换成功！\n" + stringBuffer.toString());
             TooltipUtil.showToast("转换成功");
         } catch (Exception e) {

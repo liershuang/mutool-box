@@ -1,7 +1,5 @@
 package com.mutool.javafx.core.xml;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -9,6 +7,8 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import cn.hutool.core.util.StrUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
@@ -105,7 +105,7 @@ public class XmlDocument {
 
     public void save(File file) throws IOException {
         if (file != null) {
-            Charset charset = Charset.forName(defaultString(document.getXMLEncoding(), "UTF-8"));
+            Charset charset = Charset.forName(StrUtil.blankToDefault(document.getXMLEncoding(), "UTF-8"));
             Files.write(file.toPath(), document.asXML().getBytes(charset));
         }
     }

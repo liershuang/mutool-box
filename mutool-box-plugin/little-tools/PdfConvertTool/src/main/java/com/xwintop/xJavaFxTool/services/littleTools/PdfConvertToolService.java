@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.PdfConvertToolController;
 import com.xwintop.xJavaFxTool.utils.ImgToolUtil;
 import com.mutool.javafx.core.util.FileUtil;
@@ -7,7 +8,6 @@ import com.mutool.javafx.core.util.javafx.TooltipUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -53,7 +53,7 @@ public class PdfConvertToolService {
         try {
             File pdfFile = new File(pdfConvertToolController.getFileOriginalPathTextField().getText());
             String fileTargetPath = pdfConvertToolController.getFileTargetPathTextField().getText();
-            if (StringUtils.isEmpty(fileTargetPath)) {
+            if (StrUtil.isEmpty(fileTargetPath)) {
                 fileTargetPath = pdfFile.getParent();
             }
             PDDocument document = PDDocument.load(pdfFile);
@@ -100,7 +100,7 @@ public class PdfConvertToolService {
         try {
             File pdfFile = new File(pdfConvertToolController.getFileOriginalPathTextField().getText());
             String fileTargetPath = pdfConvertToolController.getFileTargetPathTextField().getText();
-            if (StringUtils.isEmpty(fileTargetPath)) {
+            if (StrUtil.isEmpty(fileTargetPath)) {
                 fileTargetPath = pdfFile.getParent();
             }
             document = PDDocument.load(pdfFile);

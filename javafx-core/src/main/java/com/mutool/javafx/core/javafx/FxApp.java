@@ -1,12 +1,12 @@
 package com.mutool.javafx.core.javafx;
 
+import cn.hutool.core.util.StrUtil;
 import com.mutool.javafx.core.util.javafx.JavaFxSystemUtil;
 import javafx.application.Platform;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class FxApp {
         FxApp.primaryStage = primaryStage;
         JavaFxSystemUtil.mainStage = primaryStage;  // 为兼容性保留
 
-        if (StringUtils.isNotBlank(iconPath)) {
+        if (StrUtil.isNotBlank(iconPath)) {
             FxApp.appIcon = icon(iconPath);
             primaryStage.getIcons().add(FxApp.appIcon);
         }

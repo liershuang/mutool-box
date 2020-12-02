@@ -1,6 +1,7 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
 import cn.hutool.core.lang.Singleton;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.ExceptionMsgBackup;
 import com.xwintop.xTransfer.task.entity.TaskConfig;
 import com.xwintop.xTransfer.filter.bean.FilterConfig;
@@ -10,7 +11,6 @@ import com.xwintop.xTransfer.filter.service.FilterManager;
 import com.xwintop.xTransfer.messaging.IContext;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +49,7 @@ public class FilterConfigServiceImpl implements FilterConfigService {
         params.put(TaskQuartzJob.JOBID, taskConfig.getName());
         params.put(TaskQuartzJob.JOBSEQ, taskConfig.getProperty(TaskQuartzJob.JOBSEQ));
         for (FilterConfig filterConfig : filterConfigList) {
-            if (StringUtils.isBlank(filterConfig.getId())) {
+            if (StrUtil.isBlank(filterConfig.getId())) {
                 filterConfig.setId(taskConfig.getName() + "_" + filterIndex);
             } else {
                 if (!filterConfig.getId().startsWith(taskConfig.getName())) {
@@ -104,7 +104,7 @@ public class FilterConfigServiceImpl implements FilterConfigService {
     public void stopFilter(TaskConfig taskConfig) throws Exception {
         int filterIndex = 0;
         for (FilterConfig filterConfig : taskConfig.getFilterConfigs()) {
-            if (StringUtils.isBlank(filterConfig.getId())) {
+            if (StrUtil.isBlank(filterConfig.getId())) {
                 filterConfig.setId(taskConfig.getName() + "_" + filterIndex);
             } else {
                 if (!filterConfig.getId().startsWith(taskConfig.getName())) {

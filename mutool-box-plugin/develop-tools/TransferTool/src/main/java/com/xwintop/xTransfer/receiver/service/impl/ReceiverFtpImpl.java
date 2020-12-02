@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.utils.FtpUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
@@ -12,8 +14,6 @@ import com.xwintop.xTransfer.receiver.service.Receiver;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import com.mutool.javafx.core.util.UuidUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -72,14 +72,14 @@ public class ReceiverFtpImpl implements Receiver {
         boolean delReceiveFile = receiverConfigFs.isDelReceiveFile();
         String fileNameRegex = receiverConfigFs.getFileNameRegex();
         String remotePath = receiverConfigFs.getRemotePath();
-        remotePath = StringUtils.appendIfMissing(remotePath, "/", "/", "\\");
+        remotePath = StrUtil.appendIfMissing(remotePath, "/", "/", "\\");
         int max = receiverConfigFs.getMax();
         long maxSize = receiverConfigFs.getMaxSize();
         String bigFilePath = receiverConfigFs.getBigFilePath();
-        bigFilePath = StringUtils.appendIfMissing(bigFilePath, "/", "/", "\\");
+        bigFilePath = StrUtil.appendIfMissing(bigFilePath, "/", "/", "\\");
         String encoding = receiverConfigFs.getEncoding();
         String tmpPath = receiverConfigFtp.getTmpPath();
-        tmpPath = StringUtils.appendIfMissing(tmpPath, "/", "/", "\\");
+        tmpPath = StrUtil.appendIfMissing(tmpPath, "/", "/", "\\");
         boolean hasTmpPath = receiverConfigFtp.isHasTmpPath();
         String postfixName = null;
         boolean includeSubdirectory = receiverConfigFs.isIncludeSubdirectory();
@@ -123,7 +123,7 @@ public class ReceiverFtpImpl implements Receiver {
                 continue;
             }
             //add filename filter
-            if (StringUtils.isNotBlank(fileNameRegex)) {
+            if (StrUtil.isNotBlank(fileNameRegex)) {
                 if (!file.getName().matches(fileNameRegex)) {
                     continue;
                 }
@@ -131,7 +131,7 @@ public class ReceiverFtpImpl implements Receiver {
             if (file.isFile()) {
                 if (maxSize != -1 && file.getSize() > maxSize) {
                     log.warn(file.getName() + ": size is exceed the limit [" + maxSize + "]. fileSize:" + file.getSize());
-                    if (StringUtils.isNotEmpty(bigFilePath)) {
+                    if (StrUtil.isNotEmpty(bigFilePath)) {
                         try {
                             ftpUtil.rename(file.getName(), bigFilePath + file.getName());
                             log.info("move big file to:" + bigFilePath + "/" + file.getName());
@@ -171,7 +171,7 @@ public class ReceiverFtpImpl implements Receiver {
                     }
                 } else {
                     //when has no tmp directory then do
-                    if (StringUtils.isBlank(postfixName)) {
+                    if (StrUtil.isBlank(postfixName)) {
                         postfixName = msg.getId();
                     }
                     fileName = fileName + "." + postfixName;
@@ -259,7 +259,7 @@ public class ReceiverFtpImpl implements Receiver {
         msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_FTP);
         msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigFtp.getHost() + ":" + receiverConfigFtp.getPort());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_FTP);

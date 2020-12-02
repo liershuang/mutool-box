@@ -1,5 +1,6 @@
 package com.mutool.box.plugin;
 
+import cn.hutool.core.util.StrUtil;
 import com.mutool.box.model.PluginJarInfo;
 import com.mutool.box.utils.Config;
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
@@ -9,7 +10,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ResourceBundle;
 
@@ -24,7 +24,7 @@ public class PluginLoader {
         try {
             FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getPagePath()));
 
-            if (StringUtils.isNotEmpty(plugin.getBundleName())) {
+            if (StrUtil.isNotEmpty(plugin.getBundleName())) {
                 ResourceBundle resourceBundle = ResourceBundle.getBundle(plugin.getBundleName(), Config.defaultLocale);
                 generatingCodeFXMLLoader.setResources(resourceBundle);
             }
@@ -44,14 +44,14 @@ public class PluginLoader {
         try {
             FXMLLoader generatingCodeFXMLLoader = new FXMLLoader(PluginLoader.class.getResource(plugin.getPagePath()));
 
-            if (StringUtils.isNotEmpty(plugin.getBundleName())) {
+            if (StrUtil.isNotEmpty(plugin.getBundleName())) {
                 ResourceBundle resourceBundle = ResourceBundle.getBundle(plugin.getBundleName(), Config.defaultLocale);
                 generatingCodeFXMLLoader.setResources(resourceBundle);
             }
 
             Tab tab = new Tab(plugin.getTitle());
 
-            if (StringUtils.isNotEmpty(plugin.getIconPath())) {
+            if (StrUtil.isNotEmpty(plugin.getIconPath())) {
                 ImageView imageView = new ImageView(new Image(plugin.getIconPath()));
                 imageView.setFitHeight(18);
                 imageView.setFitWidth(18);

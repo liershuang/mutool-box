@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -16,8 +18,6 @@ import com.xwintop.xTransfer.util.ParseVariableCommon;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -41,9 +41,9 @@ public class FilterBackupImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         for (IMessage iMessage : ctx.getMessages()) {
-            if (StringUtils.isNotBlank(filterConfigBackup.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(filterConfigBackup.getFileNameFilterRegex())) {
                 String fileNameFilterRegexGroup = filterConfigBackup.getFileNameFilterRegexGroup();
-                if (StringUtils.isEmpty(fileNameFilterRegexGroup)) {
+                if (StrUtil.isEmpty(fileNameFilterRegexGroup)) {
                     fileNameFilterRegexGroup = "defaultRegexGroup";
                 }
                 if ("?!".equals(filterConfigBackup.getFileNameFilterRegex())) {
@@ -67,9 +67,9 @@ public class FilterBackupImpl implements Filter {
 //        log.info("开始文件备份操作");
         String path = filterConfigBackup.getPath();
         String tmp = filterConfigBackup.getTmpPath();
-        boolean hasTmpPath = StringUtils.isNotEmpty(tmp);
+        boolean hasTmpPath = StrUtil.isNotEmpty(tmp);
         String fileName = msg.getFileName();
-        if (StringUtils.isNotBlank(filterConfigBackup.getFileName())) {
+        if (StrUtil.isNotBlank(filterConfigBackup.getFileName())) {
             fileName = ParseVariableCommon.parseVariable(filterConfigBackup.getFileName(), msg, params);
         }
         if (path == null || path.trim().length() <= 0) {
@@ -78,8 +78,8 @@ public class FilterBackupImpl implements Filter {
         if (fileName == null || fileName.trim().length() <= 0) {
             throw new Exception("configuration for fileName is missing.MessageSender:" + filterConfigBackup.toString());
         }
-        path = StringUtils.appendIfMissing(path, "/", "/", "\\");
-        tmp = StringUtils.appendIfMissing(tmp, "/", "/", "\\");
+        path = StrUtil.appendIfMissing(path, "/", "/", "\\");
+        tmp = StrUtil.appendIfMissing(tmp, "/", "/", "\\");
         File filePath = new File(path);
         Common.checkIsHaveDir(filePath, filterConfigBackup.isCreatePathFlag());
         switch (StrategyEnum.valueOf(filterConfigBackup.getStrategy())) {
@@ -136,7 +136,7 @@ public class FilterBackupImpl implements Filter {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_FS);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, filterConfigBackup.getPath());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

@@ -1,6 +1,7 @@
 package com.xwintop.xJavaFxTool.controller.littleTools;
 
 import cn.hutool.core.swing.clipboard.ClipboardUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.services.littleTools.FileSearchToolService;
 import com.xwintop.xJavaFxTool.utils.ImgToolUtil;
 import com.xwintop.xJavaFxTool.view.littleTools.FileSearchToolView;
@@ -25,7 +26,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -118,7 +118,7 @@ public class FileSearchToolController extends FileSearchToolView {
         searchResultTableVIew.setItems(searchResultTableData);
 
 //        searchDirectoryTextField.setText("D:\\TestXf\\");
-        searchDirectoryTextField.setText(StringUtils.removeEnd(new File("./").getAbsolutePath(), "."));
+        searchDirectoryTextField.setText(StrUtil.removeSuffix(new File("./").getAbsolutePath(), "."));
     }
 
     private void initEvent() {

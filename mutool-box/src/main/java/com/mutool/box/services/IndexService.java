@@ -1,5 +1,6 @@
 package com.mutool.box.services;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.FileUtil;
@@ -28,8 +29,6 @@ import javafx.stage.WindowEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -184,7 +183,7 @@ public class IndexService {
             Tab tab = new Tab(title);
             tab.setContent(fxmlView.getView());
 
-            if (org.apache.commons.lang.StringUtils.isNotEmpty(iconPath)) {
+            if (StrUtil.isNotEmpty(iconPath)) {
                 ImageView imageView = new ImageView(new Image(iconPath));
                 imageView.setFitHeight(18);
                 imageView.setFitWidth(18);
@@ -217,7 +216,7 @@ public class IndexService {
             return;
         }
         Tab tab = new Tab(title);
-        if (StringUtils.isNotEmpty(iconPath)) {
+        if (StrUtil.isNotEmpty(iconPath)) {
             ImageView imageView = new ImageView(new Image(iconPath));
             imageView.setFitHeight(18);
             imageView.setFitWidth(18);
@@ -243,7 +242,7 @@ public class IndexService {
             return;
         }
         Tab tab = new Tab(title);
-        if (StringUtils.isNotEmpty(iconPath)) {
+        if (StrUtil.isNotEmpty(iconPath)) {
             ImageView imageView = new ImageView(new Image(iconPath));
             imageView.setFitHeight(18);
             imageView.setFitWidth(18);
@@ -267,7 +266,7 @@ public class IndexService {
             return;
         }
         Tab tab = new Tab(title);
-        if (StringUtils.isNotEmpty(iconPath)) {
+        if (StrUtil.isNotEmpty(iconPath)) {
             ImageView imageView = new ImageView(new Image(iconPath));
             imageView.setFitHeight(18);
             imageView.setFitWidth(18);
@@ -381,7 +380,7 @@ public class IndexService {
                     if("childMenu".equals(childNode.getName())){
                         childMenuNode = childNode;
                     }else{
-                        BeanUtils.copyProperty(menuConfig, childNode.getName(), childNode.getStringValue());
+                        BeanUtil.setFieldValue(menuConfig, childNode.getName(), childNode.getStringValue());
                     }
                 }
                 if(childMenuNode != null){
@@ -414,11 +413,7 @@ public class IndexService {
                 if("childMenu".equals(childMenuTreeEle.getName())){
                     childMenuNode = childMenuTreeEle;
                 }else{
-                    try {
-                        BeanUtils.copyProperty(childMenu, childMenuTreeEle.getName(), childMenuTreeEle.getStringValue());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    BeanUtil.setFieldValue(childMenu, childMenuTreeEle.getName(), childMenuTreeEle.getStringValue());
                 }
             }
             //有子节点的话递归设置子节点

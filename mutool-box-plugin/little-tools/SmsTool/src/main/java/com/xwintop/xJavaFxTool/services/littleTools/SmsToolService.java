@@ -1,5 +1,9 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xwintop.xJavaFxTool.controller.littleTools.SmsToolController;
@@ -14,9 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.File;
 import java.util.*;
@@ -125,7 +126,7 @@ public class SmsToolService {
             log.info("中国电信短信获取Token返回：" + resJson);
             access_token = JSON.parseObject(resJson).getString("access_token");
 
-            String timestamp = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");//时间戳
+            String timestamp = DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss");//时间戳
             TreeMap<String, String> map2 = new TreeMap<>();
             map2.put("app_id", app_id);
             map2.put("access_token", access_token);
@@ -165,7 +166,7 @@ public class SmsToolService {
             phoneNumbers.add(smsToolTableBean.getToPhone());
         }
         try {
-            long random = RandomUtils.nextInt(0, 999999) + 100000;
+            long random = RandomUtil.randomInt(0, 999999) + 100000;
             long curTime = System.currentTimeMillis() / 1000;
 
             Map data = new HashMap();
@@ -187,7 +188,7 @@ public class SmsToolService {
             }
             String sigStr = String.format(
                     "appkey=%s&random=%d&time=%d&mobile=%s",
-                    appkey, random, curTime, StringUtils.join(phoneNumbers, ","));
+                    appkey, random, curTime, CollUtil.join(phoneNumbers, ","));
             data.put("sig", DigestUtils.sha256Hex(sigStr));
             data.put("time", curTime);
             data.put("extend", "");
@@ -229,13 +230,13 @@ public class SmsToolService {
             paras.put("SignatureNonce", java.util.UUID.randomUUID().toString());
             paras.put("AccessKeyId", accessKeyId);
             paras.put("SignatureVersion", "1.0");
-            paras.put("Timestamp", DateFormatUtils.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'", new SimpleTimeZone(0, "GMT")));
+            paras.put("Timestamp", DateUtil.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
             paras.put("Format", "JSON");
             // 2. 业务API参数
             paras.put("Action", "SendSms");
             paras.put("Version", "2017-05-25");
             paras.put("RegionId", "cn-hangzhou");
-            paras.put("PhoneNumbers", StringUtils.join(phoneNumbers, ","));
+            paras.put("PhoneNumbers", CollUtil.join(phoneNumbers, ","));
             //必填:短信签名-可在短信控制台中找到
             paras.put("SignName", signName);
             //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时
@@ -286,7 +287,7 @@ public class SmsToolService {
             String apikey = smsToolController.getMonyunApikeyTextField().getText();//用户唯一标识
 //            String mobile = "18356971618";//短信接收的手机号：多个手机号请用英文逗号分隔
             String content = smsToolController.getMonyunContentTextArea().getText();
-            String timestamp = DateFormatUtils.format(new Date(), "MMddHHmmss");
+            String timestamp = DateUtil.format(new Date(), "MMddHHmmss");
             String svrtype = smsToolController.getMonyunSvrtypeTextField().getText();//业务类型
             String exno = smsToolController.getMonyunExnoTextField().getText();//扩展号
             ArrayList<String> phoneNumbers = new ArrayList<String>();
@@ -294,7 +295,7 @@ public class SmsToolService {
                 phoneNumbers.add(smsToolTableBean.getToPhone());
             }
             Map params = new HashMap<>();
-            if (StringUtils.isBlank(apikey)) {
+            if (StrUtil.isBlank(apikey)) {
                 pwd = DigestUtils.md5Hex(userid.toUpperCase() + "00000000" + pwd + timestamp);
                 params.put("userid", userid.toUpperCase());
                 params.put("pwd", pwd);
@@ -302,7 +303,7 @@ public class SmsToolService {
                 params.put("apikey", apikey);
             }
             params.put("timestamp", timestamp);
-            params.put("mobile", StringUtils.join(phoneNumbers, ","));
+            params.put("mobile", CollUtil.join(phoneNumbers, ","));
             params.put("content", java.net.URLEncoder.encode(content, "GBK"));
             params.put("svrtype", svrtype);
             params.put("exno", exno);

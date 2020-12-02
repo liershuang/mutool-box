@@ -1,8 +1,8 @@
 package com.xwintop.xTransfer.util;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.ByteArrayInputStream;
@@ -46,8 +46,8 @@ public class Common {
      * delimited用系统默认的目录分割符
      */
     public static String addSep(String path) {
-//        return StringUtils.appendIfMissing(path, "/", "/", "\\");
-        return StringUtils.appendIfMissing(path, File.separator, "/", "\\");
+//        return StrUtil.appendIfMissing(path, "/", "/", "\\");
+        return StrUtil.appendIfMissing(path, File.separator, "/", "\\");
     }
 
     /**
@@ -90,7 +90,7 @@ public class Common {
      * @Description: 根据时间格式化创建子目录
      */
     public static File dirByDateFormat(File rootPath, String pattern) {
-        String hour = DateFormatUtils.format(new Date(), pattern);
+        String hour = DateUtil.format(new Date(), pattern);
         File dirLevelTwo = new File(rootPath, hour);
         if (!dirLevelTwo.exists()) {
             dirLevelTwo.mkdir();
@@ -109,7 +109,7 @@ public class Common {
      */
     public static File getPathByCheckFileName(File file) {
         if (file.exists()) {
-            file = new File(file.getPath() + DateFormatUtils.format(new Date(), ".yyyyMMddHHmmssss"));
+            file = new File(file.getPath() + DateUtil.format(new Date(), ".yyyyMMddHHmmssss"));
         }
         return file;
     }

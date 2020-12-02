@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.debugTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.xwintop.xJavaFxTool.controller.debugTools.ScriptEngineToolController;
 import com.xwintop.xJavaFxTool.job.ScriptEngineToolJob;
@@ -16,7 +17,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -63,7 +63,7 @@ public class ScriptEngineToolService {
         System.out.println("运行:" + type + " : " + script);
         addLog("运行:" + type + " : " + script);
         Map parameterMap = null;
-        if (StringUtils.isNotEmpty(scriptEngineToolTableBean.getParameter())) {
+        if (StrUtil.isNotEmpty(scriptEngineToolTableBean.getParameter())) {
             parameterMap = JSON.parseObject(scriptEngineToolTableBean.getParameter(), Map.class);
         }
         try {
@@ -141,7 +141,7 @@ public class ScriptEngineToolService {
         if ("简单表达式".equals(quartzType)) {
             scheduleManager.runQuartzAction(ScriptEngineToolJob.class, this, interval, repeatCount);
         } else if ("Cron表达式".equals(quartzType)) {
-            if (StringUtils.isEmpty(cronText)) {
+            if (StrUtil.isEmpty(cronText)) {
                 TooltipUtil.showToast("cron表达式不能为空。");
                 return false;
             }

@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -11,8 +13,6 @@ import com.xwintop.xTransfer.receiver.service.Receiver;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import com.mutool.javafx.core.util.UuidUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -81,7 +81,7 @@ public class ReceiverKafkaImpl implements Receiver {
                 record.headers().forEach(header -> {
                     msg.setProperty(header.key(), new String(header.value()));
                 });
-                if(StringUtils.isEmpty(msg.getFileName())){
+                if(StrUtil.isEmpty(msg.getFileName())){
                     msg.setFileName(UuidUtil.get32UUID());
                 }
                 IContext ctx = new DefaultContext();
@@ -91,7 +91,7 @@ public class ReceiverKafkaImpl implements Receiver {
                 msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, "KAFKA");
                 msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigKafka.getServers() + ":" +receiverConfigKafka.getTopics().toString());
                 msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-                msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                 msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                 msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                 msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, "kafkaReceiver");

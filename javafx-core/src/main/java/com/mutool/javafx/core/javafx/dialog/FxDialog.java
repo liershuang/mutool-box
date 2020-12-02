@@ -1,5 +1,7 @@
 package com.mutool.javafx.core.javafx.dialog;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.ListUtil;
 import com.mutool.javafx.core.XCoreException;
 import com.mutool.javafx.core.javafx.FxApp;
 import com.mutool.javafx.core.util.javafx.FxmlUtil;
@@ -27,7 +29,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * 自定义对话框
@@ -177,7 +178,7 @@ public class FxDialog<T> {
         dialogContainer.setSpacing(5);
 
         Stage stage = new Stage();
-        if (ArrayUtils.isNotEmpty(this.buttonTypes)) {
+        if (CollUtil.isNotEmpty(ListUtil.toList(this.buttonTypes))) {
             dialogContainer.getChildren().add(new Separator());
             dialogContainer.getChildren().add(buttonsPanel(stage));
         }

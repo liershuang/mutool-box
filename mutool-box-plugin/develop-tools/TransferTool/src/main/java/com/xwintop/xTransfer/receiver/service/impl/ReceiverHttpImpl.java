@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -12,8 +14,6 @@ import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import com.xwintop.xTransfer.util.HttpsClientRequestFactory;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
@@ -98,7 +98,7 @@ public class ReceiverHttpImpl implements Receiver {
                 IMessage msg = new DefaultMessage();
                 List<String> value = responseEntity.getHeaders().get(receiverConfigHttp.getFileNameField());
                 String fileName = (CollectionUtils.isEmpty(value) ? null : value.get(0));
-                if (StringUtils.isNotEmpty(fileName)) {
+                if (StrUtil.isNotEmpty(fileName)) {
                     msg.setFileName(fileName);
                 } else {
                     msg.setFileName(msg.getId());
@@ -118,7 +118,7 @@ public class ReceiverHttpImpl implements Receiver {
         IMessage msg = new DefaultMessage();
         String encoding = request.getCharacterEncoding();
         String fileName = request.getHeader(receiverConfigHttp.getFileNameField());
-        if (StringUtils.isNotEmpty(fileName)) {
+        if (StrUtil.isNotEmpty(fileName)) {
             msg.setFileName(fileName);
         } else {
             msg.setFileName(msg.getId());
@@ -139,7 +139,7 @@ public class ReceiverHttpImpl implements Receiver {
         IMessage msg = new DefaultMessage();
         String encoding = request.getCharacterEncoding();
         String fileName = request.getHeader(receiverConfigHttp.getFileNameField());
-        if (StringUtils.isNotEmpty(fileName)) {
+        if (StrUtil.isNotEmpty(fileName)) {
             msg.setFileName(fileName);
         } else {
             msg.setFileName(msg.getId());
@@ -163,7 +163,7 @@ public class ReceiverHttpImpl implements Receiver {
         msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_HTTP);
         msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigHttp.getUrl());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, "httpReceiver");

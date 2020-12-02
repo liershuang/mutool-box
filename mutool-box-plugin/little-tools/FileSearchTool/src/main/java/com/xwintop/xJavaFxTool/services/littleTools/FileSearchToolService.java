@@ -1,6 +1,7 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.FileSearchToolController;
 import com.mutool.javafx.core.util.ConfigureUtil;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
@@ -8,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.*;
@@ -162,7 +162,7 @@ public class FileSearchToolService {
             Query fileSizeFromQuery = LongPoint.newRangeQuery("fileSize", fileSizeFrom, fileSizeTo);
             builder.add(fileSizeFromQuery, BooleanClause.Occur.MUST);
         }
-        if (StringUtils.isNotEmpty(path)) {
+        if (StrUtil.isNotEmpty(path)) {
             PrefixQuery pathQuery = new PrefixQuery(new Term("absolutePath", path));// 字段搜索 Field:Keyword，自动在结尾添加 *
             builder.add(pathQuery, BooleanClause.Occur.MUST);
         }
@@ -204,7 +204,7 @@ public class FileSearchToolService {
 
     public void refreshIndexAction() throws Exception {
         String path = fileSearchToolController.getSearchDirectoryTextField().getText();
-        if (StringUtils.isEmpty(path)) {
+        if (StrUtil.isEmpty(path)) {
             TooltipUtil.showToast("路径不能为空！");
             return;
         }

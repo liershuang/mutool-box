@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.developTools.xTransferTool;
 
+import cn.hutool.core.util.StrUtil;
 import com.jcraft.jsch.ChannelSftp;
 import com.xwintop.xJavaFxTool.controller.developTools.xTransferTool.TransferToolController;
 import com.xwintop.xJavaFxTool.controller.developTools.xTransferTool.TransferToolServiceViewController;
@@ -14,8 +15,6 @@ import javafx.scene.control.Tab;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -102,12 +101,12 @@ public class TransferToolTaskViewService {
         }
         taskConfig.setIsEnable(transferToolTaskViewController.getIsEnableCheckBox().isSelected());
         String taskType = transferToolTaskViewController.getTaskTypeTextField().getText();
-        taskConfig.setTaskType(StringUtils.isBlank(taskType) ? null : taskType);
+        taskConfig.setTaskType(StrUtil.isBlank(taskType) ? null : taskType);
         taskConfig.setTriggerType(transferToolTaskViewController.getTriggerTypeChoiceBox().getValue());
         taskConfig.setIntervalTime(transferToolTaskViewController.getIntervalTimeSpinner().getValue());
         taskConfig.setExecuteTimes(transferToolTaskViewController.getExecuteTimesSpinner().getValue());
         String triggerCron = transferToolTaskViewController.getTriggerCronTextField().getText();
-        taskConfig.setTriggerCron(StringUtils.isBlank(triggerCron) ? null : triggerCron);
+        taskConfig.setTriggerCron(StrUtil.isBlank(triggerCron) ? null : triggerCron);
         taskConfig.setIsStatefulJob(transferToolTaskViewController.getIsStatefullJobCheckBox().isSelected());
         taskConfig.getProperties().clear();
         transferToolTaskViewController.getPropertiesTableData().forEach(map -> {
@@ -123,12 +122,12 @@ public class TransferToolTaskViewService {
         Map<String, TaskConfig> taskConfigMap = transferToolController.getTransferToolService().getTaskConfigFileMap().get(fileName);
         taskConfig.setIsEnable(transferToolTaskViewController.getIsEnableCheckBox().isSelected());
         String taskType = transferToolTaskViewController.getTaskTypeTextField().getText();
-        taskConfig.setTaskType(StringUtils.isBlank(taskType) ? null : taskType);
+        taskConfig.setTaskType(StrUtil.isBlank(taskType) ? null : taskType);
         taskConfig.setTriggerType(transferToolTaskViewController.getTriggerTypeChoiceBox().getValue());
         taskConfig.setIntervalTime(transferToolTaskViewController.getIntervalTimeSpinner().getValue());
         taskConfig.setExecuteTimes(transferToolTaskViewController.getExecuteTimesSpinner().getValue());
         String triggerCron = transferToolTaskViewController.getTriggerCronTextField().getText();
-        taskConfig.setTriggerCron(StringUtils.isBlank(triggerCron) ? null : triggerCron);
+        taskConfig.setTriggerCron(StrUtil.isBlank(triggerCron) ? null : triggerCron);
         taskConfig.setIsStatefulJob(transferToolTaskViewController.getIsStatefullJobCheckBox().isSelected());
         taskConfig.getProperties().clear();
         transferToolTaskViewController.getPropertiesTableData().forEach(map -> {

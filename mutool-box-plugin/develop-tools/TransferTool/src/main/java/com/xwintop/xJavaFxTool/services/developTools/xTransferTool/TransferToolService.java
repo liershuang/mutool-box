@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.developTools.xTransferTool;
 
+import cn.hutool.core.util.StrUtil;
 import com.jcraft.jsch.ChannelSftp;
 import com.xwintop.xJavaFxTool.controller.developTools.xTransferTool.TransferToolController;
 import com.xwintop.xJavaFxTool.controller.developTools.xTransferTool.TransferToolDataSourceController;
@@ -17,7 +18,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.ByteArrayOutputStream;
@@ -45,7 +45,7 @@ public class TransferToolService {
     }
 
     public void reloadTaskConfigFile() throws Exception {
-        if (StringUtils.isBlank(transferToolController.getConfigurationPathTextField().getText())) {
+        if (StrUtil.isBlank(transferToolController.getConfigurationPathTextField().getText())) {
             TooltipUtil.showToast("配置目录不能为空！");
             return;
         }
@@ -71,7 +71,7 @@ public class TransferToolService {
             try {
                 ChannelSftp channel = TransferViewUtil.getSftpChannel(transferToolController);
                 String remotePath = transferToolController.getConfigurationPathTextField().getText();
-                remotePath = StringUtils.appendIfMissing(remotePath, "/", "/", "\\");
+                remotePath = StrUtil.appendIfMissing(remotePath, "/", "/", "\\");
                 Vector<ChannelSftp.LsEntry> fileList = channel.ls(remotePath);
                 for (ChannelSftp.LsEntry file : fileList) {
                     if (file.getAttrs().isDir() || ".".equals(file.getFilename()) || "..".equals(file.getFilename())) {

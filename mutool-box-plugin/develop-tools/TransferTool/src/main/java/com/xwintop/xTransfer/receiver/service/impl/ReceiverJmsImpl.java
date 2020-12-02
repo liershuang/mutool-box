@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -11,8 +13,6 @@ import com.xwintop.xTransfer.receiver.service.Receiver;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import com.mutool.javafx.core.util.UuidUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.connection.SingleConnectionFactory;
@@ -93,7 +93,7 @@ public class ReceiverJmsImpl implements Receiver {
                     } else {
                         msg.setRawData((byte[]) ((ObjectMessage) message).getObject());
                     }
-                    if (StringUtils.isBlank(msg.getFileName())) {
+                    if (StrUtil.isBlank(msg.getFileName())) {
                         String fileName = message.getStringProperty(receiverConfigJms.getFileNameField());
                         if (fileName == null) {
                             fileName = UuidUtil.get32UUID();
@@ -112,7 +112,7 @@ public class ReceiverJmsImpl implements Receiver {
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_JMS);
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigJms.getJmsUrl() + ":" + receiverConfigJms.getJmsQueue());
                     msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                     msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                     msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                     msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_JMS);

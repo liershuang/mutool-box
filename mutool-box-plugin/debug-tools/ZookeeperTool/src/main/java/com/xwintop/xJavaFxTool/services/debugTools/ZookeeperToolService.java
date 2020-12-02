@@ -1,5 +1,7 @@
 package com.xwintop.xJavaFxTool.services.debugTools;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.debugTools.ZookeeperToolController;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
@@ -12,17 +14,12 @@ import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkMarshallingError;
 import org.I0Itec.zkclient.serialize.ZkSerializer;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.zookeeper.ZooDefs.Perms;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName: ZookeeperToolService
@@ -101,7 +98,7 @@ public class ZookeeperToolService {
         for (String name : list) {
             TreeItem<String> treeItem2 = new TreeItem<>(name);
             treeItem.getChildren().add(treeItem2);
-            this.addNodeTree(StringUtils.appendIfMissing(path, "/", "/") + name, treeItem2);
+            this.addNodeTree(StrUtil.appendIfMissing(path, "/", "/") + name, treeItem2);
         }
     }
 
@@ -110,7 +107,7 @@ public class ZookeeperToolService {
         stringBuffer.append(selectedItem.getValue());
         TreeItem<String> indexItem = selectedItem.getParent();
         while (indexItem != null) {
-            stringBuffer.insert(0, StringUtils.appendIfMissing(indexItem.getValue(), "/", "/"));
+            stringBuffer.insert(0, StrUtil.appendIfMissing(indexItem.getValue(), "/", "/"));
             indexItem = indexItem.getParent();
         }
         return stringBuffer.toString();
@@ -126,12 +123,12 @@ public class ZookeeperToolService {
         Map.Entry<List<ACL>, Stat> aclsEntry = zkClient.getAcl(nodePath);
         Stat stat = aclsEntry.getValue();
         zookeeperToolController.getA_VERSIONTextField().setText("" + stat.getAversion());
-        zookeeperToolController.getC_TIMETextField().setText(DateFormatUtils.format(stat.getCtime(), "yyyy-MM-dd'T'HH:mm:ss.SSS z"));
+        zookeeperToolController.getC_TIMETextField().setText(DateUtil.format(new Date(stat.getCtime()), "yyyy-MM-dd'T'HH:mm:ss.SSS z"));
         zookeeperToolController.getC_VERSIONTextField().setText("" + stat.getCversion());
         zookeeperToolController.getCZXIDTextField().setText("0x" + Long.toHexString(stat.getCzxid()));
         zookeeperToolController.getDATA_LENGTHTextField().setText("" + stat.getDataLength());
         zookeeperToolController.getEPHEMERAL_OWNERTextField().setText("0x" + Long.toHexString(stat.getEphemeralOwner()));
-        zookeeperToolController.getM_TIMETextField().setText(DateFormatUtils.format(stat.getMtime(), "yyyy-MM-dd'T'HH:mm:ss.SSS z"));
+        zookeeperToolController.getM_TIMETextField().setText(DateUtil.format(new Date(stat.getMtime()), "yyyy-MM-dd'T'HH:mm:ss.SSS z"));
         zookeeperToolController.getMZXIDTextField().setText("0x" + Long.toHexString(stat.getMzxid()));
         zookeeperToolController.getNUM_CHILDRENTextField().setText("" + stat.getNumChildren());
         zookeeperToolController.getPZXIDTextField().setText("0x" + Long.toHexString(stat.getPzxid()));
@@ -197,12 +194,12 @@ public class ZookeeperToolService {
             return;
         }
         String nodeName = AlertUtil.showInputAlert("请输入节点名称：");
-        if (StringUtils.isEmpty(nodeName)) {
+        if (StrUtil.isEmpty(nodeName)) {
             TooltipUtil.showToast("节点名不能为空！");
             return;
         }
         String nodePath = this.getNodePath(selectedItem);
-        zkClient.createPersistent(StringUtils.appendIfMissing(nodePath, "/", "/") + nodeName);
+        zkClient.createPersistent(StrUtil.appendIfMissing(nodePath, "/", "/") + nodeName);
         TreeItem<String> treeItem2 = new TreeItem<>(nodeName);
         selectedItem.getChildren().add(treeItem2);
     }
@@ -214,13 +211,13 @@ public class ZookeeperToolService {
             return;
         }
         String nodeName = AlertUtil.showInputAlert("请输入节点新名称：");
-        if (StringUtils.isEmpty(nodeName)) {
+        if (StrUtil.isEmpty(nodeName)) {
             TooltipUtil.showToast("节点名不能为空！");
             return;
         }
 //        String nodePath = this.getNodePath(selectedItem);
         String nodeParent = this.getNodePath(selectedItem.getParent());
-        String nodeParentPath = StringUtils.appendIfMissing(nodeParent, "/", "/");
+        String nodeParentPath = StrUtil.appendIfMissing(nodeParent, "/", "/");
         copyNode(nodeParentPath + selectedItem.getValue(), nodeParentPath + nodeName);
         if (isCopy) {
             TreeItem<String> selectedItem2 = new TreeItem<>(nodeName);
@@ -236,7 +233,7 @@ public class ZookeeperToolService {
         zkClient.createPersistent(copyPath, zkClient.readData(path), zkClient.getAcl(path).getKey());
         List<String> list = zkClient.getChildren(path);
         for (String name : list) {
-            copyNode(StringUtils.appendIfMissing(path, "/", "/") + name, StringUtils.appendIfMissing(copyPath, "/", "/") + name);
+            copyNode(StrUtil.appendIfMissing(path, "/", "/") + name, StrUtil.appendIfMissing(copyPath, "/", "/") + name);
         }
     }
 

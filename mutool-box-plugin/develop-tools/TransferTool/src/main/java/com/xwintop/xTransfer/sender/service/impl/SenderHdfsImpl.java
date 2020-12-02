@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -13,8 +15,6 @@ import com.xwintop.xTransfer.util.ParseVariableCommon;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -44,9 +44,9 @@ public class SenderHdfsImpl implements Sender {
     public Boolean send(IMessage msg, Map params) throws Exception {
         log.debug("SenderFs,taskName:" + params.get(TaskQuartzJob.JOBID));
         String path = senderConfigHdfs.getPath();
-        path = StringUtils.appendIfMissing(path, "/", "/", "\\");
+        path = StrUtil.appendIfMissing(path, "/", "/", "\\");
         String fileName = msg.getFileName();
-        if (StringUtils.isNotBlank(senderConfigHdfs.getFileName())) {
+        if (StrUtil.isNotBlank(senderConfigHdfs.getFileName())) {
             fileName = ParseVariableCommon.parseVariable(senderConfigHdfs.getFileName(), msg, params);
         }
         if (path == null || path.trim().length() <= 0) {
@@ -88,7 +88,7 @@ public class SenderHdfsImpl implements Sender {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_HDFS);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigHdfs.getPath());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

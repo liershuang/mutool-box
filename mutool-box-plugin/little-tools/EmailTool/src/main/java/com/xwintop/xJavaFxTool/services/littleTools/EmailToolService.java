@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.EmailToolController;
 import com.xwintop.xJavaFxTool.job.EmailToolJob;
 import com.xwintop.xJavaFxTool.model.EmailToolTableBean;
@@ -13,7 +14,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.HtmlEmail;
 import org.quartz.*;
@@ -144,7 +144,7 @@ public class EmailToolService {
             scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(interval)// 时间间隔
                     .withRepeatCount(repeatCount);// 重复次数（将执行6次）
         } else if ("Cron表达式".equals(quartzType)) {
-            if (StringUtils.isEmpty(cronText)) {
+            if (StrUtil.isEmpty(cronText)) {
                 TooltipUtil.showToast("cron表达式不能为空。");
                 return false;
             }

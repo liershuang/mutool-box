@@ -1,6 +1,7 @@
 package com.xwintop.xJavaFxTool.services.developTools.xTransferTool;
 
-import com.jfoenix.controls.JFXCheckBox;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.developTools.xTransferTool.TransferToolServiceViewController;
 import com.xwintop.xTransfer.receiver.bean.ReceiverConfigFtp;
 import com.xwintop.xTransfer.receiver.bean.ReceiverConfigSftp;
@@ -17,8 +18,6 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class TransferToolServiceViewService {
                             if ("strategy".equals(field.getName())) {
                                 field.set(configObject, ((ChoiceBox<String>) node).getValue());
                             } else {
-                                if (StringUtils.isBlank(((TextField) node).getText())) {
+                                if (StrUtil.isBlank(((TextField) node).getText())) {
                                     field.set(configObject, null);
                                 } else {
                                     field.set(configObject, ((TextField) node).getText());
@@ -85,19 +84,19 @@ public class TransferToolServiceViewService {
                                 field.set(configObject, list);
                             }
                         } else if (field.getType() == Integer.class) {
-                            if (StringUtils.isBlank(((TextField) node).getText())) {
+                            if (StrUtil.isBlank(((TextField) node).getText())) {
                                 field.set(configObject, null);
                             } else {
                                 field.set(configObject, Integer.valueOf(((TextField) node).getText()));
                             }
                         } else if (field.getType() == Long.class) {
-                            if (StringUtils.isBlank(((TextField) node).getText())) {
+                            if (StrUtil.isBlank(((TextField) node).getText())) {
                                 field.set(configObject, null);
                             } else {
                                 field.set(configObject, Long.valueOf(((TextField) node).getText()));
                             }
                         } else {
-                            if (StringUtils.isBlank(((TextField) node).getText())) {
+                            if (StrUtil.isBlank(((TextField) node).getText())) {
                                 field.set(configObject, null);
                             } else {
                                 field.set(configObject, ((TextField) node).getText());
@@ -180,7 +179,7 @@ public class TransferToolServiceViewService {
                         flowPane.getChildren().add(textField);
                         textField.textProperty().addListener((observable, oldValue, newValue) -> {
                             try {
-                                if (StringUtils.isBlank(newValue)) {
+                                if (StrUtil.isBlank(newValue)) {
                                     field.set(configObject, null);
                                 } else {
                                     field.set(configObject, newValue);
@@ -328,7 +327,7 @@ public class TransferToolServiceViewService {
                     flowPane.getChildren().add(textField);
                     textField.textProperty().addListener((observable, oldValue, newValue) -> {
                         try {
-                            if (StringUtils.isBlank(newValue)) {
+                            if (StrUtil.isBlank(newValue)) {
                                 field.set(configObject, null);
                             } else {
                                 if (field.getType() == Integer.class) {
@@ -375,7 +374,7 @@ public class TransferToolServiceViewService {
                 MenuItem menu_Copy = new MenuItem("复制选中行");
                 menu_Copy.setOnAction(event1 -> {
                     try {
-                        rowList.add(listView.getSelectionModel().getSelectedIndex(), BeanUtils.cloneBean(rowList.get(listView.getSelectionModel().getSelectedIndex())));
+                        rowList.add(listView.getSelectionModel().getSelectedIndex(), ObjectUtil.clone(rowList.get(listView.getSelectionModel().getSelectedIndex())));
                     } catch (Exception e) {
                         log.error("复制失败", e);
                     }

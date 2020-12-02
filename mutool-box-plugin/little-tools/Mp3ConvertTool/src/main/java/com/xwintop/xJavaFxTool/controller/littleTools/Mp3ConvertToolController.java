@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.controller.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.services.littleTools.Mp3ConvertToolService;
 import com.xwintop.xJavaFxTool.view.littleTools.Mp3ConvertToolView;
 import com.mutool.javafx.core.util.javafx.FileChooserUtil;
@@ -16,7 +17,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -105,7 +105,7 @@ public class Mp3ConvertToolController extends Mp3ConvertToolView {
 
     @FXML
     private void openOutputFolderAction(ActionEvent event) {
-        if (StringUtils.isNotEmpty(outputFolderTextField.getText())) {
+        if (StrUtil.isNotEmpty(outputFolderTextField.getText())) {
             JavaFxSystemUtil.openDirectory(outputFolderTextField.getText());
         }
     }

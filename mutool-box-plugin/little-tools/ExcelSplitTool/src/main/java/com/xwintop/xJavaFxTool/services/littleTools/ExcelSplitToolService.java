@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.ExcelSplitToolController;
 import com.xwintop.xJavaFxTool.utils.DirectoryTreeUtil;
 import lombok.Getter;
@@ -12,7 +13,6 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
@@ -68,7 +68,7 @@ public class ExcelSplitToolService {
             }
             String sheetSelectString = excelSplitToolController.getSheetSelectTextField().getText();
             Sheet[] sheets = null;
-            if (StringUtils.isEmpty(sheetSelectString)) {
+            if (StrUtil.isEmpty(sheetSelectString)) {
                 sheets = new Sheet[]{workbook.getSheetAt(0)};
             } else {
                 String[] sheetSelectStrings = sheetSelectString.split(",");
@@ -77,9 +77,9 @@ public class ExcelSplitToolService {
                     sheets[i] = workbook.getSheetAt(Integer.valueOf(sheetSelectStrings[i]));
                 }
             }
-            String newFilePath = StringUtils.appendIfMissing(filePath, "", ".xls", ".xlsx");
-            if (StringUtils.isNotEmpty(excelSplitToolController.getSaveFilePathTextField().getText())) {
-                newFilePath = StringUtils.appendIfMissing(excelSplitToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + Paths.get(newFilePath).getFileName();
+            String newFilePath = StrUtil.appendIfMissing(filePath, "", ".xls", ".xlsx");
+            if (StrUtil.isNotEmpty(excelSplitToolController.getSaveFilePathTextField().getText())) {
+                newFilePath = StrUtil.appendIfMissing(excelSplitToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + Paths.get(newFilePath).getFileName();
             }
             if (excelSplitToolController.getSplitType1RadioButton().isSelected()) {
                 int allRowNumber = 0;
@@ -94,7 +94,7 @@ public class ExcelSplitToolService {
             } else if (excelSplitToolController.getSplitType3RadioButton().isSelected()) {
                 String splitType3String = excelSplitToolController.getSplitType3TextField().getText();
                 String[] splitCellIndex = null;
-                if (StringUtils.isEmpty(splitType3String)) {
+                if (StrUtil.isEmpty(splitType3String)) {
                     splitCellIndex = new String[]{"0"};
                 } else {
                     splitCellIndex = splitType3String.split(",");
@@ -109,9 +109,9 @@ public class ExcelSplitToolService {
     public void splitCsv() throws Exception {
         String filePath = excelSplitToolController.getSelectFileTextField().getText();
         Reader fileReader = new FileReader(filePath);
-        String newFilePath = StringUtils.appendIfMissing(filePath, "", ".csv", ".CSV");
-        if (StringUtils.isNotEmpty(excelSplitToolController.getSaveFilePathTextField().getText())) {
-            newFilePath = StringUtils.appendIfMissing(excelSplitToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + Paths.get(newFilePath).getFileName();
+        String newFilePath = StrUtil.appendIfMissing(filePath, "", ".csv", ".CSV");
+        if (StrUtil.isNotEmpty(excelSplitToolController.getSaveFilePathTextField().getText())) {
+            newFilePath = StrUtil.appendIfMissing(excelSplitToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + Paths.get(newFilePath).getFileName();
         }
         CSVParser parser = CSVFormat.DEFAULT.parse(fileReader);
         int splitNumber = 0;
@@ -125,7 +125,7 @@ public class ExcelSplitToolService {
         } else if (excelSplitToolController.getSplitType3RadioButton().isSelected()) {
             String splitType3String = excelSplitToolController.getSplitType3TextField().getText();
             String[] splitCellIndex = null;
-            if (StringUtils.isEmpty(splitType3String)) {
+            if (StrUtil.isEmpty(splitType3String)) {
                 splitCellIndex = new String[]{"0"};
             } else {
                 splitCellIndex = splitType3String.split(",");
@@ -138,8 +138,8 @@ public class ExcelSplitToolService {
     public void splitFile() throws Exception {
         String filePath = excelSplitToolController.getSelectFileTextField().getText();
         String newFilePath = filePath;
-        if (StringUtils.isNotEmpty(excelSplitToolController.getSaveFilePathTextField().getText())) {
-            newFilePath = StringUtils.appendIfMissing(excelSplitToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + Paths.get(newFilePath).getFileName();
+        if (StrUtil.isNotEmpty(excelSplitToolController.getSaveFilePathTextField().getText())) {
+            newFilePath = StrUtil.appendIfMissing(excelSplitToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + Paths.get(newFilePath).getFileName();
         }
         int splitNumber = 0;
         if (excelSplitToolController.getSplitType1RadioButton().isSelected()) {
@@ -350,9 +350,9 @@ public class ExcelSplitToolService {
 
     private static void saveFile(Workbook workbook, String filePath) {
         if (workbook instanceof HSSFWorkbook) {
-            filePath = StringUtils.appendIfMissing(filePath, ".xls", ".xls", ".xlsx");
+            filePath = StrUtil.appendIfMissing(filePath, ".xls", ".xls", ".xlsx");
         } else if (workbook instanceof XSSFWorkbook) {
-            filePath = StringUtils.appendIfMissing(filePath, ".xlsx", ".xls", ".xlsx");
+            filePath = StrUtil.appendIfMissing(filePath, ".xlsx", ".xls", ".xlsx");
         }
         FileOutputStream out = null;
         try {

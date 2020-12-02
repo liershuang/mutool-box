@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -13,8 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -47,7 +47,7 @@ public class SenderActiveMqImpl implements Sender {
             jmsTemplate.send(session -> {
                 BytesMessage message = session.createBytesMessage();
                 message.writeBytes(msg.getMessage());
-                if (StringUtils.isNotEmpty(senderConfigActiveMq.getFileNameField())) {
+                if (StrUtil.isNotEmpty(senderConfigActiveMq.getFileNameField())) {
                     message.setStringProperty(senderConfigActiveMq.getFileNameField(), msg.getFileName());
                 }
                 if (senderConfigActiveMq.getArgs() != null && !senderConfigActiveMq.getArgs().isEmpty()) {
@@ -72,7 +72,7 @@ public class SenderActiveMqImpl implements Sender {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_ACTIVE_MQ);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigActiveMq.getHostName() + "/" + senderConfigActiveMq.getQueueName());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));
@@ -100,7 +100,7 @@ public class SenderActiveMqImpl implements Sender {
         if (jmsTemplate == null) {
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
             connectionFactory.setBrokerURL("tcp://" + senderConfigActiveMq.getHostName() + ":" + senderConfigActiveMq.getPort());
-            if (StringUtils.isEmpty(senderConfigActiveMq.getUsername())) {
+            if (StrUtil.isEmpty(senderConfigActiveMq.getUsername())) {
                 connectionFactory.setUserName(senderConfigActiveMq.getUsername());
                 connectionFactory.setPassword(senderConfigActiveMq.getPassword());
             }

@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.utils.FtpUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
@@ -14,8 +16,6 @@ import com.xwintop.xTransfer.util.ParseVariableCommon;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +51,7 @@ public class SenderFtpImpl implements Sender {
             return false;
         }
         ftpUtilPoolRunning.put(ftpUtil);
-        String path = StringUtils.appendIfMissing(senderConfigFtp.getPath(), "/", "/", "\\");
+        String path = StrUtil.appendIfMissing(senderConfigFtp.getPath(), "/", "/", "\\");
         path = ParseVariableCommon.parseVariable(path, msg, params);
         boolean createPathFlag = senderConfigFtp.isCreatePathFlag();
         boolean hasTmpPath = senderConfigFtp.isHasTmpPath();
@@ -62,9 +62,9 @@ public class SenderFtpImpl implements Sender {
         String tmp = "";
         String postfixName = "";
         if (hasTmpPath) {
-            tmp = StringUtils.appendIfMissing(senderConfigFtp.getTmpPath(), "/", "/", "\\");
+            tmp = StrUtil.appendIfMissing(senderConfigFtp.getTmpPath(), "/", "/", "\\");
             tmp = ParseVariableCommon.parseVariable(tmp, msg, params);
-            if (StringUtils.isBlank(tmp)) {
+            if (StrUtil.isBlank(tmp)) {
                 throw new Exception("configuration for tmp is missing.FtpSender:" + senderConfigFtp.toString());
             }
             if (createPathFlag) {
@@ -72,20 +72,20 @@ public class SenderFtpImpl implements Sender {
             }
         } else {
             postfixName = senderConfigFtp.getPostfixName();
-            if (StringUtils.isEmpty(postfixName)) {
+            if (StrUtil.isEmpty(postfixName)) {
                 postfixName = "." + msg.getId();
             }
         }
         String fileName = msg.getFileName();
-        if (StringUtils.isNotBlank(senderConfigFtp.getFileName())) {
+        if (StrUtil.isNotBlank(senderConfigFtp.getFileName())) {
             fileName = ParseVariableCommon.parseVariable(senderConfigFtp.getFileName(), msg, params);
         }
-        if (StringUtils.isBlank(fileName)) {
+        if (StrUtil.isBlank(fileName)) {
             throw new Exception("configuration for fileName is missing.FtpSender:" + senderConfigFtp.toString());
         }
         // connect to ftp server
         ftpUtil.checkAndConnect();
-        if (!ftpUtil.getFtp().allocate(ArrayUtils.getLength(msg.getMessage()))) {
+        if (!ftpUtil.getFtp().allocate(ArrayUtil.length(msg.getMessage()))) {
             throw new Exception(ftpUtil.getFtp().getReplyString());
         }
         // overload same filename in dest path
@@ -127,7 +127,7 @@ public class SenderFtpImpl implements Sender {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_FTP);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigFtp.getPath());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

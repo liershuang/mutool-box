@@ -1,5 +1,6 @@
 package com.mutool.javafx.core.util.javafx;
 
+import cn.hutool.core.util.StrUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -8,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -65,7 +65,7 @@ public class TextFieldInputHistoryDialog {
 
     public void loadingConfigure() {
         try {
-            if (StringUtils.isNotEmpty(saveFilePath)) {
+            if (StrUtil.isNotEmpty(saveFilePath)) {
                 File CONFIG_FILE = new File(saveFilePath);
                 if (!CONFIG_FILE.exists()) {
                     FileUtils.touch(CONFIG_FILE);
@@ -82,7 +82,7 @@ public class TextFieldInputHistoryDialog {
     }
 
     public void saveConfigure() {
-        if (StringUtils.isNotEmpty(saveFilePath)) {
+        if (StrUtil.isNotEmpty(saveFilePath)) {
             try {
                 File CONFIG_FILE = new File(saveFilePath);
                 Yaml yaml = new Yaml();
@@ -148,7 +148,7 @@ public class TextFieldInputHistoryDialog {
                     } else {
                         menuItemNameStr = menuItemName.apply(map);
                     }
-                    if (!StringUtils.containsIgnoreCase(menuItemNameStr, newValue)) {
+                    if (!StrUtil.containsIgnoreCase(menuItemNameStr, newValue)) {
                         continue;
                     }
                     MenuItem menu_tab = new MenuItem(menuItemNameStr);

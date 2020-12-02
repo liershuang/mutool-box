@@ -1,16 +1,18 @@
 package com.mutool.javafx.core.javafx.helper;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.mutool.javafx.core.util.EnumUtil;
 import com.mutool.javafx.core.util.KeyValue;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.StringConverter;
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 public class ChoiceBoxHelper {
 
@@ -27,16 +29,22 @@ public class ChoiceBoxHelper {
 
     public static <T> void setContentDisplay(ChoiceBox<T> choiceBox, List<KeyValue<String, T>> keyValues) {
         List<T> values = keyValues.stream().map(KeyValue::getValue).collect(Collectors.toList());
-        BidiMap<String, T> map = new DualHashBidiMap<>();
+        Map<String, T> map = new HashMap<>();
         keyValues.forEach(keyValue -> map.put(keyValue.getKey(), keyValue.getValue()));
         setContentDisplay(choiceBox, values, map);
     }
 
-    public static <T> void setContentDisplay(ChoiceBox<T> choiceBox, List<T> items, BidiMap<String, T> itemMappings) {
+    public static <T> void setContentDisplay(ChoiceBox<T> choiceBox, List<T> items, Map<String, T> itemMappings) {
         choiceBox.setConverter(new StringConverter<T>() {
             @Override
             public String toString(T object) {
-                return itemMappings.getKey(object);
+                AtomicReference<String> result = null;
+                itemMappings.forEach((K, V) -> {
+                    if(ObjectUtil.equal(V, object)){
+                        result.set(K);
+                    }
+                });
+                return result.get();
             }
 
             @Override

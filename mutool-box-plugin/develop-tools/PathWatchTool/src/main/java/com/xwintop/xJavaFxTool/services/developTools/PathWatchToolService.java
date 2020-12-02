@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.developTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.developTools.PathWatchToolController;
 import com.xwintop.xJavaFxTool.utils.DirectoryTreeUtil;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
@@ -7,7 +8,6 @@ import javafx.geometry.Pos;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -34,7 +34,7 @@ public class PathWatchToolService {
 
     public void watchAction() throws Exception {
         String watchPath = pathWatchToolController.getWatchPathTextField().getText();
-        if (StringUtils.isEmpty(watchPath)) {
+        if (StrUtil.isEmpty(watchPath)) {
             TooltipUtil.showToast("监控目录不能为空！");
             return;
         }

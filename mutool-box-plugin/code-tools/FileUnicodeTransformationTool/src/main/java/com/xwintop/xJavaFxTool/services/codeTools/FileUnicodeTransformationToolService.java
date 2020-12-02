@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.codeTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.codeTools.FileUnicodeTransformationToolController;
 import com.xwintop.xJavaFxTool.utils.DirectoryTreeUtil;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
@@ -7,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.File;
@@ -39,7 +39,7 @@ public class FileUnicodeTransformationToolService {
 
     public void transformationAction() throws Exception {
         String watchPath = fileUnicodeTransformationToolController.getDetectPathTextField().getText();
-        if (StringUtils.isEmpty(watchPath)) {
+        if (StrUtil.isEmpty(watchPath)) {
             TooltipUtil.showToast("检测目录不能为空！");
             return;
         }
@@ -98,12 +98,12 @@ public class FileUnicodeTransformationToolService {
         String newFileUnicode = fileUnicodeTransformationToolController.getNewFileUnicodeComboBox().getValue();
         String newFilePath = fileUnicodeTransformationToolController.getNewFilePathTextField().getText();
         String fileConcel = FileUtils.readFileToString(file, oldFileUnicode);
-        if (StringUtils.isNotEmpty(newFilePath)) {
-            newFilePath = StringUtils.removeEnd(newFilePath, "/");
-            newFilePath = StringUtils.removeEnd(newFilePath, "\\");
+        if (StrUtil.isNotEmpty(newFilePath)) {
+            newFilePath = StrUtil.removeSuffix(newFilePath, "/");
+            newFilePath = StrUtil.removeSuffix(newFilePath, "\\");
             String watchPath = fileUnicodeTransformationToolController.getDetectPathTextField().getText();
-            watchPath = StringUtils.removeEnd(watchPath, "/");
-            watchPath = StringUtils.removeEnd(watchPath, "\\");
+            watchPath = StrUtil.removeSuffix(watchPath, "/");
+            watchPath = StrUtil.removeSuffix(watchPath, "\\");
             File watchPathFile = new File(watchPath);
             String subPath = "";
             if (watchPathFile.isDirectory()) {

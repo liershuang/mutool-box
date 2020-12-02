@@ -1,12 +1,12 @@
 package com.xwintop.xJavaFxTool.services.developTools.xTransferTool;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.developTools.xTransferTool.TransferToolUrlDocumentDialogController;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -64,9 +64,9 @@ public class TransferToolUrlDocumentDialogService {
                 list = new ArrayList<>();
             }
             for (Map<String, String> smap : list) {
-                if (StringUtils.equals(smap.get("host"), host) && StringUtils.equals(smap.get("port"), port)
-                        && StringUtils.equals(smap.get("userName"), userName) && StringUtils.equals(smap.get("password"), password)
-                        && StringUtils.equals(smap.get("path"), path)) {
+                if (StrUtil.equals(smap.get("host"), host) && StrUtil.equals(smap.get("port"), port)
+                        && StrUtil.equals(smap.get("userName"), userName) && StrUtil.equals(smap.get("password"), password)
+                        && StrUtil.equals(smap.get("path"), path)) {
                     return;
                 }
             }

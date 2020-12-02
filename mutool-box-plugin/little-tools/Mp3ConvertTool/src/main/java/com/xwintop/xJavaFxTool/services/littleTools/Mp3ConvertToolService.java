@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.Mp3ConvertToolController;
 import com.xwintop.xJavaFxTool.utils.NcmDump;
 import com.mutool.javafx.core.util.FileUtil;
@@ -7,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -42,13 +42,13 @@ public class Mp3ConvertToolService {
     public void convertAction() {
         for (Map<String, String> tableDatum : mp3ConvertToolController.getTableData()) {
             String absolutePath = tableDatum.get("absolutePath");
-            if (StringUtils.endsWithIgnoreCase(absolutePath, ".qmcflac")) {
+            if (StrUtil.endWithIgnoreCase(absolutePath, ".qmcflac")) {
                 if (convertQmc(absolutePath)) {
                     tableDatum.put("convertStatus", "转换成功");
                 } else {
                     tableDatum.put("convertStatus", "转换失败");
                 }
-            } else if (StringUtils.endsWithIgnoreCase(absolutePath, ".ncm")) {
+            } else if (StrUtil.endWithIgnoreCase(absolutePath, ".ncm")) {
                 if (convertNcm(absolutePath)) {
                     tableDatum.put("convertStatus", "转换成功");
                 } else {
@@ -67,8 +67,8 @@ public class Mp3ConvertToolService {
             for (int i = 0; i < buffer.length; ++i) {
                 buffer[i] = (byte) (dc.NextMask() ^ buffer[i]);
             }
-            String file = StringUtils.removeEndIgnoreCase(absolutePath, ".qmcflac");
-            if (StringUtils.isEmpty(mp3ConvertToolController.getOutputFolderTextField().getText())) {
+            String file = StrUtil.removeSuffixIgnoreCase(absolutePath, ".qmcflac");
+            if (StrUtil.isEmpty(mp3ConvertToolController.getOutputFolderTextField().getText())) {
                 FileUtils.writeByteArrayToFile(new File(file + ".mp3"), buffer);
             } else {
                 FileUtils.writeByteArrayToFile(new File(mp3ConvertToolController.getOutputFolderTextField().getText(), new File(file + ".mp3").getName()), buffer);
@@ -82,7 +82,7 @@ public class Mp3ConvertToolService {
 
     //网易云音乐格式转换
     private boolean convertNcm(String absolutePath) {
-        if (StringUtils.isEmpty(mp3ConvertToolController.getOutputFolderTextField().getText())) {
+        if (StrUtil.isEmpty(mp3ConvertToolController.getOutputFolderTextField().getText())) {
             return NcmDump.dump(new File(absolutePath), new File(absolutePath).getParentFile());
         } else {
             return NcmDump.dump(new File(absolutePath), new File(mp3ConvertToolController.getOutputFolderTextField().getText()));

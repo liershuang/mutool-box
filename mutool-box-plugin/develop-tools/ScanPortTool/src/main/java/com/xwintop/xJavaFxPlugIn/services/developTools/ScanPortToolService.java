@@ -1,6 +1,7 @@
 package com.xwintop.xJavaFxPlugIn.services.developTools;
 
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxPlugIn.controller.developTools.ScanPortToolController;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -8,7 +9,6 @@ import javafx.scene.control.CheckBox;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -50,7 +50,7 @@ public class ScanPortToolService {
             }
         }
         String diyPortString = scanPortToolController.getDiyPortTextField().getText();
-        if (StringUtils.isNotEmpty(diyPortString)) {
+        if (StrUtil.isNotEmpty(diyPortString)) {
             for (String port : diyPortString.split(",")) {
                 portsList.add(Integer.valueOf(port));
             }

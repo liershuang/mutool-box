@@ -3,8 +3,7 @@ package com.xwintop.xJavaFxTool.controller.codeTools;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang3.StringUtils;
-
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.services.codeTools.WebSourcesToolService;
 import com.xwintop.xJavaFxTool.view.codeTools.WebSourcesToolView;
 import com.mutool.javafx.core.util.HttpClientUtil;
@@ -70,7 +69,7 @@ public class WebSourcesToolController extends WebSourcesToolView {
 
 	@FXML
 	private void jumpAction(ActionEvent event) {
-		if (StringUtils.isEmpty(urlTextField.getText())) {
+		if (StrUtil.isEmpty(urlTextField.getText())) {
 			TooltipUtil.showToast("请输入网站！！！");
 			return;
 		}
@@ -79,7 +78,7 @@ public class WebSourcesToolController extends WebSourcesToolView {
 
 	@FXML
 	private void browserOpenAction(ActionEvent event) {
-		if (StringUtils.isEmpty(urlTextField.getText())) {
+		if (StrUtil.isEmpty(urlTextField.getText())) {
 			TooltipUtil.showToast("请输入网站！！！");
 			return;
 		}

@@ -1,5 +1,8 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ibm.mq.jmqi.system.JmqiCodepage;
 import com.ibm.mq.jms.MQQueueConnectionFactory;
 import com.ibm.msg.client.wmq.compat.jms.internal.JMSC;
@@ -13,9 +16,6 @@ import com.xwintop.xTransfer.receiver.bean.ReceiverConfigIbmMq;
 import com.xwintop.xTransfer.receiver.service.Receiver;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.SerializationUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jms.connection.SingleConnectionFactory;
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter;
@@ -78,12 +78,12 @@ public class ReceiverIbmMqImpl implements Receiver {
             defaultMessageListenerContainer = new DefaultMessageListenerContainer();
             MQQueueConnectionFactory mqQueueConnectionFactory = new MQQueueConnectionFactory();
             mqQueueConnectionFactory.setQueueManager(receiverConfigIbmMq.getQueueManagerName());
-            if (StringUtils.isNotBlank(receiverConfigIbmMq.getHostName())) {
+            if (StrUtil.isNotBlank(receiverConfigIbmMq.getHostName())) {
                 mqQueueConnectionFactory.setHostName(receiverConfigIbmMq.getHostName());
                 mqQueueConnectionFactory.setTransportType(JMSC.MQJMS_TP_CLIENT_MQ_TCPIP);
                 mqQueueConnectionFactory.setClientReconnectTimeout(10);
             }
-            if (StringUtils.isNotBlank(receiverConfigIbmMq.getChannel())) {
+            if (StrUtil.isNotBlank(receiverConfigIbmMq.getChannel())) {
                 mqQueueConnectionFactory.setChannel(receiverConfigIbmMq.getChannel());
             }
             if (receiverConfigIbmMq.getPort() != null) {
@@ -93,7 +93,7 @@ public class ReceiverIbmMqImpl implements Receiver {
                 mqQueueConnectionFactory.setCCSID(receiverConfigIbmMq.getCCSID());
             }
             SingleConnectionFactory cachingConnectionFactory = new SingleConnectionFactory();
-            if (StringUtils.isEmpty(receiverConfigIbmMq.getUsername())) {
+            if (StrUtil.isEmpty(receiverConfigIbmMq.getUsername())) {
                 cachingConnectionFactory.setTargetConnectionFactory(mqQueueConnectionFactory);
             } else {
                 UserCredentialsConnectionFactoryAdapter userCredentialsConnectionFactoryAdapter = new UserCredentialsConnectionFactoryAdapter();
@@ -150,11 +150,11 @@ public class ReceiverIbmMqImpl implements Receiver {
                     } else if (message instanceof ObjectMessage) {
                         log.info("received mq ObjectMessage:" + msg.getId());
                         Serializable o = ((ObjectMessage) message).getObject();
-                        msg.setRawData(SerializationUtils.serialize(o));
+                        msg.setRawData(ObjectUtil.serialize(o));
                     } else {
                         log.info("received mq JMSMessage:" + msg.getId());
                         try {
-                            msg.setRawData(SerializationUtils.serialize((Serializable) message));
+                            msg.setRawData(ObjectUtil.serialize((Serializable) message));
                         } catch (Exception e) {
                             log.error("received IbmMq 接收到异常消息msgId:" + msg.getId(), e);
                         }
@@ -162,7 +162,7 @@ public class ReceiverIbmMqImpl implements Receiver {
                             msg.setRawData("".getBytes());
                         }
                     }
-                    msg.setFileName(StringUtils.defaultIfEmpty(message.getStringProperty(receiverConfigIbmMq.getFileNameField()), msg.getId()));
+                    msg.setFileName(StrUtil.blankToDefault(message.getStringProperty(receiverConfigIbmMq.getFileNameField()), msg.getId()));
                     msg.setProperty(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_MQ);
                     msg.setProperty(LOGKEYS.CHANNEL_IN, receiverConfigIbmMq.getQueueManagerName() + ":" + receiverConfigIbmMq.getQueueName());
                     msg.setProperty(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_MQ);
@@ -174,7 +174,7 @@ public class ReceiverIbmMqImpl implements Receiver {
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_MQ);
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigIbmMq.getQueueManagerName() + ":" + receiverConfigIbmMq.getQueueName());
                     msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                     msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                     msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                     msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_MQ);

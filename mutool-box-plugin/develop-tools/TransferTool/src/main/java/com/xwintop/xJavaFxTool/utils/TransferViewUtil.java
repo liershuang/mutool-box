@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -11,7 +12,6 @@ import com.xwintop.xTransfer.task.entity.TaskConfig;
 import javafx.scene.control.TreeItem;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -50,7 +50,7 @@ public class TransferViewUtil {
             byte[] configBytes = configYamlString.getBytes("utf-8");
             ChannelSftp channel = TransferViewUtil.getSftpChannel(transferToolController);
             String remotePath = transferToolController.getConfigurationPathTextField().getText();
-            remotePath = StringUtils.appendIfMissing(remotePath, "/", "/", "\\");
+            remotePath = StrUtil.appendIfMissing(remotePath, "/", "/", "\\");
             channel.put(new ByteArrayInputStream(configBytes), remotePath + fileName);
             TransferViewUtil.closeSftpSession(channel);
         }

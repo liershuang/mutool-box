@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ibm.mq.jms.MQDestination;
 import com.ibm.mq.jms.MQQueueConnectionFactory;
 import com.ibm.msg.client.wmq.compat.jms.internal.JMSC;
@@ -15,8 +17,6 @@ import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter;
@@ -51,7 +51,7 @@ public class SenderIbmMqImpl implements Sender {
             jmsTemplate.send(session -> {
                 BytesMessage message = session.createBytesMessage();
                 message.writeBytes(msg.getMessage());
-                if (StringUtils.isNotEmpty(senderConfigIbmMq.getFileNameField())) {
+                if (StrUtil.isNotEmpty(senderConfigIbmMq.getFileNameField())) {
                     message.setStringProperty(senderConfigIbmMq.getFileNameField(), msg.getFileName());
                 }
                 if (senderConfigIbmMq.getArgs() != null && !senderConfigIbmMq.getArgs().isEmpty()) {
@@ -76,7 +76,7 @@ public class SenderIbmMqImpl implements Sender {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_MQ);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigIbmMq.getQueueManagerName() + "/" + senderConfigIbmMq.getQueueName());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));
@@ -104,12 +104,12 @@ public class SenderIbmMqImpl implements Sender {
         if (jmsTemplate == null) {
             MQQueueConnectionFactory mqQueueConnectionFactory = new MQQueueConnectionFactory();
             mqQueueConnectionFactory.setQueueManager(senderConfigIbmMq.getQueueManagerName());
-            if (StringUtils.isNotBlank(senderConfigIbmMq.getHostName())) {
+            if (StrUtil.isNotBlank(senderConfigIbmMq.getHostName())) {
                 mqQueueConnectionFactory.setHostName(senderConfigIbmMq.getHostName());
                 mqQueueConnectionFactory.setTransportType(JMSC.MQJMS_TP_CLIENT_MQ_TCPIP);
                 mqQueueConnectionFactory.setClientReconnectTimeout(10);
             }
-            if (StringUtils.isNotBlank(senderConfigIbmMq.getChannel())) {
+            if (StrUtil.isNotBlank(senderConfigIbmMq.getChannel())) {
                 mqQueueConnectionFactory.setChannel(senderConfigIbmMq.getChannel());
             }
             if (senderConfigIbmMq.getPort() != null) {
@@ -120,7 +120,7 @@ public class SenderIbmMqImpl implements Sender {
             }
 //            mqQueueConnectionFactory.setTargetClientMatching(false);
             CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-            if (StringUtils.isEmpty(senderConfigIbmMq.getUsername())) {
+            if (StrUtil.isEmpty(senderConfigIbmMq.getUsername())) {
                 cachingConnectionFactory.setTargetConnectionFactory(mqQueueConnectionFactory);
             } else {
                 UserCredentialsConnectionFactoryAdapter userCredentialsConnectionFactoryAdapter = new UserCredentialsConnectionFactoryAdapter();

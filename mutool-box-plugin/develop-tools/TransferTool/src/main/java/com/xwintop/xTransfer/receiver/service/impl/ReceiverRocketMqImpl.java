@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -11,8 +13,6 @@ import com.xwintop.xTransfer.receiver.service.Receiver;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import com.mutool.javafx.core.util.UuidUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -61,7 +61,7 @@ public class ReceiverRocketMqImpl implements Receiver {
                                 msg.setProperty(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_MQ);
                                 msg.setProperty(LOGKEYS.RECEIVER_ID, receiverConfigRocketMq.getId());
                                 messageExt.getProperties().get(receiverConfigRocketMq.getFileNameField());
-                                msg.setFileName(StringUtils.defaultIfEmpty(messageExt.getProperties().get(receiverConfigRocketMq.getFileNameField()), UuidUtil.get32UUID()));
+                                msg.setFileName(StrUtil.emptyToDefault(messageExt.getProperties().get(receiverConfigRocketMq.getFileNameField()), UuidUtil.get32UUID()));
                                 IContext ctx = new DefaultContext();
                                 ctx.setMessage(msg);
 
@@ -69,7 +69,7 @@ public class ReceiverRocketMqImpl implements Receiver {
                                 msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_ROCKET_MQ);
                                 msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigRocketMq.getNamesrvAddr() + ":" + receiverConfigRocketMq.getTopic());
                                 msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-                                msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                                msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                                 msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                                 msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                                 msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_MQ);

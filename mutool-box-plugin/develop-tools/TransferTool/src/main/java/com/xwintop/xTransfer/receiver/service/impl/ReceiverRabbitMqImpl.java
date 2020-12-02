@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -10,8 +12,6 @@ import com.xwintop.xTransfer.receiver.bean.ReceiverConfigRabbitMq;
 import com.xwintop.xTransfer.receiver.service.Receiver;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
@@ -65,17 +65,17 @@ public class ReceiverRabbitMqImpl implements Receiver {
         if (simpleMessageListenerContainer == null) {
             simpleMessageListenerContainer = new SimpleMessageListenerContainer();
             CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-            if (StringUtils.isNotEmpty(receiverConfigRabbitMq.getHost())) {
+            if (StrUtil.isNotEmpty(receiverConfigRabbitMq.getHost())) {
                 connectionFactory.setHost(receiverConfigRabbitMq.getHost());
             }
             connectionFactory.setPort(receiverConfigRabbitMq.getPort());
-            if (StringUtils.isNotEmpty(receiverConfigRabbitMq.getUsername())) {
+            if (StrUtil.isNotEmpty(receiverConfigRabbitMq.getUsername())) {
                 connectionFactory.setUsername(receiverConfigRabbitMq.getUsername());
             }
-            if (StringUtils.isNotEmpty(receiverConfigRabbitMq.getPassword())) {
+            if (StrUtil.isNotEmpty(receiverConfigRabbitMq.getPassword())) {
                 connectionFactory.setPassword(receiverConfigRabbitMq.getPassword());
             }
-            if (StringUtils.isNotEmpty(receiverConfigRabbitMq.getVirtualHost())) {
+            if (StrUtil.isNotEmpty(receiverConfigRabbitMq.getVirtualHost())) {
                 connectionFactory.setVirtualHost(receiverConfigRabbitMq.getVirtualHost());
             }
             if (receiverConfigRabbitMq.getRequestedHeartbeat() != null) {
@@ -84,7 +84,7 @@ public class ReceiverRabbitMqImpl implements Receiver {
             if (receiverConfigRabbitMq.getConnectionTimeout() != null) {
                 connectionFactory.setConnectionTimeout(receiverConfigRabbitMq.getConnectionTimeout());
             }
-            if (StringUtils.isNotEmpty(receiverConfigRabbitMq.getAddresses())) {
+            if (StrUtil.isNotEmpty(receiverConfigRabbitMq.getAddresses())) {
                 //该方法配置多个host，在当前连接host down掉的时候会自动去重连后面的host
                 connectionFactory.setAddresses(receiverConfigRabbitMq.getAddresses());
             }
@@ -112,11 +112,11 @@ public class ReceiverRabbitMqImpl implements Receiver {
                     try {
                         IMessage msg = new DefaultMessage();
                         msg.setRawData(body);
-                        if (StringUtils.isNotEmpty(message.getMessageProperties().getContentEncoding())) {
+                        if (StrUtil.isNotEmpty(message.getMessageProperties().getContentEncoding())) {
                             msg.setEncoding(message.getMessageProperties().getContentEncoding());
                         }
                         Map<String, Object> headers = message.getMessageProperties().getHeaders();
-                        msg.setFileName(StringUtils.defaultIfEmpty((String) headers.get(receiverConfigRabbitMq.getFileNameField()), msg.getId()));
+                        msg.setFileName(StrUtil.blankToDefault((String) headers.get(receiverConfigRabbitMq.getFileNameField()), msg.getId()));
                         msg.setProperty(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_RABBIT_MQ);
                         msg.setProperty(LOGKEYS.CHANNEL_IN, receiverConfigRabbitMq.getVirtualHost() + ":" + receiverConfigRabbitMq.getTopic());
                         msg.setProperty(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_MQ);
@@ -128,7 +128,7 @@ public class ReceiverRabbitMqImpl implements Receiver {
                         msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_RABBIT_MQ);
                         msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigRabbitMq.getVirtualHost() + ":" + receiverConfigRabbitMq.getTopic());
                         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-                        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_MQ);

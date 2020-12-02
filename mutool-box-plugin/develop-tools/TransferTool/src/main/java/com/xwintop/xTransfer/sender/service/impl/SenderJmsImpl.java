@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -14,8 +16,6 @@ import com.ibm.msg.client.wmq.compat.jms.internal.JMSC;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -52,7 +52,7 @@ public class SenderJmsImpl implements Sender {
             jmsTemplate.send(session -> {
                 BytesMessage message = session.createBytesMessage();
                 message.writeBytes(msg.getMessage());
-                if (StringUtils.isNotEmpty(senderConfigJms.getFileNameField())) {
+                if (StrUtil.isNotEmpty(senderConfigJms.getFileNameField())) {
                     message.setStringProperty(senderConfigJms.getFileNameField(), msg.getFileName());
                 }
                 if (senderConfigJms.getArgs() != null && !senderConfigJms.getArgs().isEmpty()) {
@@ -77,7 +77,7 @@ public class SenderJmsImpl implements Sender {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_MQ);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigJms.getJmsUrl() + "/" + senderConfigJms.getJmsQueue());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

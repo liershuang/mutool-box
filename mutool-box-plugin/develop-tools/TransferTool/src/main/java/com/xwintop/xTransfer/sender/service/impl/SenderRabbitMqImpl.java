@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -12,8 +14,6 @@ import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -43,17 +43,17 @@ public class SenderRabbitMqImpl implements Sender {
     public Boolean send(IMessage msg, Map params) throws Exception {
         log.debug("SenderRabbitMq,taskName:" + params.get(TaskQuartzJob.JOBID));
         this.checkInit();
-//        log.debug("发送rabbitMq消息：" + ArrayUtils.getLength(msg.getMessage()));
+//        log.debug("发送rabbitMq消息：" + ArrayUtil.getLength(msg.getMessage()));
         try {
             MessageProperties messageProperties = new MessageProperties();
             if (senderConfigRabbitMq.getArgs() != null && !senderConfigRabbitMq.getArgs().isEmpty()) {
                 messageProperties.getHeaders().putAll(senderConfigRabbitMq.getArgs());
             }
-            if (StringUtils.isNotEmpty(senderConfigRabbitMq.getFileNameField())) {
+            if (StrUtil.isNotEmpty(senderConfigRabbitMq.getFileNameField())) {
                 messageProperties.getHeaders().put(senderConfigRabbitMq.getFileNameField(), msg.getFileName());
             }
             messageProperties.setContentType(senderConfigRabbitMq.getContentType());
-            messageProperties.setContentLength(ArrayUtils.getLength(msg.getMessage()));
+            messageProperties.setContentLength(ArrayUtil.length(msg.getMessage()));
             messageProperties.setContentEncoding(msg.getEncoding());
             Message message = new Message(msg.getMessage(), messageProperties);
             rabbitTemplate.convertAndSend(message);
@@ -64,7 +64,7 @@ public class SenderRabbitMqImpl implements Sender {
             msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_RABBIT_MQ);
             msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigRabbitMq.getHost() + ":" + senderConfigRabbitMq.getPort() + ":" + senderConfigRabbitMq.getVirtualHost() + "/" + senderConfigRabbitMq.getTopic());
             msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-            msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+            msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
             msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
             msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
             msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));
@@ -94,7 +94,7 @@ public class SenderRabbitMqImpl implements Sender {
 
     private synchronized void checkInit() throws Exception {
         if (rabbitTemplate == null) {
-            if (StringUtils.isEmpty(senderConfigRabbitMq.getTopic())) {
+            if (StrUtil.isEmpty(senderConfigRabbitMq.getTopic())) {
                 throw new Exception("SenderRabbitMq失败，topic不能为空" + senderConfigRabbitMq.getId());
             }
             CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
@@ -121,7 +121,7 @@ public class SenderRabbitMqImpl implements Sender {
             connectionFactory.setPublisherConfirms(senderConfigRabbitMq.isPublisherConfirms());
             connectionFactory.setPublisherReturns(senderConfigRabbitMq.isPublisherReturns());
             rabbitTemplate = new RabbitTemplate(connectionFactory);
-            if (StringUtils.isNotEmpty(senderConfigRabbitMq.getExchange())) {
+            if (StrUtil.isNotEmpty(senderConfigRabbitMq.getExchange())) {
                 rabbitTemplate.setExchange(senderConfigRabbitMq.getExchange());
             }
             rabbitTemplate.setRoutingKey(senderConfigRabbitMq.getTopic());

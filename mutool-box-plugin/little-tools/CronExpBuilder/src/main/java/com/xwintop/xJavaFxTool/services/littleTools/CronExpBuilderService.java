@@ -1,5 +1,9 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.CronExpBuilderController;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
@@ -7,10 +11,6 @@ import javafx.scene.control.ToggleGroup;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.quartz.CronExpression;
 
 /**
@@ -32,7 +32,7 @@ public class CronExpBuilderService {
 
     public void parseActionPerformed() throws Exception {
         String cronExpString = cronExpBuilderController.getJTF_Cron_Exp().getText().trim();
-        if (StringUtils.isEmpty(cronExpString)) {
+        if (StrUtil.isEmpty(cronExpString)) {
             return;
         }
         String[] regs = cronExpString.split(" ");
@@ -50,17 +50,17 @@ public class CronExpBuilderService {
 
     public void runCronExpressionAction() {
         String cronExpString = cronExpBuilderController.getJTF_Cron_Exp().getText().trim();
-        if (StringUtils.isEmpty(cronExpString)) {
+        if (StrUtil.isEmpty(cronExpString)) {
             return;
         }
         cronExpBuilderController.getJTA_Schedule_Next().setText("");
         try {
             CronExpression exp = new CronExpression(cronExpString);
             java.util.Date dd = new java.util.Date();
-            cronExpBuilderController.getJTF_Schedule_Start().setText(DateFormatUtils.format(dd, "yyyy-MM-dd HH:mm:ss"));
+            cronExpBuilderController.getJTF_Schedule_Start().setText(DateUtil.format(dd, "yyyy-MM-dd HH:mm:ss"));
             for (int i = 1; i <= 6; i++) {
                 dd = exp.getNextValidTimeAfter(dd);
-                cronExpBuilderController.getJTA_Schedule_Next().appendText(i + ": " + DateFormatUtils.format(dd, "yyyy-MM-dd HH:mm:ss") + "\t\t");
+                cronExpBuilderController.getJTA_Schedule_Next().appendText(i + ": " + DateUtil.format(dd, "yyyy-MM-dd HH:mm:ss") + "\t\t");
                 if (i % 2 == 0) {
                     cronExpBuilderController.getJTA_Schedule_Next().appendText("\n");
                 }
@@ -71,40 +71,40 @@ public class CronExpBuilderService {
         }
     }
 
-    private void initObj(String strVal, String checkType) throws Exception {
+    private void initObj(String strVal, String checkType) {
         String checkTypeLowerCase = checkType.toLowerCase();
-        ToggleGroup toggleGroup = (ToggleGroup) FieldUtils.readField(cronExpBuilderController, "toggleGroup" + checkType, true);
+        ToggleGroup toggleGroup = (ToggleGroup) ReflectUtil.getFieldValue(cronExpBuilderController, "toggleGroup" + checkType);
         if ("*".equals(strVal)) {
             toggleGroup.selectToggle(toggleGroup.getToggles().get(0));
         } else if (strVal.contains("-")) {
             String[] ary = strVal.split("-");
-            ((Spinner<Integer>) FieldUtils.readField(cronExpBuilderController, checkTypeLowerCase + "Start_0", true)).getEditor()
+            ((Spinner<Integer>) ReflectUtil.getFieldValue(cronExpBuilderController, checkTypeLowerCase + "Start_0")).getEditor()
                     .setText(ary[0]);
-            ((Spinner<Integer>) FieldUtils.readField(cronExpBuilderController, checkTypeLowerCase + "End_0", true)).getEditor()
+            ((Spinner<Integer>) ReflectUtil.getFieldValue(cronExpBuilderController, checkTypeLowerCase + "End_0")).getEditor()
                     .setText(ary[1]);
         } else if (strVal.contains("/")) {
             String[] ary = strVal.split("/");
-            ((Spinner<Integer>) FieldUtils.readField(cronExpBuilderController, checkTypeLowerCase + "Start_1", true)).getEditor()
+            ((Spinner<Integer>) ReflectUtil.getFieldValue(cronExpBuilderController, checkTypeLowerCase + "Start_1")).getEditor()
                     .setText(ary[0]);
-            ((Spinner<Integer>) FieldUtils.readField(cronExpBuilderController, checkTypeLowerCase + "End_1", true)).getEditor()
+            ((Spinner<Integer>) ReflectUtil.getFieldValue(cronExpBuilderController, checkTypeLowerCase + "End_1")).getEditor()
                     .setText(ary[1]);
         } else if (("Day".equals(checkType) || "Month".equals(checkType) || "Week".equals(checkType))
                 && "?".equals(strVal)) {
             toggleGroup.selectToggle(toggleGroup.getToggles().get(3));
         } else if ("Day".equals(checkType) && strVal.contains("W")) {
             String[] ary = strVal.split("W");
-            ((Spinner<Integer>) FieldUtils.readField(cronExpBuilderController, checkTypeLowerCase + "Start_2", true)).getEditor()
+            ((Spinner<Integer>) ReflectUtil.getFieldValue(cronExpBuilderController, checkTypeLowerCase + "Start_2")).getEditor()
                     .setText(ary[0]);
         } else if ("Day".equals(checkType) && "L".equals(strVal)) {
             toggleGroup.selectToggle(toggleGroup.getToggles().get(5));
         } else if ("Week".equals(checkType) && strVal.contains("L")) {
             String[] ary = strVal.split("L");
-            ((Spinner<Integer>) FieldUtils.readField(cronExpBuilderController, checkTypeLowerCase + "Start_2", true)).getEditor()
+            ((Spinner<Integer>) ReflectUtil.getFieldValue(cronExpBuilderController, checkTypeLowerCase + "Start_2")).getEditor()
                     .setText(ary[0]);
         } else {
             if (!"?".equals(strVal)) {
                 String[] ary = strVal.split(",");
-                CheckBox[] checkBox = (CheckBox[]) FieldUtils.readField(cronExpBuilderController, checkTypeLowerCase + "CheckBox", true);
+                CheckBox[] checkBox = (CheckBox[]) ReflectUtil.getFieldValue(cronExpBuilderController, checkTypeLowerCase + "CheckBox");
                 int addInt = "00".equals(checkBox[0].getText()) ? 0 : 1;
                 for (int i = 0; i < checkBox.length; i++) {
                     checkBox[i].setSelected(false);
@@ -117,7 +117,7 @@ public class CronExpBuilderService {
     }
 
     private void initYear(String strVal) throws Exception {
-        if (StringUtils.isEmpty(strVal)) {
+        if (StrUtil.isEmpty(strVal)) {
             cronExpBuilderController.getRadioButtonYear1().setSelected(true);
         } else if ("*".equals(strVal)) {
             cronExpBuilderController.getRadioButtonYear2().setSelected(true);
@@ -144,7 +144,7 @@ public class CronExpBuilderService {
 
     public static String getCronToCronTab(String cron) {
         String[] crons = cron.split(" ");
-        crons = ArrayUtils.remove(crons, 0);
+        crons = ArrayUtil.remove(crons, 0);
         if ("?".equals(crons[2])) {
             crons[2] = "*";
         }

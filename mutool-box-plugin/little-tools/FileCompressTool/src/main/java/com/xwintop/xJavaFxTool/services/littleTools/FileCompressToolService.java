@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.FileCompressToolController;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,6 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,7 +72,7 @@ public class FileCompressToolService {
                     fileList.add(file);
                 }
             }
-            if (StringUtils.isEmpty(saveFilePath)) {
+            if (StrUtil.isEmpty(saveFilePath)) {
                 saveFilePath = FilenameUtils.getFullPath(fileList.get(0).getPath());
             }
             FileUtils.writeByteArrayToFile(new File(saveFilePath, fileList.get(0).getName() + "." + zipType), zippedData);
@@ -154,7 +154,7 @@ public class FileCompressToolService {
 
     private void unzip(String filePath, String zipType) throws Exception {
         String saveFilePath = fileCompressToolController.getSaveFilePathTextField().getText();
-        if (StringUtils.isEmpty(saveFilePath)) {
+        if (StrUtil.isEmpty(saveFilePath)) {
             saveFilePath = FilenameUtils.getFullPath(filePath);
         }
         if (ArchiveStreamFactory.SEVEN_Z.equalsIgnoreCase(zipType)) {
@@ -189,10 +189,10 @@ public class FileCompressToolService {
         if (compressorInputStream instanceof GzipCompressorInputStream) {
             entryFileName = ((GzipCompressorInputStream) compressorInputStream).getMetaData().getFilename();
         }
-        if (StringUtils.isEmpty(entryFileName)) {
+        if (StrUtil.isEmpty(entryFileName)) {
             entryFileName = FilenameUtils.getBaseName(filePath);
         }
-        if (StringUtils.isEmpty(saveFilePath)) {
+        if (StrUtil.isEmpty(saveFilePath)) {
             saveFilePath = FilenameUtils.getFullPath(filePath);
         }
         FileUtils.writeByteArrayToFile(new File(saveFilePath, entryFileName), outputStream.toByteArray());

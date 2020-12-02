@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xwintop.xJavaFxTool.controller.littleTools.ImageAnalysisToolController;
@@ -10,7 +11,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
@@ -31,7 +31,7 @@ public class ImageAnalysisToolService {
     //解析atlas文件
     public void analysisAtlasButtonAction() throws Exception {
         String atlasPathTextFieldString = imageAnalysisToolController.getAtlasPathTextField().getText();
-        if (StringUtils.isBlank(atlasPathTextFieldString)) {
+        if (StrUtil.isBlank(atlasPathTextFieldString)) {
             TooltipUtil.showToast("atlas路径名不能为空。");
             return;
         }
@@ -40,7 +40,7 @@ public class ImageAnalysisToolService {
             return;
         }
         String imagePathTextFieldString = imageAnalysisToolController.getImagePathTextField().getText();
-        if (StringUtils.isBlank(imagePathTextFieldString)) {
+        if (StrUtil.isBlank(imagePathTextFieldString)) {
             String fileName = FilenameUtils.getName(atlasPathTextFieldString);
             String fileBaseName = FilenameUtils.getBaseName(fileName);
             AtomicReference<File> imageFile = new AtomicReference<>();
@@ -58,10 +58,10 @@ public class ImageAnalysisToolService {
             imagePathTextFieldString = imageFile.get().getAbsolutePath();
         }
         String outputPathTextFieldString = imageAnalysisToolController.getOutputPathTextField().getText();
-        if (StringUtils.isBlank(outputPathTextFieldString)) {
+        if (StrUtil.isBlank(outputPathTextFieldString)) {
             outputPathTextFieldString = FilenameUtils.getFullPath(atlasPathTextFieldString);
         }
-        outputPathTextFieldString = StringUtils.appendIfMissing(outputPathTextFieldString, "/", "/", "\\");
+        outputPathTextFieldString = StrUtil.appendIfMissing(outputPathTextFieldString, "/", "/", "\\");
         JSONObject jsonObject = JSON.parseObject(FileUtils.readFileToString(new File(atlasPathTextFieldString)));
         JSONObject jsonObject2 = jsonObject.getJSONObject("frames");
         for (String s : jsonObject2.keySet()) {
@@ -79,15 +79,15 @@ public class ImageAnalysisToolService {
     //拆分图片
     public void analysisImageButtonAction() {
         String imagePathTextFieldString = imageAnalysisToolController.getImagePathTextField().getText();
-        if (StringUtils.isBlank(imagePathTextFieldString)) {
+        if (StrUtil.isBlank(imagePathTextFieldString)) {
             TooltipUtil.showToast("图片地址不能为空。");
             return;
         }
         String outputPathTextFieldString = imageAnalysisToolController.getOutputPathTextField().getText();
-        if (StringUtils.isBlank(outputPathTextFieldString)) {
+        if (StrUtil.isBlank(outputPathTextFieldString)) {
             outputPathTextFieldString = FilenameUtils.getFullPath(imagePathTextFieldString);
         }
-        outputPathTextFieldString = StringUtils.appendIfMissing(outputPathTextFieldString, "/", "/", "\\");
+        outputPathTextFieldString = StrUtil.appendIfMissing(outputPathTextFieldString, "/", "/", "\\");
         String imageName = FilenameUtils.getBaseName(imagePathTextFieldString);
         String imageExtensionName = FilenameUtils.getExtension(imagePathTextFieldString);
         Integer analysisNumber = imageAnalysisToolController.getAnalysisNumberComboBox().getValue();

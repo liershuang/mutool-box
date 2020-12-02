@@ -1,6 +1,7 @@
 package com.xwintop.xTransfer.task.quartz;
 
 import cn.hutool.core.lang.Singleton;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.task.dao.TaskConfigDao;
 import com.xwintop.xTransfer.task.entity.TaskConfig;
 import com.xwintop.xTransfer.filter.service.FilterConfigService;
@@ -13,7 +14,6 @@ import com.xwintop.xTransfer.sender.service.impl.SenderConfigServiceImpl;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.listeners.SchedulerListenerSupport;
@@ -127,7 +127,7 @@ public class ScheduleManager {
             scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(interval)// 时间间隔
                     .withRepeatCount(repeatCount);// 重复次数
         } else if (QuartzTypeEnum.CRON.equals(quartzType)) {
-            if (StringUtils.isEmpty(cronText)) {
+            if (StrUtil.isEmpty(cronText)) {
                 throw new Exception("cron表达式不能为空。");
             }
             scheduleBuilder = CronScheduleBuilder.cronSchedule(cronText);

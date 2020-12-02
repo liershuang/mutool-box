@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.developTools.DirectoryTreeToolController;
 import com.xwintop.xJavaFxTool.utils.DirectoryTreeUtil;
 
@@ -33,7 +32,7 @@ public class DirectoryTreeToolService {
 
 	public void buildDirectoryTreeString() {
 		String projectPath = directoryTreeToolController.getProjectPathTextField().getText();
-		if (StringUtils.isEmpty(projectPath)) {
+		if (StrUtil.isEmpty(projectPath)) {
 			projectPath = System.getProperty("user.dir");
 		}
 		File generateFile = new File(projectPath);

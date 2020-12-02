@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.debugTools.redisTool;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.debugTools.redisTool.RedisToolDataTableController;
 import com.xwintop.xJavaFxTool.controller.debugTools.redisTool.RedisToolDataViewController;
 import com.xwintop.xJavaFxTool.controller.debugTools.redisTool.RedisToolDialogController;
@@ -16,7 +17,6 @@ import javafx.scene.control.Tab;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -98,7 +98,7 @@ public class RedisToolDataTableService {
         String[] valueStrings = AlertUtil.showInputAlert("请输入值", "key", "value", "过期时间（单位：秒，-1为永久）");
         if (valueStrings != null) {
             redisToolDataTableController.getRedisUtil().setString(valueStrings[0], valueStrings[1]);
-            if (StringUtils.isNoneEmpty(valueStrings[2])) {
+            if (!StrUtil.hasEmpty(valueStrings[2])) {
                 redisToolDataTableController.getRedisUtil().setDeadLine(valueStrings[0],
                         Integer.parseInt(valueStrings[2]));
             }
@@ -129,7 +129,7 @@ public class RedisToolDataTableService {
         String key = redisToolDialogController.getKeyTextField().getText();
         List<String> list = new ArrayList<String>();
         redisToolDialogController.getDialogTableData().forEach((map) -> {
-            if (StringUtils.isNotEmpty(map.get("value"))) {
+            if (StrUtil.isNotEmpty(map.get("value"))) {
                 list.add(map.get("value"));
             }
         });
@@ -141,7 +141,7 @@ public class RedisToolDataTableService {
         String key = redisToolDialogController.getKeyTextField().getText();
         Set<String> list = new HashSet<String>();
         redisToolDialogController.getDialogTableData().forEach((map) -> {
-            if (StringUtils.isNotEmpty(map.get("value"))) {
+            if (StrUtil.isNotEmpty(map.get("value"))) {
                 list.add(map.get("value"));
             }
         });
@@ -153,7 +153,7 @@ public class RedisToolDataTableService {
         String key = redisToolDialogController.getKeyTextField().getText();
         Map<String, Double> list = new HashMap<String, Double>();
         redisToolDialogController.getDialogTableData().forEach((map) -> {
-            if (StringUtils.isNotEmpty(map.get("value")) && StringUtils.isNotEmpty(map.get("key"))) {
+            if (StrUtil.isNotEmpty(map.get("value")) && StrUtil.isNotEmpty(map.get("key"))) {
                 list.put(map.get("value"), Double.valueOf(map.get("key")));
             }
         });
@@ -165,7 +165,7 @@ public class RedisToolDataTableService {
         String key = redisToolDialogController.getKeyTextField().getText();
         Map<String, String> list = new HashMap<String, String>();
         redisToolDialogController.getDialogTableData().forEach((map) -> {
-            if (StringUtils.isNotEmpty(map.get("value")) && StringUtils.isNotEmpty(map.get("key"))) {
+            if (StrUtil.isNotEmpty(map.get("value")) && StrUtil.isNotEmpty(map.get("key"))) {
                 list.put(map.get("key"), map.get("value"));
             }
         });

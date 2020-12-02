@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -13,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQBytesMessage;
 import org.apache.activemq.command.ActiveMQMapMessage;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.listener.SessionAwareMessageListener;
@@ -48,7 +48,7 @@ public class ReceiverActiveMqImpl implements Receiver {
 
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
             connectionFactory.setBrokerURL("tcp://" + receiverConfigActiveMq.getHost() + ":" + receiverConfigActiveMq.getPort());
-            if (StringUtils.isEmpty(receiverConfigActiveMq.getUsername())) {
+            if (StrUtil.isEmpty(receiverConfigActiveMq.getUsername())) {
                 connectionFactory.setUserName(receiverConfigActiveMq.getUsername());
                 connectionFactory.setPassword(receiverConfigActiveMq.getPassword());
             }
@@ -86,9 +86,9 @@ public class ReceiverActiveMqImpl implements Receiver {
                     } else {
                         msg.setRawData((byte[]) ((ObjectMessage) message).getObject());
                     }
-                    if (StringUtils.isBlank(msg.getFileName())) {
+                    if (StrUtil.isBlank(msg.getFileName())) {
                         msg.setFileName(message.getStringProperty(receiverConfigActiveMq.getFileNameField()));
-                        if (StringUtils.isNotEmpty(msg.getFileName())) {
+                        if (StrUtil.isNotEmpty(msg.getFileName())) {
                             msg.setFileName(msg.getId());
                         }
                     }
@@ -104,7 +104,7 @@ public class ReceiverActiveMqImpl implements Receiver {
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_ACTIVE_MQ);
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigActiveMq.getHost() + ":" + receiverConfigActiveMq.getQueueName());
                     msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                     msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                     msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                     msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_MQ);

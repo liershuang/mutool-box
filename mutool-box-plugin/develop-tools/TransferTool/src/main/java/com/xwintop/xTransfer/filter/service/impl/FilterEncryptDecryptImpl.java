@@ -1,5 +1,6 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.filter.bean.FilterConfig;
 import com.xwintop.xTransfer.filter.bean.FilterConfigEncryptDecrypt;
 import com.xwintop.xTransfer.filter.enums.CryptosEnum;
@@ -10,7 +11,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.BinaryCodec;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.util.Base64;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class FilterEncryptDecryptImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         for (IMessage iMessage : ctx.getMessages()) {
-            if (StringUtils.isNotBlank(filterConfigEncryptDecrypt.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(filterConfigEncryptDecrypt.getFileNameFilterRegex())) {
                 if (!iMessage.getFileName().matches(filterConfigEncryptDecrypt.getFileNameFilterRegex())) {
                     log.info("Filter:" + filterConfigEncryptDecrypt.getId() + "跳过fileName：" + iMessage.getFileName());
                     continue;

@@ -1,8 +1,10 @@
 package com.xwintop.xJavaFxTool.controller.developTools.xTransferTool;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.swing.clipboard.ClipboardUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
 import com.jcraft.jsch.ChannelSftp;
 import com.xwintop.xJavaFxTool.services.developTools.xTransferTool.TransferToolService;
 import com.xwintop.xJavaFxTool.services.developTools.xTransferTool.TransferToolUrlDocumentDialogService;
@@ -25,8 +27,6 @@ import javafx.scene.input.MouseButton;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -167,7 +167,7 @@ public class TransferToolController extends TransferToolView {
                 if ("TaskConfig列表".equals(selectedItem.getValue())) {
                     MenuItem menu_AddFile = new MenuItem("添加任务配置文件");
                     menu_AddFile.setOnAction(event1 -> {
-                        String fileName = "taskConf" + DateFormatUtils.format(new Date(), "MMddHHmm") + "service.yml";
+                        String fileName = "taskConf" + DateUtil.format(new Date(), "MMddHHmm") + "service.yml";
                         TreeItem<String> addItem = new TreeItem<>(fileName);
                         selectedItem.getChildren().add(addItem);
                         Map<String, TaskConfig> taskConfigMap = new ConcurrentHashMap<>();
@@ -177,7 +177,7 @@ public class TransferToolController extends TransferToolView {
                     contextMenu.getItems().add(menu_AddFile);
                     MenuItem menu_AddDataSourceFile = new MenuItem("添加数据源配置文件");
                     menu_AddDataSourceFile.setOnAction(event1 -> {
-                        String fileName = "dataConf" + DateFormatUtils.format(new Date(), "MMddHHmm") + "datasource.yml";
+                        String fileName = "dataConf" + DateUtil.format(new Date(), "MMddHHmm") + "datasource.yml";
                         TreeItem<String> addItem = new TreeItem<>(fileName);
                         selectedItem.getChildren().add(addItem);
                         Map<String, DataSourceConfigDruid> taskConfigMap = new ConcurrentHashMap<>();
@@ -195,7 +195,7 @@ public class TransferToolController extends TransferToolView {
                         MenuItem menu_RenameFile = new MenuItem("文件重命名");
                         menu_RenameFile.setOnAction(event1 -> {
                             String string = AlertUtil.showInputAlertDefaultValue("重命名文件", selectedItem.getValue());
-                            if (StringUtils.isEmpty(string) || selectedItem.getValue().equals(string)) {
+                            if (StrUtil.isEmpty(string) || selectedItem.getValue().equals(string)) {
                                 return;
                             }
                             if (selectedItem.getValue().endsWith("service.yml")) {
@@ -213,7 +213,7 @@ public class TransferToolController extends TransferToolView {
                                 try {
                                     ChannelSftp channel = TransferViewUtil.getSftpChannel(this);
                                     String remotePath = configurationPathTextField.getText();
-                                    remotePath = StringUtils.appendIfMissing(remotePath, "/", "/", "\\");
+                                    remotePath = StrUtil.appendIfMissing(remotePath, "/", "/", "\\");
                                     channel.rename(remotePath + selectedItem.getValue(), remotePath + string);
                                     TransferViewUtil.closeSftpSession(channel);
                                 } catch (Exception e) {
@@ -238,7 +238,7 @@ public class TransferToolController extends TransferToolView {
                                 if (config instanceof List) {
                                     Iterable<TaskConfig> taskConfigs = (Iterable<TaskConfig>) config;
                                     for (TaskConfig taskConfig : taskConfigs) {
-                                        String configName = StringUtils.appendIfMissing(taskConfig.getName(), "_copy", "_copy");
+                                        String configName = StrUtil.appendIfMissing(taskConfig.getName(), "_copy", "_copy");
                                         while (taskConfigMap.containsKey(configName)) {
                                             String[] copyName = configName.split("_copy");
                                             if (copyName.length > 1) {
@@ -254,7 +254,7 @@ public class TransferToolController extends TransferToolView {
                                     }
                                 } else {
                                     TaskConfig taskConfig = (TaskConfig) config;
-                                    String configName = StringUtils.appendIfMissing(taskConfig.getName(), "_copy", "_copy");
+                                    String configName = StrUtil.appendIfMissing(taskConfig.getName(), "_copy", "_copy");
                                     while (taskConfigMap.containsKey(configName)) {
                                         String[] copyName = configName.split("_copy");
                                         if (copyName.length > 1) {
@@ -276,14 +276,14 @@ public class TransferToolController extends TransferToolView {
                         MenuItem menu_AddTask = new MenuItem("添加");
                         menu_AddTask.setOnAction(event1 -> {
                             if (selectedItem.getValue().endsWith("service.yml")) {
-                                String taskConfigName = "taskConfig" + DateFormatUtils.format(new Date(), "MMddHHmmss");
+                                String taskConfigName = "taskConfig" + DateUtil.format(new Date(), "MMddHHmmss");
                                 TreeItem<String> addItem = new TreeItem<>(taskConfigName);
                                 selectedItem.getChildren().add(addItem);
                                 TaskConfig taskConfig = new TaskConfig();
                                 taskConfig.setName(taskConfigName);
                                 transferToolService.getTaskConfigFileMap().get(selectedItem.getValue()).put(taskConfigName, taskConfig);
                             } else if (selectedItem.getValue().endsWith("datasource.yml")) {
-                                String taskConfigName = "dataSourceConfig" + DateFormatUtils.format(new Date(), "MMddHHmmss");
+                                String taskConfigName = "dataSourceConfig" + DateUtil.format(new Date(), "MMddHHmmss");
                                 TreeItem<String> addItem = new TreeItem<>(taskConfigName);
                                 selectedItem.getChildren().add(addItem);
                                 DataSourceConfigDruid taskConfig = new DataSourceConfigDruid();
@@ -298,7 +298,7 @@ public class TransferToolController extends TransferToolView {
                                 String taskConfigString = ClipboardUtil.getStr();
                                 try {
                                     TaskConfig taskConfig = new Yaml().load(taskConfigString);
-                                    String taskConfigName = StringUtils.appendIfMissing(taskConfig.getName(), "_copy", "_copy");
+                                    String taskConfigName = StrUtil.appendIfMissing(taskConfig.getName(), "_copy", "_copy");
                                     while (transferToolService.getTaskConfigFileMap().get(selectedItem.getValue()).containsKey(taskConfigName)) {
                                         String[] copyName = taskConfigName.split("_copy");
                                         if (copyName.length > 1) {
@@ -333,7 +333,7 @@ public class TransferToolController extends TransferToolView {
                                 try {
                                     ChannelSftp channel = TransferViewUtil.getSftpChannel(this);
                                     String remotePath = configurationPathTextField.getText();
-                                    remotePath = StringUtils.appendIfMissing(remotePath, "/", "/", "\\");
+                                    remotePath = StrUtil.appendIfMissing(remotePath, "/", "/", "\\");
                                     channel.rm(remotePath + selectedItem.getValue());
                                     TransferViewUtil.closeSftpSession(channel);
                                 } catch (Exception e) {
@@ -386,7 +386,7 @@ public class TransferToolController extends TransferToolView {
                             menu_Copy.setOnAction(event1 -> {
                                 try {
                                     Map<String, TaskConfig> taskConfigMap = transferToolService.getTaskConfigFileMap().get(selectedItem.getParent().getValue());
-                                    String configName = StringUtils.appendIfMissing(selectedItem.getValue(), "_copy", "_copy");
+                                    String configName = StrUtil.appendIfMissing(selectedItem.getValue(), "_copy", "_copy");
                                     while (taskConfigMap.containsKey(configName)) {
                                         String[] copyName = configName.split("_copy");
                                         if (copyName.length > 1) {

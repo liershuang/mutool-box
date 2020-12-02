@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.utils.SpringUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
@@ -14,8 +16,6 @@ import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +42,7 @@ public class FilterGroovyScriptImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         for (IMessage iMessage : ctx.getMessages()) {
-            if (StringUtils.isNotBlank(filterConfigGroovyScript.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(filterConfigGroovyScript.getFileNameFilterRegex())) {
                 if (!iMessage.getFileName().matches(filterConfigGroovyScript.getFileNameFilterRegex())) {
                     log.info("Filter:" + filterConfigGroovyScript.getId() + "跳过fileName：" + iMessage.getFileName());
                     continue;
@@ -59,10 +59,10 @@ public class FilterGroovyScriptImpl implements Filter {
         binding.setVariable("applicationContext", SpringUtil.getApplicationContext());
         GroovyShell shell = new GroovyShell(binding);
 
-        if (StringUtils.isNotEmpty(filterConfigGroovyScript.getScriptString())) {
+        if (StrUtil.isNotEmpty(filterConfigGroovyScript.getScriptString())) {
             Object value = shell.evaluate(filterConfigGroovyScript.getScriptString());
         }
-        if (StringUtils.isNotEmpty(filterConfigGroovyScript.getScriptFilePath())) {
+        if (StrUtil.isNotEmpty(filterConfigGroovyScript.getScriptFilePath())) {
             String script = new String(Files.readAllBytes(Paths.get(filterConfigGroovyScript.getScriptFilePath())));
             shell.evaluate(script, filterConfigGroovyScript.getFileNameFilterRegex(), filterConfigGroovyScript.getFileNameFilterRegex());
         }
@@ -71,7 +71,7 @@ public class FilterGroovyScriptImpl implements Filter {
         msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, msg.getProperty(LOGKEYS.CHANNEL_IN_TYPE));
         msgLogInfo.put(LOGKEYS.CHANNEL_IN, msg.getProperty(LOGKEYS.CHANNEL_IN));
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

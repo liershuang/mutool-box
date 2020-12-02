@@ -1,6 +1,7 @@
 package com.mutool.box.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import com.mutool.box.constant.UrlConstant;
 import com.mutool.box.services.IndexService;
 import com.mutool.box.services.PluginService;
@@ -18,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
@@ -157,7 +157,7 @@ public class JavafxIndexController extends IndexView {
 
     @FXML
     private void openLogFileAction() {
-        String filePath = System.getProperty("user.home")+"/mutool/logs/logFile." + DateFormatUtils.format(new Date(), "yyyy-MM-dd") + ".log";
+        String filePath = System.getProperty("user.home")+"/mutool/logs/logFile." + DateUtil.format(new Date(), "yyyy-MM-dd") + ".log";
         JavaFxSystemUtil.openDirectory(filePath);
     }
 

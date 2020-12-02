@@ -1,9 +1,9 @@
 package com.xwintop.xTransfer.common.model;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.messaging.IMessage;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -26,8 +26,8 @@ public class Msg {
     public Msg(String eventType, String msgId, String eventTime) {
         this.fields.put("eventType", eventType);
         this.fields.put("msgId", msgId);
-        if (StringUtils.isBlank(eventTime)) {
-            this.fields.put("eventTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSS"));
+        if (StrUtil.isBlank(eventTime)) {
+            this.fields.put("eventTime", DateUtil.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSS"));
         } else {
             this.fields.put("eventTime", eventTime);
         }
@@ -49,7 +49,7 @@ public class Msg {
         if (null != msg.getRawData()) {
             this.fields.put("length", msg.getRawData().length);
         } else if (null != msg.getMessage()) {
-            this.fields.put("length", ArrayUtils.getLength(msg.getMessage()));
+            this.fields.put("length", ArrayUtil.length(msg.getMessage()));
         }
     }
 

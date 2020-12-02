@@ -1,5 +1,6 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.filter.bean.FilterConfig;
 import com.xwintop.xTransfer.filter.bean.FilterConfigChangeStr;
 import com.xwintop.xTransfer.filter.service.Filter;
@@ -7,7 +8,6 @@ import com.xwintop.xTransfer.messaging.IContext;
 import com.xwintop.xTransfer.messaging.IMessage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +30,9 @@ public class FilterChangeStrImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         for (IMessage iMessage : ctx.getMessages()) {
-            if (StringUtils.isNotBlank(filterConfigChangeStr.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(filterConfigChangeStr.getFileNameFilterRegex())) {
                 String fileNameFilterRegexGroup = filterConfigChangeStr.getFileNameFilterRegexGroup();
-                if (StringUtils.isEmpty(fileNameFilterRegexGroup)) {
+                if (StrUtil.isEmpty(fileNameFilterRegexGroup)) {
                     fileNameFilterRegexGroup = "defaultRegexGroup";
                 }
                 if ("?!".equals(filterConfigChangeStr.getFileNameFilterRegex())) {
@@ -56,9 +56,9 @@ public class FilterChangeStrImpl implements Filter {
         if (filterConfigChangeStr.isHalfChinese()) {
             halfChinese(msg);
         }
-        if (StringUtils.isNotEmpty(filterConfigChangeStr.getOrgStr())) {
+        if (StrUtil.isNotEmpty(filterConfigChangeStr.getOrgStr())) {
             String encoding = filterConfigChangeStr.getEncoding();
-            if (StringUtils.isEmpty(encoding)) {
+            if (StrUtil.isEmpty(encoding)) {
                 encoding = msg.getEncoding();
             }
             String msgStr = new String(msg.getMessage(), encoding);

@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import cn.hutool.core.util.StrUtil;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
 
 import com.xwintop.xJavaFxTool.controller.debugTools.HttpToolController;
 import com.mutool.javafx.core.util.HttpClientUtil;
@@ -43,7 +43,7 @@ public class HttpToolService {
 	 */
 	public void sendAction() throws Exception {
 		String url = httpToolController.getUrlTextField().getText().trim();
-		if (StringUtils.isEmpty(url)) {
+		if (StrUtil.isEmpty(url)) {
 			TooltipUtil.showToast("请输入网站！！！");
 			return;
 		}
@@ -134,7 +134,7 @@ public class HttpToolService {
 	 * @Description: 从浏览器中打开
 	 */
 	public void toBrowerAction() {
-		if (StringUtils.isEmpty(httpToolController.getUrlTextField().getText())) {
+		if (StrUtil.isEmpty(httpToolController.getUrlTextField().getText())) {
 			TooltipUtil.showToast("请输入网站！！！");
 			return;
 		}

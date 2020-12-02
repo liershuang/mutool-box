@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.filter.bean.FilterConfig;
 import com.xwintop.xTransfer.filter.bean.FilterConfigOracleSqlldr;
 import com.xwintop.xTransfer.filter.service.Filter;
@@ -8,8 +10,6 @@ import com.xwintop.xTransfer.messaging.IMessage;
 import com.xwintop.xTransfer.util.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +37,7 @@ public class FilterOracleSqlldrImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         for (IMessage iMessage : ctx.getMessages()) {
-            if (StringUtils.isNotBlank(filterConfigOracleSqlldr.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(filterConfigOracleSqlldr.getFileNameFilterRegex())) {
                 if (!iMessage.getFileName().matches(filterConfigOracleSqlldr.getFileNameFilterRegex())) {
                     log.info("Filter:" + filterConfigOracleSqlldr.getId() + "跳过fileName：" + iMessage.getFileName());
                     continue;
@@ -55,7 +55,7 @@ public class FilterOracleSqlldrImpl implements Filter {
         Common.checkIsHaveDir(new File(badPath), true);
         Common.checkIsHaveDir(new File(logPath), true);
         FileUtils.writeByteArrayToFile(new File(tmpFilePath + msg.getFileName()), msg.getMessage());
-        String fileTimer = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+        String fileTimer = DateUtil.format(new Date(), "yyyyMMddHHmmss");
         String exeComm = "sqlldr userid=" + filterConfigOracleSqlldr.getUsername() + "/" + filterConfigOracleSqlldr.getPassword() + "@" + filterConfigOracleSqlldr.getDbServiceName()
                 + " control=" + tmpFilePath + msg.getFileName()
                 + " bad=" + badPath + msg.getFileName() + fileTimer

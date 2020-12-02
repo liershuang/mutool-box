@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -14,8 +16,6 @@ import com.xwintop.xTransfer.util.ParseVariableCommon;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -59,13 +59,13 @@ public class SenderEmailImpl implements Sender {
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom(ParseVariableCommon.parseVariable(senderConfigEmail.getFrom(), msg, params));
         helper.setTo(InternetAddress.parse(ParseVariableCommon.parseVariable(senderConfigEmail.getTo(), msg, params)));
-        if (StringUtils.isNotEmpty(senderConfigEmail.getCc())) {
+        if (StrUtil.isNotEmpty(senderConfigEmail.getCc())) {
             helper.setCc(InternetAddress.parse(ParseVariableCommon.parseVariable(senderConfigEmail.getCc(), msg, params)));
         }
         helper.setSubject(ParseVariableCommon.parseVariable(senderConfigEmail.getSubject(), msg, params));
 
         String fileName = msg.getFileName();
-        if (StringUtils.isNotBlank(senderConfigEmail.getFileName())) {
+        if (StrUtil.isNotBlank(senderConfigEmail.getFileName())) {
             fileName = ParseVariableCommon.parseVariable(senderConfigEmail.getFileName(), msg, params);
         }
         switch (EmailMethod.getEnum(senderConfigEmail.getMethod())) {
@@ -87,7 +87,7 @@ public class SenderEmailImpl implements Sender {
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_EMAIL);
         msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigEmail.getHost() + "/" + senderConfigEmail.getPort());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

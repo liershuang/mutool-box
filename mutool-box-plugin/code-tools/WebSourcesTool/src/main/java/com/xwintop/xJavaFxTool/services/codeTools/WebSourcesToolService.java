@@ -6,8 +6,8 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.ArrayUtil;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.xwintop.xJavaFxTool.controller.codeTools.WebSourcesToolController;
 
@@ -82,7 +82,7 @@ public class WebSourcesToolService {
 				for(int i=0;i<sUrlStrings.length-1;i++){
 					sourcesIndexPathFile = sourcesIndexPathFile.getParentFile();
 				}
-				url = StringUtils.join(urlStrings,"/",0,urlStrings.length-sUrlStrings.length);
+				url = ArrayUtil.join(ArrayUtil.sub(urlStrings,0,urlStrings.length-sUrlStrings.length),"/");
 			}
 			Request request = new Request.Builder().url(url+"/"+sUrlStrings[sUrlStrings.length-1]).build();
 			Response response = client.newCall(request).execute();

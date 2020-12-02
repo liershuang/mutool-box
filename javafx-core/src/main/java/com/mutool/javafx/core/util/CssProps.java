@@ -1,14 +1,13 @@
 package com.mutool.javafx.core.util;
 
+import cn.hutool.core.util.StrUtil;
 import javafx.scene.Node;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * 用于解析和更新 node 的 CSS 样式字符串
@@ -18,7 +17,7 @@ public class CssProps {
     private Map<String, String> props = new HashMap<>();
 
     public CssProps put(String propName, String propValue) {
-        if (isNotBlank(propName) && isNotBlank(propValue)) {
+        if (StrUtil.isNotBlank(propName) && StrUtil.isNotBlank(propValue)) {
             this.props.put(propName, propValue);
         }
         return this;
@@ -49,9 +48,9 @@ public class CssProps {
 
     private static CssProps parse(String style) {
         CssProps cssProps = new CssProps();
-        if (isNotBlank(style)) {
+        if (StrUtil.isNotBlank(style)) {
             Stream.of(style.split(";"))
-                .filter(StringUtils::isNotBlank)
+                .filter(StrUtil::isNotBlank)
                 .forEach(cssInstr -> {
                     String[] split = cssInstr.split(":");
                     cssProps.put(split[0].trim(), split[1].trim());

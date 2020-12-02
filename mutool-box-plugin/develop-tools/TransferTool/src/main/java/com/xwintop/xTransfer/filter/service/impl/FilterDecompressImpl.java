@@ -1,5 +1,6 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.filter.bean.FilterConfig;
 import com.xwintop.xTransfer.filter.bean.FilterConfigDecompress;
 import com.xwintop.xTransfer.filter.service.Filter;
@@ -18,7 +19,6 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -45,9 +45,9 @@ public class FilterDecompressImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         for (IMessage iMessage : ctx.getMessages()) {
-            if (StringUtils.isNotBlank(filterConfigDecompress.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(filterConfigDecompress.getFileNameFilterRegex())) {
                 String fileNameFilterRegexGroup = filterConfigDecompress.getFileNameFilterRegexGroup();
-                if (StringUtils.isEmpty(fileNameFilterRegexGroup)) {
+                if (StrUtil.isEmpty(fileNameFilterRegexGroup)) {
                     fileNameFilterRegexGroup = "defaultRegexGroup";
                 }
                 if ("?!".equals(filterConfigDecompress.getFileNameFilterRegex())) {
@@ -71,8 +71,8 @@ public class FilterDecompressImpl implements Filter {
     private void doFilter(IMessage msg, IContext ctx) throws Exception {
 //        Map args = filterConfigDecompress.getArgs();
         String zipType = filterConfigDecompress.getMethod();
-        if (StringUtils.isBlank(zipType)) {
-            zipType = StringUtils.defaultIfBlank(msg.getProperties().getProperty("COMPRESS_METHOD"), "zip");
+        if (StrUtil.isBlank(zipType)) {
+            zipType = StrUtil.blankToDefault(msg.getProperties().getProperty("COMPRESS_METHOD"), "zip");
         }
         if ("AUTO".equalsIgnoreCase(zipType)) {
             try {
@@ -136,12 +136,12 @@ public class FilterDecompressImpl implements Filter {
         if (compressorInputStream instanceof GzipCompressorInputStream) {
             entryFileName = ((GzipCompressorInputStream) compressorInputStream).getMetaData().getFilename();
         }
-        if (StringUtils.isEmpty(entryFileName)) {
+        if (StrUtil.isEmpty(entryFileName)) {
             entryFileName = FilenameUtils.getBaseName(msg.getFileName());
         }
         msg.getProperties().put("ZIP_FILE_NAME", msg.getFileName());
         msg.setFileName(entryFileName);
-        if (StringUtils.isNotEmpty(filterConfigDecompress.getEncoding())) {
+        if (StrUtil.isNotEmpty(filterConfigDecompress.getEncoding())) {
             msg.setEncoding(filterConfigDecompress.getEncoding());
         }
         return msg;
@@ -149,11 +149,11 @@ public class FilterDecompressImpl implements Filter {
 
     private IMessage getUnzipMsg(IMessage msg, byte[] bytes, ArchiveEntry entry) throws Exception {
         IMessage unzipMsg = (IMessage) msg.cloneMessage();
-        if (StringUtils.isNotEmpty(filterConfigDecompress.getEncoding())) {
+        if (StrUtil.isNotEmpty(filterConfigDecompress.getEncoding())) {
             unzipMsg.setEncoding(filterConfigDecompress.getEncoding());
         }
         String zipEntryPath = FilenameUtils.getFullPath(entry.getName());
-        if (StringUtils.isNotEmpty(zipEntryPath)) {
+        if (StrUtil.isNotEmpty(zipEntryPath)) {
             unzipMsg.getProperties().put("ZIP_ENTRY_PATH", zipEntryPath);
         }
         unzipMsg.getProperties().put("ZIP_FILE_NAME", msg.getFileName());

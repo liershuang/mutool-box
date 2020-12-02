@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -12,8 +14,6 @@ import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.context.annotation.Scope;
@@ -51,14 +51,14 @@ public class SenderRocketMqImpl implements Sender {
             }
         }
         if (log.isDebugEnabled()) {
-            log.debug("发送RocketMq消息：" + ArrayUtils.getLength(msg.getMessage()));
+            log.debug("发送RocketMq消息：" + ArrayUtil.length(msg.getMessage()));
         }
         try {
             Message message = new Message(senderConfigRocketMq.getTopic(), senderConfigRocketMq.getTags(), msg.getId(), msg.getMessage());
             if (senderConfigRocketMq.getArgs() != null && !senderConfigRocketMq.getArgs().isEmpty()) {
                 message.getProperties().putAll(senderConfigRocketMq.getArgs());
             }
-            if (StringUtils.isNotEmpty(senderConfigRocketMq.getFileNameField())) {
+            if (StrUtil.isNotEmpty(senderConfigRocketMq.getFileNameField())) {
                 message.getProperties().put(senderConfigRocketMq.getFileNameField(), msg.getFileName());
             }
             producer.send(message);
@@ -69,7 +69,7 @@ public class SenderRocketMqImpl implements Sender {
             msgLogInfo.put(LOGKEYS.CHANNEL_OUT_TYPE, LOGVALUES.CHANNEL_TYPE_ROCKET_MQ);
             msgLogInfo.put(LOGKEYS.CHANNEL_OUT, senderConfigRocketMq.getNamesrvAddr() + "/" + senderConfigRocketMq.getTopic());
             msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-            msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+            msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
             msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
             msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
             msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

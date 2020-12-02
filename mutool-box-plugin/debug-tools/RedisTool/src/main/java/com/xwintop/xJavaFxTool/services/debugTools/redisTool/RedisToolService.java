@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.debugTools.redisTool;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.debugTools.redisTool.RedisToolController;
 import com.xwintop.xJavaFxTool.controller.debugTools.redisTool.RedisToolDataTableController;
 import com.xwintop.xJavaFxTool.utils.RedisUtil;
@@ -13,7 +14,6 @@ import javafx.scene.layout.Priority;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -59,8 +59,8 @@ public class RedisToolService {
             Optional<ButtonType> _buttonType = alert.showAndWait();
             // 根据点击结果返回
             if (_buttonType.get().getButtonData().equals(ButtonBar.ButtonData.YES)) {
-                if (StringUtils.isEmpty(txName.getText()) || StringUtils.isEmpty(txHost.getText())
-                        || StringUtils.isEmpty(txPort.getText())) {
+                if (StrUtil.isEmpty(txName.getText()) || StrUtil.isEmpty(txHost.getText())
+                        || StrUtil.isEmpty(txPort.getText())) {
                     TooltipUtil.showToast("请输入服务器信息");
                     return;
                 }

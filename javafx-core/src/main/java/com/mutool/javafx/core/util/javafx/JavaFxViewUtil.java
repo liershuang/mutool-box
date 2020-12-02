@@ -2,6 +2,8 @@ package com.mutool.javafx.core.util.javafx;
 
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.lang.Singleton;
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.jfoenix.controls.JFXDecorator;
 import com.mutool.javafx.core.javafx.FxApp;
 import com.mutool.javafx.core.javafx.helper.LayoutHelper;
@@ -34,8 +36,6 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -110,7 +110,7 @@ public class JavaFxViewUtil {
         JFXDecorator decorator = new JFXDecorator(stage, root, fullScreen, max, min);
         decorator.setCustomMaximize(true);
         decorator.setTitle(title);
-        if (StringUtils.isNotEmpty(iconUrl)) {
+        if (StrUtil.isNotEmpty(iconUrl)) {
             ImageView imageView = new ImageView(new Image(iconUrl));
             imageView.setFitWidth(24);
             imageView.setFitHeight(24);
@@ -224,7 +224,7 @@ public class JavaFxViewUtil {
         Scene scene = JavaFxViewUtil
             .getJFXDecoratorScene(newStage, title, iconUrl, root, width, height, fullScreen, max, min);
         newStage.setScene(scene);
-        if (StringUtils.isNotEmpty(iconUrl)) {
+        if (StrUtil.isNotEmpty(iconUrl)) {
             newStage.getIcons().add(new Image(iconUrl));
         }
         return newStage;
@@ -246,9 +246,9 @@ public class JavaFxViewUtil {
     //设置窗口移除前回调
     public static void setControllerOnCloseRequest(Object controller, Event event) {
         try {
-            Method method = MethodUtils.getAccessibleMethod(controller.getClass(), "onCloseRequest", Event.class);
+            Method method = ReflectUtil.getMethod(controller.getClass(), "onCloseRequest", Event.class);
             if (method != null) {
-                MethodUtils.invokeMethod(controller, "onCloseRequest", event);
+                ReflectUtil.invoke(controller, "onCloseRequest", event);
             }
         } catch (Exception e) {
             log.error("执行onCloseRequest方法失败", e);

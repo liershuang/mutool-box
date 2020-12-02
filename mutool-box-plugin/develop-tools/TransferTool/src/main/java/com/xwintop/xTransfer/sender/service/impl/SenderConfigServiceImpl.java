@@ -1,6 +1,7 @@
 package com.xwintop.xTransfer.sender.service.impl;
 
 import cn.hutool.core.lang.Singleton;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.ExceptionMsgBackup;
 import com.xwintop.xTransfer.messaging.IContext;
 import com.xwintop.xTransfer.messaging.IMessage;
@@ -11,7 +12,6 @@ import com.xwintop.xTransfer.sender.service.SenderManager;
 import com.xwintop.xTransfer.task.entity.TaskConfig;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +50,7 @@ public class SenderConfigServiceImpl implements SenderConfigService {
         params.put(TaskQuartzJob.JOBID, taskConfig.getName());
         params.put(TaskQuartzJob.JOBSEQ, taskConfig.getProperty(TaskQuartzJob.JOBSEQ));
         for (SenderConfig senderConfig : senderConfigList) {
-            if (StringUtils.isBlank(senderConfig.getId())) {
+            if (StrUtil.isBlank(senderConfig.getId())) {
                 senderConfig.setId(taskConfig.getName() + "_" + senderIndex);
             } else {
                 if (!senderConfig.getId().startsWith(taskConfig.getName())) {
@@ -97,7 +97,7 @@ public class SenderConfigServiceImpl implements SenderConfigService {
                 sender.setSenderConfig(senderConfig);
                 cache.put(senderConfig.getId(), sender);
             }
-            if (StringUtils.isNotBlank(senderConfig.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(senderConfig.getFileNameFilterRegex())) {
                 if (!iMessage.getFileName().matches(senderConfig.getFileNameFilterRegex())) {
                     log.info("Sender:" + senderConfig.getId() + "跳过fileName：" + iMessage.getFileName());
                     continue;
@@ -111,7 +111,7 @@ public class SenderConfigServiceImpl implements SenderConfigService {
     public void stopSender(TaskConfig taskConfig) throws Exception {
         int senderIndex = 0;
         for (SenderConfig senderConfig : taskConfig.getSenderConfig()) {
-            if (StringUtils.isBlank(senderConfig.getId())) {
+            if (StrUtil.isBlank(senderConfig.getId())) {
                 senderConfig.setId(taskConfig.getName() + "_" + senderIndex);
             } else {
                 if (!senderConfig.getId().startsWith(taskConfig.getName())) {

@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.littleTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.littleTools.FileMergeToolController;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
@@ -58,14 +58,14 @@ public class FileMergeToolService {
         }
         String newFilePath = null;
         if (fileList.get(0).isDirectory()) {
-            if (StringUtils.isNotEmpty(fileMergeToolController.getSaveFilePathTextField().getText())) {
-                newFilePath = StringUtils.appendIfMissing(fileMergeToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + "merge_file";
+            if (StrUtil.isNotEmpty(fileMergeToolController.getSaveFilePathTextField().getText())) {
+                newFilePath = StrUtil.appendIfMissing(fileMergeToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + "merge_file";
             } else {
                 newFilePath = fileList.get(0).getPath() + "/merge_file";
             }
         } else {
-            if (StringUtils.isNotEmpty(fileMergeToolController.getSaveFilePathTextField().getText())) {
-                newFilePath = StringUtils.appendIfMissing(fileMergeToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + "merge_" + fileList.get(0).getName();
+            if (StrUtil.isNotEmpty(fileMergeToolController.getSaveFilePathTextField().getText())) {
+                newFilePath = StrUtil.appendIfMissing(fileMergeToolController.getSaveFilePathTextField().getText(), "/", "/", "\\") + "merge_" + fileList.get(0).getName();
             } else {
                 newFilePath = fileList.get(0).getParent() + "/merge_" + fileList.get(0).getName();
             }
@@ -81,7 +81,7 @@ public class FileMergeToolService {
     }
 
     public void mergeExcel(List<File> fileList, String newFilePath) throws Exception { //拆分Excel表格
-        newFilePath = StringUtils.appendIfMissing(newFilePath, ".xls", ".xls", ".xlsx");
+        newFilePath = StrUtil.appendIfMissing(newFilePath, ".xls", ".xls", ".xlsx");
         boolean isAddHead = fileMergeToolController.getIncludeHandCheckBox().isSelected();
         Workbook newWorkbook = new HSSFWorkbook();
         if (!newFilePath.endsWith(".xls")) {
@@ -132,7 +132,7 @@ public class FileMergeToolService {
     }
 
     public void mergeCsv(List<File> fileList, String newFilePath) throws Exception {
-        newFilePath = StringUtils.appendIfMissing(newFilePath, ".csv", ".csv", ".CSV");
+        newFilePath = StrUtil.appendIfMissing(newFilePath, ".csv", ".csv", ".CSV");
         boolean isAddHead = fileMergeToolController.getIncludeHandCheckBox().isSelected();
         CSVPrinter printer = CSVFormat.DEFAULT.print(new PrintWriter(newFilePath));
         boolean addHeadRecord = false;
@@ -188,9 +188,9 @@ public class FileMergeToolService {
 
     private static void saveFile(Workbook workbook, String filePath) {
         if (workbook instanceof HSSFWorkbook) {
-            filePath = StringUtils.appendIfMissing(filePath, ".xls", ".xls", ".xlsx");
+            filePath = StrUtil.appendIfMissing(filePath, ".xls", ".xls", ".xlsx");
         } else if (workbook instanceof XSSFWorkbook) {
-            filePath = StringUtils.appendIfMissing(filePath, ".xlsx", ".xls", ".xlsx");
+            filePath = StrUtil.appendIfMissing(filePath, ".xlsx", ".xls", ".xlsx");
         }
         FileOutputStream out = null;
         try {

@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.debugTools;
 
+import cn.hutool.system.OsInfo;
 import cn.hutool.system.SystemUtil;
 import com.xwintop.xJavaFxTool.controller.debugTools.SwitchHostsToolController;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
@@ -9,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -68,7 +68,8 @@ public class SwitchHostsToolService {
         String fileName = this.getHostsFilePath();
         File file = new File(fileName);
         try {
-            if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_UNIX) {
+            OsInfo osInfo = new OsInfo();
+            if (osInfo.isLinux() || osInfo.isMac() || osInfo.isHpUx()) {
                 if (sudoPwd == null) {
                     TextInputDialog dialog = new TextInputDialog("");
                     dialog.setTitle("Sudo Dialog");

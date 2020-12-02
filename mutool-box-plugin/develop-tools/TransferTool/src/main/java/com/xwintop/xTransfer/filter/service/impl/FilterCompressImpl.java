@@ -1,5 +1,6 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.filter.bean.FilterConfig;
 import com.xwintop.xTransfer.filter.bean.FilterConfigCompress;
 import com.xwintop.xTransfer.filter.service.Filter;
@@ -23,7 +24,6 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipParameters;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +49,9 @@ public class FilterCompressImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         IMessage msg = ctx.getMessages().get(0);
-        if (StringUtils.isNotBlank(filterConfigCompress.getFileNameFilterRegex())) {
+        if (StrUtil.isNotBlank(filterConfigCompress.getFileNameFilterRegex())) {
             String fileNameFilterRegexGroup = filterConfigCompress.getFileNameFilterRegexGroup();
-            if (StringUtils.isEmpty(fileNameFilterRegexGroup)) {
+            if (StrUtil.isEmpty(fileNameFilterRegexGroup)) {
                 fileNameFilterRegexGroup = "defaultRegexGroup";
             }
             if ("?!".equals(filterConfigCompress.getFileNameFilterRegex())) {
@@ -69,8 +69,8 @@ public class FilterCompressImpl implements Filter {
         }
         //        Map args = filterConfigCompress.getArgs();
         String zipType = msg.getProperties().getProperty("COMPRESS_METHOD");
-        if (StringUtils.isBlank(zipType)) {
-            zipType = StringUtils.defaultIfBlank(filterConfigCompress.getMethod(), "zip");
+        if (StrUtil.isBlank(zipType)) {
+            zipType = StrUtil.blankToDefault(filterConfigCompress.getMethod(), "zip");
         }
         byte[] zippedData = null;
         if (new ArchiveStreamFactory().getOutputStreamArchiveNames().contains(zipType.toLowerCase())) {

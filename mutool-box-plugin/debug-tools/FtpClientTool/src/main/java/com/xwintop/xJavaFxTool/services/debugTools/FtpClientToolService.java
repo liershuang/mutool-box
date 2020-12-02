@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.debugTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
@@ -16,7 +17,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -108,7 +108,7 @@ public class FtpClientToolService {
                 if (file.isFile()) {
                     boolean flag = true;
                     if (connectionType == 1) {
-                        serverFile = StringUtils.appendIfMissing(serverFile, "/", "/", "\\");
+                        serverFile = StrUtil.appendIfMissing(serverFile, "/", "/", "\\");
                         sftp.put(new ByteArrayInputStream(FileUtils.readFileToByteArray(file)), serverFile + file.getName());
                     } else {
                         flag = ftpUtil.uploadFile(file.getName(), FileUtils.readFileToByteArray(file));
@@ -122,7 +122,7 @@ public class FtpClientToolService {
                     for (File file1 : file.listFiles()) {
                         boolean flag = true;
                         if (connectionType == 1) {
-                            serverFile = StringUtils.appendIfMissing(serverFile, "/", "/", "\\");
+                            serverFile = StrUtil.appendIfMissing(serverFile, "/", "/", "\\");
                             sftp.put(new ByteArrayInputStream(FileUtils.readFileToByteArray(file1)), serverFile + file1.getName());
                         } else {
                             flag = ftpUtil.uploadFile(file1.getName(), FileUtils.readFileToByteArray(file1));
@@ -204,7 +204,7 @@ public class FtpClientToolService {
             scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(interval)// 时间间隔
                     .withRepeatCount(repeatCount);// 重复次数（将执行6次）
         } else if ("Cron表达式".equals(quartzType)) {
-            if (StringUtils.isEmpty(cronText)) {
+            if (StrUtil.isEmpty(cronText)) {
                 TooltipUtil.showToast("cron表达式不能为空。");
                 return false;
             }

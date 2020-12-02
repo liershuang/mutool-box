@@ -1,5 +1,6 @@
 package com.mutool.javafx.core.javafx.helper;
 
+import cn.hutool.core.util.StrUtil;
 import com.mutool.javafx.core.XCoreException;
 
 import java.io.IOException;
@@ -8,7 +9,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.StringUtils;
 
 public class FxmlHelper {
 
@@ -24,7 +24,7 @@ public class FxmlHelper {
             }
 
             FXMLLoader fxmlLoader;
-            if (StringUtils.isNotBlank(bundleName)) {
+            if (StrUtil.isNotBlank(bundleName)) {
                 fxmlLoader = new FXMLLoader(resource, ResourceBundle.getBundle(bundleName));
             } else {
                 fxmlLoader = new FXMLLoader(resource);

@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.controller.debugTools;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.xwintop.xJavaFxTool.services.debugTools.socketTool.SocketToolService;
 import com.xwintop.xJavaFxTool.view.debugTools.SocketToolView;
 import com.mutool.javafx.core.util.javafx.JavaFxViewUtil;
@@ -14,7 +15,6 @@ import javafx.scene.input.MouseButton;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.NetworkIF;
@@ -56,7 +56,7 @@ public class SocketToolController extends SocketToolView {
         HardwareAbstractionLayer hal = si.getHardware();
         NetworkIF[] networkIFs = hal.getNetworkIFs();
         for (NetworkIF networkIF : networkIFs) {
-            if (ArrayUtils.getLength(networkIF.getIPv4addr()) > 0) {
+            if (ArrayUtil.length(networkIF.getIPv4addr()) > 0) {
                 String address = networkIF.getIPv4addr()[0];
                 serverTcpUrlComboBox.getItems().add(address);
                 serverUdpUrlComboBox.getItems().add(address);

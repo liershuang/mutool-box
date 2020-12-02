@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
+
+import cn.hutool.core.util.StrUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 public class FileUtil {
 
@@ -42,8 +43,8 @@ public class FileUtil {
     public static String[] getFileNames(File file) {
         String fileName = file.getName();
         return new String[]{
-            StringUtils.substringBeforeLast(fileName, "."),
-            StringUtils.substringAfterLast(fileName, ".")
+                StrUtil.subBefore(fileName, ".", true),
+                StrUtil.subAfter(fileName, ".", true)
         };
     }
 

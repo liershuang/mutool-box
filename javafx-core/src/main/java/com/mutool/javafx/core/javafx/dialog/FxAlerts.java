@@ -1,5 +1,7 @@
 package com.mutool.javafx.core.javafx.dialog;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.mutool.javafx.core.javafx.FxApp;
 
 import java.util.Optional;
@@ -9,8 +11,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
  * 系统对话框封装
@@ -26,9 +26,9 @@ public class FxAlerts {
     }
 
     public static void error(String title, Throwable throwable) {
-        boolean noMessage = StringUtils.isBlank(throwable.getMessage());
+        boolean noMessage = StrUtil.isBlank(throwable.getMessage());
         String message = noMessage ? throwable.toString() : throwable.getMessage();
-        error(title, message, ExceptionUtils.getStackTrace(throwable));
+        error(title, message, ExceptionUtil.stacktraceToString(throwable));
     }
 
     public static void info(String title, String message) {

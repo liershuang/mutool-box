@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.controller.games;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.services.games.BullsAndCowsGameService;
 import com.xwintop.xJavaFxTool.view.games.BullsAndCowsGameView;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
@@ -17,7 +18,6 @@ import javafx.scene.text.Font;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -85,7 +85,7 @@ public class BullsAndCowsGameController extends BullsAndCowsGameView {
         inputNumberTextFields = new TextField[]{inputNumberTextField1, inputNumberTextField2, inputNumberTextField3, inputNumberTextField4};
         for (TextField numberTextField : inputNumberTextFields) {
             numberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (StringUtils.isEmpty(newValue)) {
+                if (StrUtil.isEmpty(newValue)) {
                     return;
                 }
                 try {

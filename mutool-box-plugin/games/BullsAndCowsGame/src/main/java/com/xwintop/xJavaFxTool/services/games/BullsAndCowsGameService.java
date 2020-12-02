@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.games;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.games.BullsAndCowsGameController;
 import com.mutool.javafx.core.util.ConfigureUtil;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
@@ -12,7 +13,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Random;
@@ -101,7 +101,7 @@ public class BullsAndCowsGameService {
         int[] inputNumsArray = new int[4];
         for (int i = 0; i < 4; i++) {
             TextField inputNumberTextField = bullsAndCowsGameController.getInputNumberTextFields()[i];
-            if (StringUtils.isEmpty(inputNumberTextField.getText())) {
+            if (StrUtil.isEmpty(inputNumberTextField.getText())) {
                 AlertUtil.showInfoAlert("请输入四个0-9的数字！");
                 return;
             }

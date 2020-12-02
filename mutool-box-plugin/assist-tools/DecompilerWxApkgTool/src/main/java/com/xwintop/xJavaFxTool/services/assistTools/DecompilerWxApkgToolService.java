@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.assistTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.assistTools.DecompilerWxApkgToolController;
 import com.mutool.javafx.core.util.javafx.TooltipUtil;
 import lombok.Data;
@@ -8,7 +9,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 
@@ -32,16 +32,16 @@ public class DecompilerWxApkgToolService {
 
     public void decompileButtonAction() throws Exception {
         String filePath = decompilerWxApkgToolController.getPackageFileTextField().getText();
-        if (StringUtils.isBlank(filePath)) {
+        if (StrUtil.isBlank(filePath)) {
             TooltipUtil.showToast("原包路径未填写。");
             return;
         }
         String decompilePath = decompilerWxApkgToolController.getDecompilePathTextField().getText();
-        if (StringUtils.isBlank(decompilePath)) {
+        if (StrUtil.isBlank(decompilePath)) {
             decompilePath = FilenameUtils.getFullPath(filePath) + FilenameUtils.getBaseName(filePath);
             FileUtils.forceMkdir(new File(decompilePath + "\\"));
         }
-        decompilePath = StringUtils.appendIfMissing(decompilePath, "/", "/", "\\");
+        decompilePath = StrUtil.appendIfMissing(decompilePath, "/", "/", "\\");
         this.in = new DataInputStream(new FileInputStream(filePath));
         decodeWxFile(this.in);
         while (currentWxFile != null) {

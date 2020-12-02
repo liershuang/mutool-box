@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
 import com.xwintop.xTransfer.common.model.LOGVALUES;
@@ -16,8 +18,6 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 import com.mutool.javafx.core.util.UuidUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +92,7 @@ public class ReceiverSftpImpl implements Receiver {
         int max = receiverConfigFs.getMax();
         long maxSize = receiverConfigFs.getMaxSize();
         String bigFilePath = receiverConfigFs.getBigFilePath();
-        bigFilePath = StringUtils.appendIfMissing(bigFilePath, "/", "/", "\\");
+        bigFilePath = StrUtil.appendIfMissing(bigFilePath, "/", "/", "\\");
         String encoding = receiverConfigFs.getEncoding();
         String tmpPath = receiverConfigSftp.getTmpPath();
         boolean hasTmpPath = receiverConfigSftp.isHasTmpPath();
@@ -100,8 +100,8 @@ public class ReceiverSftpImpl implements Receiver {
         boolean includeSubdirectory = receiverConfigFs.isIncludeSubdirectory();
         long delayTime = receiverConfigFs.getDelayTime();
         long minSize = receiverConfigFs.getMinSize();
-        remotePath = StringUtils.appendIfMissing(remotePath, "/", "/", "\\");
-        tmpPath = StringUtils.appendIfMissing(tmpPath, "/", "/", "\\");
+        remotePath = StrUtil.appendIfMissing(remotePath, "/", "/", "\\");
+        tmpPath = StrUtil.appendIfMissing(tmpPath, "/", "/", "\\");
         receiveAllFile(remotePath, tmpPath, hasTmpPath, fileNameRegex, encoding, delReceiveFile, max, maxSize, bigFilePath, postfixName, includeSubdirectory, delayTime, minSize, params, channel, 0);
     }
 
@@ -132,7 +132,7 @@ public class ReceiverSftpImpl implements Receiver {
         for (int i = 0; i < fileList.size() && (max == -1 || receivedFileSum < max); i++) {
             LsEntry file = fileList.get(i);
             //add filename filter
-            if (StringUtils.isNotBlank(fileNameRegex)) {
+            if (StrUtil.isNotBlank(fileNameRegex)) {
                 if (!file.getFilename().matches(fileNameRegex)) {
                     continue;
                 }
@@ -145,7 +145,7 @@ public class ReceiverSftpImpl implements Receiver {
                 channel = this.checkAndConnect(channel);
                 if (maxSize != -1 && file.getAttrs().getSize() > maxSize) {
                     log.warn(file.getFilename() + ": size is exceed the limit [" + maxSize + "]. fileSize:" + file.getAttrs().getSize());
-                    if (StringUtils.isNotEmpty(bigFilePath)) {
+                    if (StrUtil.isNotEmpty(bigFilePath)) {
                         try {
                             channel.rename(remotePath + file.getFilename(), bigFilePath + file.getFilename());
                             log.info("move big file to:" + bigFilePath + file.getFilename());
@@ -170,7 +170,7 @@ public class ReceiverSftpImpl implements Receiver {
                 boolean removeFlag = false;
                 IMessage msg = new DefaultMessage();
                 // use the tmpPath to be a temporary directory or read the file directly is there is no tmpPath.
-                if (hasTmpPath && StringUtils.isNotBlank(tmpPath)) {
+                if (hasTmpPath && StrUtil.isNotBlank(tmpPath)) {
                     try {
                         channel.rename(filePathAndName, tmpPath + file.getFilename());
                         filePathAndName = tmpPath + file.getFilename();
@@ -208,7 +208,7 @@ public class ReceiverSftpImpl implements Receiver {
                                 channel.rm(filePathAndName);
                             } else {
                                 //execute move file to dist directory
-                                if (hasTmpPath && StringUtils.isNotBlank(tmpPath)) {
+                                if (hasTmpPath && StrUtil.isNotBlank(tmpPath)) {
                                     channel.rename(filePathAndName, remotePath + file.getFilename());
                                 } else {
                                     channel.rename(filePathAndName, remotePath + file.getFilename());
@@ -223,7 +223,7 @@ public class ReceiverSftpImpl implements Receiver {
                     log.error("receiverSftp接收失败：", e);
                     // rename the temp file to the remote path when error
                     if (removeFlag) {
-                        if (hasTmpPath && StringUtils.isNotBlank(tmpPath)) {
+                        if (hasTmpPath && StrUtil.isNotBlank(tmpPath)) {
                             channel.rename(filePathAndName, remotePath + file.getFilename());
                         } else {
                             channel.rename(filePathAndName, remotePath + file.getFilename());
@@ -255,7 +255,7 @@ public class ReceiverSftpImpl implements Receiver {
         msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_SFTP);
         msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigSftp.getHost() + ":" + receiverConfigSftp.getPort());
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_SFTP);

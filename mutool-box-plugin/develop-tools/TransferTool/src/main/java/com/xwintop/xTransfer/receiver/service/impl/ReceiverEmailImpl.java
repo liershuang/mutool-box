@@ -1,5 +1,8 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.sun.mail.util.BASE64DecoderStream;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
@@ -15,9 +18,6 @@ import com.mutool.javafx.core.util.UuidUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +65,7 @@ public class ReceiverEmailImpl implements Receiver {
                 Date sendDt = message.getSentDate();
                 String sendTime = "";
                 if (sendDt != null) {
-                    sendTime = DateFormatUtils.format(sendDt, "yyyyMMddHHmmss");
+                    sendTime = DateUtil.format(sendDt, "yyyyMMddHHmmss");
                 }
                 String s = message.getSubject();
                 if (s != null) {
@@ -129,7 +129,7 @@ public class ReceiverEmailImpl implements Receiver {
                 msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_EMAIL);
                 msgLogInfo.put(LOGKEYS.CHANNEL_IN, receiverConfigEmail.getHost() + ":" + receiverConfigEmail.getPort());
                 msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-                msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+                msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                 msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                 msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                 msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, "emailReceiver");
@@ -146,7 +146,7 @@ public class ReceiverEmailImpl implements Receiver {
     }
 
     private void backupMail(Message message, String backupPath) {
-        if (StringUtils.isNotBlank(backupPath)) {
+        if (StrUtil.isNotBlank(backupPath)) {
             try {
                 File dir = new File(backupPath);
                 if (!dir.exists()) {

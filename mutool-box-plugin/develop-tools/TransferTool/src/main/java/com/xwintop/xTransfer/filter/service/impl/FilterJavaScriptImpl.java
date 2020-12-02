@@ -1,5 +1,7 @@
 package com.xwintop.xTransfer.filter.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.utils.SpringUtil;
 import com.xwintop.xTransfer.common.MsgLogger;
 import com.xwintop.xTransfer.common.model.LOGKEYS;
@@ -12,8 +14,6 @@ import com.xwintop.xTransfer.messaging.IContext;
 import com.xwintop.xTransfer.messaging.IMessage;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,7 @@ public class FilterJavaScriptImpl implements Filter {
     @Override
     public void doFilter(IContext ctx, Map params) throws Exception {
         for (IMessage iMessage : ctx.getMessages()) {
-            if (StringUtils.isNotBlank(filterConfigJavaScript.getFileNameFilterRegex())) {
+            if (StrUtil.isNotBlank(filterConfigJavaScript.getFileNameFilterRegex())) {
                 if (!iMessage.getFileName().matches(filterConfigJavaScript.getFileNameFilterRegex())) {
                     log.info("Filter:" + filterConfigJavaScript.getId() + "跳过fileName：" + iMessage.getFileName());
                     continue;
@@ -60,10 +60,10 @@ public class FilterJavaScriptImpl implements Filter {
         bindings.put("applicationContext", SpringUtil.getApplicationContext());
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-        if (StringUtils.isNotEmpty(filterConfigJavaScript.getScriptString())) {
+        if (StrUtil.isNotEmpty(filterConfigJavaScript.getScriptString())) {
             engine.eval(filterConfigJavaScript.getScriptString(), bindings);
         }
-        if (StringUtils.isNotEmpty(filterConfigJavaScript.getScriptFilePath())) {
+        if (StrUtil.isNotEmpty(filterConfigJavaScript.getScriptFilePath())) {
             String script = new String(Files.readAllBytes(Paths.get(filterConfigJavaScript.getScriptFilePath())));
             engine.eval(script, bindings);
         }
@@ -72,7 +72,7 @@ public class FilterJavaScriptImpl implements Filter {
         msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, msg.getProperty(LOGKEYS.CHANNEL_IN_TYPE));
         msgLogInfo.put(LOGKEYS.CHANNEL_IN, msg.getProperty(LOGKEYS.CHANNEL_IN));
         msgLogInfo.put(LOGKEYS.MSG_TAG, msg.getFileName());
-        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtils.getLength(msg.getMessage()));
+        msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
         msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
         msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
         msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, msg.getProperty(LOGKEYS.RECEIVER_TYPE));

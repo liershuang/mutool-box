@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.controller.littleTools;
 
+import cn.hutool.core.date.DateUtil;
 import com.xwintop.xJavaFxTool.services.littleTools.SealBuilderToolService;
 import com.xwintop.xJavaFxTool.view.littleTools.SealBuilderToolView;
 import com.mutool.javafx.core.util.javafx.FileChooserUtil;
@@ -14,7 +15,6 @@ import javafx.stage.FileChooser;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -107,7 +107,7 @@ public class SealBuilderToolController extends SealBuilderToolView {
 
     @FXML
     private void saveAction(ActionEvent event) throws Exception {
-        String fileName = "x" + DateFormatUtils.format(new Date(), "yyyyMMddHHmm") + ".png";
+        String fileName = "x" + DateUtil.format(new Date(), "yyyyMMddHHmm") + ".png";
         File file = FileChooserUtil.chooseSaveFile(fileName, new FileChooser.ExtensionFilter("All Images", "*.*"), new FileChooser.ExtensionFilter("PNG", "*.png"));
         if (file != null) {
             ImageIO.write(SwingFXUtils.fromFXImage(codeImageView.getImage(), null), "PNG", file);

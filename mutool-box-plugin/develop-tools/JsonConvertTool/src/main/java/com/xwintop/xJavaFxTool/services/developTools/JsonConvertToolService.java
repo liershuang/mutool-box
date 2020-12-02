@@ -1,19 +1,19 @@
 package com.xwintop.xJavaFxTool.services.developTools;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.developTools.JsonConvertToolController;
 import com.xwintop.xJavaFxTool.services.developTools.JsonConvertToolServiceUtil.ArrayProcessor;
 import com.xwintop.xJavaFxTool.services.developTools.JsonConvertToolServiceUtil.PropertyTree;
 import com.xwintop.xJavaFxTool.services.developTools.JsonConvertToolServiceUtil.TreeBuilder;
 import com.xwintop.xJavaFxTool.utils.XML2BeanUtils;
-import com.mutool.javafx.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.betwixt.schema.Element;
-import org.apache.commons.lang3.StringUtils;
 import org.dom4j.io.SAXReader;
 import org.yaml.snakeyaml.Yaml;
 
@@ -68,7 +68,7 @@ public class JsonConvertToolService {
         for (Map.Entry<String, Object> entry : ((JSONObject) jsonObject).entrySet()) {
             Object value = entry.getValue();
             String key = entry.getKey();
-            String keyName = StrUtil.firstToUpCase(key);
+            String keyName = StrUtil.upperFirst(key);
             if (value instanceof String) {
                 propertyString.append("\n\tprivate String " + key + ";");
                 getSetString.append("\n\tpublic void set" + keyName + "(String " + key + "){\n\t\tthis." + key + " = " + key + ";\n\t}");
@@ -125,7 +125,7 @@ public class JsonConvertToolService {
         for (Map.Entry<String, Object> entry : ((JSONObject) jsonObject).entrySet()) {
             Object value = entry.getValue();
             String key = entry.getKey();
-            String keyName = StrUtil.firstToUpCase(key);
+            String keyName = StrUtil.upperFirst(key);
             if (value instanceof String) {
                 propertyString.append("\n\tpublic string " + key + " {get; set;}");
             } else if (value instanceof Integer) {
@@ -173,9 +173,9 @@ public class JsonConvertToolService {
         String jsonString = jsonConvertToolController.getJsonTextArea().getText();
         JSONArray jsonArray = JSON.parseArray(jsonString);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(StringUtils.join(jsonArray.getJSONObject(0).keySet(), "\t"));
+        stringBuilder.append(CollUtil.join(jsonArray.getJSONObject(0).keySet(), "\t"));
         for (JSONObject jsonObject : jsonArray.toArray(new JSONObject[0])) {
-            stringBuilder.append("\n" + StringUtils.join(jsonObject.values(), "\t"));
+            stringBuilder.append("\n" + CollUtil.join(jsonObject.values(), "\t"));
         }
         jsonConvertToolController.getAfterTextArea().setText(stringBuilder.toString());
     }
@@ -230,10 +230,10 @@ public class JsonConvertToolService {
         for (String key : ymlEntry.keySet()) {
             Object value = ymlEntry.get(key);
             if (value instanceof Map) {
-                iterateAndProcess(properties, (Map<String, Object>) value, StringUtils.isEmpty(rootKey) ? key : rootKey
+                iterateAndProcess(properties, (Map<String, Object>) value, cn.hutool.core.util.StrUtil.isEmpty(rootKey) ? key : rootKey
                         + "." + key);
             } else {
-                properties.setProperty(StringUtils.isEmpty(rootKey) ? key : rootKey + "." + key, value.toString());
+                properties.setProperty(cn.hutool.core.util.StrUtil.isEmpty(rootKey) ? key : rootKey + "." + key, value.toString());
             }
         }
     }

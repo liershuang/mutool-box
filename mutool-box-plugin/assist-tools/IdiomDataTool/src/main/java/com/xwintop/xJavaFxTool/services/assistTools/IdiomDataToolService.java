@@ -1,5 +1,6 @@
 package com.xwintop.xJavaFxTool.services.assistTools;
 
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xJavaFxTool.controller.assistTools.IdiomDataToolController;
 import com.mutool.javafx.core.util.ConfigureUtil;
 import com.mutool.javafx.core.util.javafx.AlertUtil;
@@ -11,7 +12,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.h2.jdbcx.JdbcDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -77,7 +77,7 @@ public class IdiomDataToolService {
     public void selectAction() throws Exception {
         String sql = "SELECT * FROM Idiom_dirty WHERE word like ? or abbreviation like ?";
         String sqlArgs = "";
-        if (StringUtils.isEmpty(idiomDataToolController.getSelectWordTextField().getText())) {
+        if (StrUtil.isEmpty(idiomDataToolController.getSelectWordTextField().getText())) {
             String[] indexString = new String[]{
                     idiomDataToolController.getIndex1TextField().getText(),
                     idiomDataToolController.getIndex2TextField().getText(),
@@ -85,7 +85,7 @@ public class IdiomDataToolService {
                     idiomDataToolController.getIndex4TextField().getText()
             };
             for (int i = 0; i < 4; i++) {
-                if (StringUtils.isEmpty(indexString[i])) {
+                if (StrUtil.isEmpty(indexString[i])) {
                     sqlArgs += "_";
                 } else {
                     sqlArgs += indexString[i];

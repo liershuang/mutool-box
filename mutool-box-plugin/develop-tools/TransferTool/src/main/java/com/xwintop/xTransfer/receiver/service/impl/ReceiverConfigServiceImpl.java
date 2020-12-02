@@ -1,6 +1,7 @@
 package com.xwintop.xTransfer.receiver.service.impl;
 
 import cn.hutool.core.lang.Singleton;
+import cn.hutool.core.util.StrUtil;
 import com.xwintop.xTransfer.messaging.*;
 import com.xwintop.xTransfer.receiver.bean.ReceiverConfig;
 import com.xwintop.xTransfer.receiver.service.Receiver;
@@ -9,7 +10,6 @@ import com.xwintop.xTransfer.receiver.service.ReceiverManager;
 import com.xwintop.xTransfer.task.entity.TaskConfig;
 import com.xwintop.xTransfer.task.quartz.TaskQuartzJob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class ReceiverConfigServiceImpl implements ReceiverConfigService {
             return;
         }
         for (ReceiverConfig receiverConfig : receiverConfigList) {
-            if (StringUtils.isBlank(receiverConfig.getId())) {
+            if (StrUtil.isBlank(receiverConfig.getId())) {
                 receiverConfig.setId(taskConfig.getName() + "_" + receiverIndex);
             } else {
                 if (!receiverConfig.getId().startsWith(taskConfig.getName())) {
@@ -106,7 +106,7 @@ public class ReceiverConfigServiceImpl implements ReceiverConfigService {
     public void stopReceiver(TaskConfig taskConfig) {
         int receiverIndex = 0;
         for (ReceiverConfig receiverConfig : taskConfig.getReceiverConfig()) {
-            if (StringUtils.isBlank(receiverConfig.getId())) {
+            if (StrUtil.isBlank(receiverConfig.getId())) {
                 receiverConfig.setId(taskConfig.getName() + "_" + receiverIndex);
             } else {
                 if (!receiverConfig.getId().startsWith(taskConfig.getName())) {
