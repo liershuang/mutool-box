@@ -47,8 +47,6 @@ import static com.mutool.javafx.core.util.javafx.JavaFxViewUtil.setControllerOnC
 @Service
 public class IndexService {
 
-//    private Map<String, Menu> menuMap = new HashMap<String, Menu>();
-
     /** 页面菜单（叶子节点功能菜单）map */
     @Getter
     private Map<String, MenuConfig> menuItemMap = new HashMap<>();
@@ -67,8 +65,6 @@ public class IndexService {
     @Setter
     /** 首页是否新窗口打开复选框 */
     private CheckBox singleWindowBootCheckBox;
-//    @Getter
-//    private Map<String, MenuItem> menuItemMap = new HashMap<String, MenuItem>();
 
 
     /**
