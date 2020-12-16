@@ -348,7 +348,7 @@ public class ReceiverFsImpl implements Receiver {
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN_TYPE, LOGVALUES.CHANNEL_TYPE_FS);
                     msgLogInfo.put(LOGKEYS.CHANNEL_IN, pathIn);
                     msgLogInfo.put(LOGKEYS.MSG_TAG, curFileName);
-                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.getLength(msg.getMessage()));
+                    msgLogInfo.put(LOGKEYS.MSG_LENGTH, ArrayUtil.length(msg.getMessage()));
                     msgLogInfo.put(LOGKEYS.JOB_ID, params.get(TaskQuartzJob.JOBID));
                     msgLogInfo.put(LOGKEYS.JOB_SEQ, params.get(TaskQuartzJob.JOBSEQ));
                     msgLogInfo.put(LOGKEYS.RECEIVER_TYPE, LOGVALUES.RCV_TYPE_FS);

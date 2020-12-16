@@ -84,7 +84,7 @@
         drawPluginList(businData);
     });*/
     //服务地址
-    var serverUrl = "${baseAttr.serverDoamin}:${baseAttr.serverPort}";
+    var serverUrl = "${systemConfig.serverDoamin}:${systemConfig.serverPort}";
 
     //回车搜索
     $("#searchKeyWord").keyup(function(event){

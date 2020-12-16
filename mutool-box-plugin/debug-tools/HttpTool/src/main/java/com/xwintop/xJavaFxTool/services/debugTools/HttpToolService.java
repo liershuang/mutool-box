@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import org.apache.commons.collections.MapUtils;
 
 import com.xwintop.xJavaFxTool.controller.debugTools.HttpToolController;
 import com.mutool.javafx.core.util.HttpClientUtil;
@@ -60,7 +60,7 @@ public class HttpToolService {
 				headerMap.put(map.get("name"), map.get("value"));
 			}
 		}
-		if (httpToolController.getParamsCookieCheckBox().isSelected() && MapUtils.isNotEmpty(cookieMap)) {
+		if (httpToolController.getParamsCookieCheckBox().isSelected() && CollUtil.isNotEmpty(cookieMap)) {
 			StringBuffer paramsCookieBuffer = new StringBuffer();
 			for (Map<String, String> map : httpToolController.getParamsCookietableData()) {
 				cookieMap.put(map.get("name"), map.get("value"));
@@ -74,7 +74,7 @@ public class HttpToolService {
 		Request request = null;
 		if ("GET".equals(methodString)) {
 			StringBuffer paramsDataBuffer = new StringBuffer();
-			if (MapUtils.isNotEmpty(paramsMap)) {
+			if (CollUtil.isNotEmpty(paramsMap)) {
 				if (url.contains("?")) {
 					paramsDataBuffer.append("&");
 				} else {

@@ -29,7 +29,7 @@
     //加载菜单数据要同步的方式，保证渲染页面在layui之前执行
     $.ajax({
         type : "post",
-        url : "${baseAttr.serverDoamin}:${baseAttr.serverPort}/index/getMenuTree",
+        url : "${systemConfig.serverDoamin}:${systemConfig.serverPort}/index/getMenuTree",
         async : false,
         success : function(data){
             if(data.code != "200"){
@@ -83,7 +83,7 @@
             });
         }
         if(menuType == "WebView"){
-            $.get("${baseAttr.serverDoamin}:${baseAttr.serverPort}"+pageUrl, function(result){
+            $.get("${systemConfig.serverDoamin}:${systemConfig.serverPort}"+pageUrl, function(result){
                 if(result.code != "200"){
                     layer.open({title: '提示', content: result.msg, time:1500});
                     return;

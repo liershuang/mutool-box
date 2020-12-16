@@ -20,11 +20,11 @@ public class MyControllerAdvice {
     private SystemConfig systemConfig;
 
     /**
-     * 获取公共基础数据
+     * 获取系统配置信息
      * @return
      */
-    @ModelAttribute(name = "baseAttr")
-    public Map<String,Object> getBaseAttr() {
+    @ModelAttribute(name = "systemConfig")
+    public Map<String,Object> getSystemConfig() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("serverDoamin", systemConfig.serverDoamin);
         map.put("serverPort", systemConfig.serverPort);
